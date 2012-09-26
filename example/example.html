@@ -1,0 +1,153 @@
+<html>
+	<head>
+		<script type="text/javascript" src="lib/easeljs-0.5.0.min.js"></script>
+		<script type="text/javascript" src="lib/tweenjs-0.3.0.min.js"></script>
+		<script type="text/javascript" src="../easystar-min.js"></script>
+		<script type="text/javascript">
+			//Set up some consts
+			var TILE_SIZE = 32;
+			var MAP_WIDTH = 20;
+			var MAP_HEIGHT = 15;
+
+			//Set up EasyStar
+			var acceptableTiles = [2,3];
+			var easyStar = new EasyStar.js(acceptableTiles,onPathFound); //Instantiate EasyStar 
+
+			//CreateJS Data
+			var mouseOverShape; //The mouse-over square
+			var player; //The player's Bitmap object
+			var stage; //CreateJS Stage
+
+			//Player data
+			var playerX = 19;
+			var playerY = 4;
+
+			//Path data
+			var end = {x: 0, y: 0};
+
+			//Create our TileMap
+			var grid = [];
+			for (var y = 0; y < MAP_HEIGHT; y++) grid.push([]);
+			 grid[0].push(0,0,1,0,0,0,0,0,0,1,0,0,0,0,1,0,0,0,0,0);
+			 grid[1].push(0,2,2,2,2,2,0,2,2,2,2,2,2,2,2,2,2,2,2,0);
+			 grid[2].push(0,2,2,2,2,2,0,2,2,2,2,0,2,2,2,2,2,2,2,0);
+			 grid[3].push(0,2,2,2,2,2,0,2,2,2,2,0,2,2,2,3,3,3,2,0);
+			 grid[4].push(0,2,2,2,2,2,0,2,2,2,2,0,2,2,2,3,3,3,2,2);
+			 grid[5].push(0,2,2,2,2,2,0,2,2,2,2,0,2,2,2,3,3,3,2,0);
+			 grid[6].push(0,2,2,2,2,2,0,2,2,2,2,0,2,2,2,2,2,2,2,0);
+			 grid[7].push(0,2,0,0,1,0,0,0,2,2,2,0,0,0,2,2,2,2,2,0);
+			 grid[8].push(0,2,2,2,2,2,2,0,2,2,2,2,2,0,2,2,2,2,2,0);
+			 grid[9].push(0,2,2,2,2,2,2,0,0,1,0,0,0,0,0,1,0,0,2,0);
+			grid[10].push(0,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,0);
+			grid[11].push(0,2,2,2,2,2,2,2,2,2,2,0,0,1,0,0,2,0,0,0);
+			grid[12].push(0,2,2,2,2,2,2,2,2,2,2,0,2,2,2,2,2,2,2,0);
+			grid[13].push(0,2,2,2,2,2,2,2,2,2,2,0,2,2,2,2,2,2,2,0);
+			grid[14].push(0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0);
+
+			easyStar.setGrid(grid); //Tell EasyStar that this is the grid we want to use
+
+			function init() {
+				stage = new createjs.Stage('canvas');
+				setupTiles();
+				setupPlayer();
+				setupMouseShape();
+				stage.update();
+				createjs.Ticker.setInterval(1000/60); //60FPS
+				createjs.Ticker.addListener(window);
+				stage.onMouseMove = onMouseMove;
+			}
+
+			function onMouseMove(event) {
+				if (mouseOverShape.visible==false) {
+					mouseOverShape.visible = true;
+				}
+				mouseOverShape.x = Math.floor(event.rawX/TILE_SIZE)*TILE_SIZE;
+				mouseOverShape.y = Math.floor(event.rawY/TILE_SIZE)*TILE_SIZE;
+				stage.update();
+			}
+
+			function setupMouseShape() {
+				mouseOverShape = new createjs.Shape();
+				mouseOverShape.graphics.beginFill("#FFFFFF");
+				mouseOverShape.graphics.drawRect(0,0,TILE_SIZE,TILE_SIZE);
+				mouseOverShape.alpha = .2;
+				mouseOverShape.visible = false;
+				stage.addChild(mouseOverShape);
+			}
+
+			//Sets up the tiles onto the screen
+			function setupTiles() {
+				for (var y = 0; y < grid.length; y++) {
+					for (var x = 0; x < grid[0].length; x++) {
+						var bitmap = new createjs.Bitmap("assets/tiles.png");
+						bitmap.sourceRect = {x: TILE_SIZE*grid[y][x], y: 0, width: TILE_SIZE, height: TILE_SIZE};
+						bitmap.x = x*TILE_SIZE;
+						bitmap.y = y*TILE_SIZE;
+						bitmap.onClick = function() {
+							end.x = this.x/TILE_SIZE;
+							end.y = this.y/TILE_SIZE;
+							findPath();
+						}
+						stage.addChild(bitmap);
+					}
+				}
+			}
+
+			function tick() {
+	            stage.update();
+	        }
+
+			//Sets up the player onto the screen
+			function setupPlayer() {
+				var PLAYER_FRAME = 4;
+				player = new createjs.Bitmap("assets/tiles.png");
+				player.sourceRect = {x: TILE_SIZE*PLAYER_FRAME, y: 0, width: TILE_SIZE, height: TILE_SIZE};
+				player.x = playerX*TILE_SIZE;
+				player.y = playerY*TILE_SIZE;
+				stage.addChild(player);
+			}
+
+			//Moves the player to the specified location
+			function movePlayerTo(path) {
+				if (path.length==0) {
+					return;
+				}
+				playerX = path[0].x;
+				playerY = path[0].y;
+				var tween = createjs.Tween.get(player).to({x:playerX*TILE_SIZE,y:playerY*TILE_SIZE},100, createjs.Ease.easeNone).call(function() { path.shift(); movePlayerTo(path); });
+			}
+
+
+			function findPath() {
+				easyStar.setPath(playerX,playerY,end.x,end.y); //Tell EasyStar where are start and end positions are at.
+				calculate();
+			}
+
+			function calculate() {
+				easyStar.calculate(); //Tell EasyStar to calculate the path. It will call our callback method (onPathFound) with a list of Points once it is finished.
+				setTimeout(calculate,1000);
+			}
+
+			/**
+			* This is our callback from EasyStar. It is fired when EasyStar is done searching for a path. It returns an Array of objects with x and y values, (Points).
+			* @param path An Array of "points".
+			**/
+			function onPathFound(path) {
+				if (path===null) {
+					//No path found..
+				} else {
+					createjs.Tween.removeTweens(player);
+					movePlayerTo(path);
+				}
+			}
+
+		</script>
+	</head>
+	<body onload="init()">
+		<center>
+			<canvas id="canvas" width="640" height="480"></canvas><br>
+			<b>EasyStar.js</b><br>A Javascript A* Pathfinding library.<br>
+			<h1><a href="http://github.com/prettymuchbryce/easystarjs">View this project on GitHub</a></h1>
+		</center>
+	</body>
+</html>
