@@ -14,11 +14,9 @@ Thus EasyStar.js is a simple A* API written in Javascript.
 * EasyStar calls a callback if it finds your path, or if there is no possible path.
 * Easy!
 
-## Public Methods
+## Important Public Methods
 
-	var easyStar = new EasyStar.js(acceptableTiles,callback); 
-	//callback should be a function that takes a single parameter. The parameter is an array of Point objects. i.e. [{x: #, y: #},...]
-	//If your path is not found, the parameter will be null.
+	var easyStar = new EasyStar.js(acceptableTiles,callback);
 
 	easyStar.setGrid(twoDimensionalArray);
 
