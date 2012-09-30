@@ -96,7 +96,8 @@ EasyStar.js = function(acceptableTiles,callback) {
 				isDoneCalculating = true;
 				return;
 			}
-			var searchNode = openList.getHighestPriorityElement();
+			var searchNode = openList.shiftHighestPriorityElement();
+			searchNode.list = EasyStar.Node.CLOSED_LIST;
 
 			if (searchNode.y > 0) {
 				checkAdjacentNode(searchNode,0,-1,STRAIGHT_COST);
@@ -122,8 +123,8 @@ EasyStar.js = function(acceptableTiles,callback) {
 					return;
 				}
 			}
-			openList.shiftHighestPriorityElement();
-			searchNode.list = EasyStar.Node.CLOSED_LIST;
+
+
 			iterationsSoFar++;
 		}
 	}
@@ -182,7 +183,7 @@ EasyStar.js = function(acceptableTiles,callback) {
 					if (node.list === undefined) {
 						node.list = EasyStar.Node.OPEN_LIST;
 						openList.insert(node);
-					} else if (node.list===EasyStar.Node.OPENLIST) {
+					} else if (node.list===EasyStar.Node.OPEN_LIST) {
 						if (searchNode.costSoFar + cost < node.costSoFar) {
 							node.costSoFar = searchNode.costSoFar + cost;
 							node.parent = searchNode;
@@ -199,11 +200,11 @@ EasyStar.js = function(acceptableTiles,callback) {
 		if (nodeHash[x + "_" + y]!==undefined) {
 			return nodeHash[x + "_" + y];
 		}
-		var simpleDistanceToTarget = getDistance(x,y,endX,endY)*STRAIGHT_COST;
+		var simpleDistanceToTarget = getDistance(x,y,endX,endY);
 		if (parent!==null) {
 			var costSoFar = parent.costSoFar + cost;
 		} else {
-			costSoFar = 0;
+			costSoFar = simpleDistanceToTarget;
 		}
 		var node = new EasyStar.Node(parent,x,y,costSoFar,simpleDistanceToTarget);
 		nodeHash[x + "_" + y] = node;
@@ -211,6 +212,6 @@ EasyStar.js = function(acceptableTiles,callback) {
 	}
 
 	var getDistance = function(x1,x2,y1,y2) {
-		return Math.floor(Math.sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1)));
+		return Math.floor(Math.abs(x2-x1) + Math.abs(y2-y1));
 	}
 }

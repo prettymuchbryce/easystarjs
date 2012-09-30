@@ -50,8 +50,12 @@ EasyStar.PriorityQueue = function(criteria,heapType) {
 	* @return the highest priority element
 	**/
 	this.shiftHighestPriorityElement = function() {
-		if (this.length < 0) {
+		if (this.length === 0) {
 			throw ("There are no more elements in your priority queue.");
+		} else if (this.length === 1) {
+			var onlyValue = queue[0];
+			queue = [];
+			return onlyValue;
 		}
 		var oldRoot = queue[0];
 		var newRoot = queue.pop();
