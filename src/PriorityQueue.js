@@ -55,6 +55,7 @@ EasyStar.PriorityQueue = function(criteria,heapType) {
 		} else if (this.length === 1) {
 			var onlyValue = queue[0];
 			queue = [];
+                        this.length = 0;
 			return onlyValue;
 		}
 		var oldRoot = queue[0];
