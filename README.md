@@ -97,7 +97,7 @@ EasyStar.js is licensed under the MIT license, which means you can use it for al
 
 ## Running the example locally
 
-In order to run the example do the follow.
+In order to run the example do the following.
 
 	git clone https://github.com/prettymuchbryce/easystarjs.git
 
@@ -107,12 +107,12 @@ In order to run the example do the follow.
 
 	node app.js
 
-Then open your browser to 127.0.0.1:3000
+Now open your browser to 127.0.0.1:3000 to see the example.
 
 ## Roadmap
 
 * Unit tests with Mocha and Chai
-* More friendly API
+* Friendlier API
 * Tiles with varying costs
 * Optional diagonals
 * Node support ?
