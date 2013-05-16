@@ -2,7 +2,7 @@
 
 [![Launch Example](http://prettymuchbryce.com/easystarjs/easystar.jpg)](http://prettymuchbryce.com/easystarjs/example/example.html)
 
-A* is an algorithm for finding the shortest path between two points. It is very useful in game development. Any tile-based game that requires this kind of movement will probably utilize some form of A*. Tower Defense games, City Building games, Rogue-Likes, the list goes on.
+A* is an algorithm for finding the shortest path between two points. It is very useful in game development. Any tile-based game that requires this kind of movement will probably utilize some form of A*. Tower defense games, city-building games, roguelikes, the list goes on.
 
 Thus EasyStar.js is a simple A* API written in Javascript. 
 
@@ -95,6 +95,28 @@ The only thing left to do is to calculate the path.
 
 EasyStar.js is licensed under the MIT license, which means you can use it for almost anything, even commercial use.
 
+## Running the example locally
+
+In order to run the example do the follow.
+
+	git clone https://github.com/prettymuchbryce/easystarjs.git
+
+	cd easystarjs/example
+
+	npm install
+
+	node app.js
+
+Then open your browser to 127.0.0.1:3000
+
+## Roadmap
+
+* Unit tests with Mocha and Chai
+* More friendly API
+* Tiles with varying costs
+* Optional diagonals
+* Node support ?
+
 ## Support
 
-If you have any questions, comments, or suggestions you can email me at hi@prettymuchbryce.com
+If you have any questions, comments, or suggestions please feel free to open an issue.
