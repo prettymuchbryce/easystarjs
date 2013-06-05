@@ -111,11 +111,10 @@ Now open your browser to 127.0.0.1:3000 to see the example.
 
 ## Roadmap
 
-* Unit tests with Mocha and Chai
+* Unit tests
 * Friendlier API
 * Tiles with varying costs
 * Optional diagonals
-* Node support ?
 
 ## Support
 
