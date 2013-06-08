@@ -8,9 +8,9 @@ module.exports = function(grunt) {
     }
   });
 
-  var releaseFilename = "easystar-" + grunt.file.readJSON('package.json').version + ".min.js";
+  var releaseFilename = "bin/easystar-" + grunt.file.readJSON('package.json').version + ".min.js";
   var files = {};
-  files[releaseFilename] = ['lib/node.js', 'lib/priorityqueue.js', 'lib/easystar.js'];
+  files[releaseFilename] = ['src/node.js', 'src/priorityqueue.js', 'src/instance.js', 'src/easystar.js'];
   grunt.config.set('uglify.release.files',files)
 
   // Load the plugin that provides the "uglify" task.

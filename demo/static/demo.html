@@ -1,0 +1,42 @@
+<html>
+	<head>
+		<link rel="stylesheet" href="/css/jquery-ui.css" />
+		<script type="text/javascript" src="/lib/jquery-1.9.1.js"></script>
+		<script type="text/javascript" src="/lib/jquery-ui.js"></script>
+		<script type="text/javascript" src="/lib/easeljs-0.6.1.min.js"></script>
+		<script type="text/javascript" src="/lib/tweenjs-0.3.0.min.js"></script>
+		<script type="text/javascript" src="/lib/easystar-0.1.4.min.js"></script>
+		<script type="text/javascript" src="/src/demo.js"></script>
+	</head>
+	<style>
+		body {
+			color: #FFFFFF;
+			background-color: #222222;
+		}
+		#slider {
+			width: 640;
+		}
+	</style>
+	<script type="text/javascript">
+		$(function() {
+		    $("#slider").slider({ min: 100, max: 10000 });
+		    $("#slider").slider({
+			  change: function( event, ui ) {
+			  	demo.setIterationsPerCalculation(ui.value);
+			  }
+			});
+		});
+
+		var demo = new Demo();
+	</script>
+	<body onload="demo.init()">
+			<center>
+				iterations per calculation
+				<div id="slider"></div><br>
+				<canvas id="canvas" width="640" height="480"></canvas><br>
+				<b>EasyStar.js</b><br>Asynchronous A* Pathfinding library written in Javascript.<br>
+			</center>
+
+			<a href="http://github.com/prettymuchbryce/easystarjs"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png" alt="Fork me on GitHub"></a>
+	</body>
+</html>

@@ -4,8 +4,10 @@
 * 
 * For more on binary heaps see: http://en.wikipedia.org/wiki/Binary_heap
 * 
-* @param criteria The criteria by which to sort the objects. This should be a property of the objects you're sorting.
-* @param heapType either PriorityQueue.MAX_HEAP or PriorityQueue.MIN_HEAP.
+* @param {String} criteria The criteria by which to sort the objects. 
+* This should be a property of the objects you're sorting.
+* 
+* @param {Number} heapType either PriorityQueue.MAX_HEAP or PriorityQueue.MIN_HEAP.
 **/
 EasyStar.PriorityQueue = function(criteria,heapType) {
 	this.length = 0; //The current length of heap.
@@ -141,7 +143,7 @@ EasyStar.PriorityQueue = function(criteria,heapType) {
 	var getRightOf = function(index) {
 		return index*2 + 2;
 	}
-}
+};
 
 //Constants
 EasyStar.PriorityQueue.MAX_HEAP = 0;

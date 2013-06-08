@@ -3,7 +3,7 @@ var express = require("express"),
     port    = parseInt(process.env.PORT, 10) || 3000;
     
 app.get("/", function(req, res) {
-  res.redirect("/example.html");
+  res.redirect("/demo.html");
 });
 
 app.configure(function(){
@@ -19,4 +19,4 @@ app.configure(function(){
 
 app.listen(port);
 
-console.log("Please visit 127.0.0.1:3000 to view the example.")
+console.log("Visit 127.0.0.1:3000 in your web browser to view the demo.")

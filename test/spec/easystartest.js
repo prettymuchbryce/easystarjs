@@ -3,8 +3,7 @@ describe("EasyStar.js", function() {
   beforeEach(function() { });
 
   it("It should find a path successfully.", function() {
-	var acceptableTiles = [1];
-	var easyStar = new EasyStar.js(acceptableTiles, onPathFound);
+	var easyStar = new EasyStar.js();
 	var map = [[1,1,0,1,1],
 		   [1,1,0,1,1],
 		   [1,1,0,1,1],
@@ -13,7 +12,9 @@ describe("EasyStar.js", function() {
 
 	easyStar.setGrid(map);
 
-	easyStar.setPath(1,2,3,2);
+	easyStar.setAcceptableTiles([1]);
+
+	easyStar.findPath(1,2,3,2,onPathFound);
 
 	easyStar.calculate();
 
@@ -27,8 +28,7 @@ describe("EasyStar.js", function() {
   });
 
   it("It should be able to avoid a separate point successfully.", function() {
-	var acceptableTiles = [1];
-	var easyStar = new EasyStar.js(acceptableTiles, onPathFound);
+	var easyStar = new EasyStar.js();
 	var map = [[1,1,0,1,1],
 		   [1,1,0,1,1],
 		   [1,1,0,1,1],
@@ -39,7 +39,9 @@ describe("EasyStar.js", function() {
 
 	easyStar.avoidAdditionalPoint(2,3);
 
-	easyStar.setPath(1,2,3,2);
+	easyStar.setAcceptableTiles([1]);
+
+	easyStar.findPath(1,2,3,2,onPathFound);
 
 	easyStar.calculate();
 
