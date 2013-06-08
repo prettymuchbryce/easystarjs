@@ -53,7 +53,7 @@ Set our grid.
 
 Set tiles which are "walkable".
 	
-	easystar.setAcceptableTiles([1]);
+	easystar.setAcceptableTiles([0]);
 
 Find a path.
 	
