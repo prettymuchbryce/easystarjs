@@ -83,7 +83,7 @@ The only thing left to do now is to calculate the path.
 
 ## License
 
-EasyStar.js is licensed under the MIT license. You may use it for commercial use.
+easystar.js is licensed under the MIT license. You may use it for commercial use.
 
 ## Running the demo locally
 
