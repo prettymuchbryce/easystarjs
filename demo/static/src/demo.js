@@ -29,10 +29,11 @@ var Demo = function() {
 		this._setupGrid();
 	
 		//Add some players		
-		for (var i = 0; i < 500; i++) {
+		for (var i = 0; i < 250; i++) {
 			this._addPlayer();
 		}
 
+		createjs.Ticker.setFPS(20)
 		createjs.Ticker.addEventListener("tick", this._onTick);
 	};
 
