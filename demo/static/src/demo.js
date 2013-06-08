@@ -77,7 +77,7 @@ var Demo = function() {
 		
 		this._easystar.setGrid(this._grid); //Tell EasyStar that this is the grid we want to use
 		this._easystar.setAcceptableTiles([1]); //Set acceptable tiles
-		this._easystar.setIterationsPerCalculation(1000); //Set iterations per calculation
+		this._easystar.setIterationsPerCalculation(300); //Set iterations per calculation
 
 		//Draw the grid onto the screen.
 		for (var y = 0; y < this._grid.length; y++) {
