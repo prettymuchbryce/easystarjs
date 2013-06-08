@@ -10,8 +10,9 @@
 	</head>
 	<style>
 		body {
-			color: #FFFFFF;
-			background-color: #222222;
+			font-family: "Helvetica";
+			color: #343434;
+			background-color: #FFFFFF;
 		}
 		#slider {
 			width: 640;
@@ -19,7 +20,7 @@
 	</style>
 	<script type="text/javascript">
 		$(function() {
-		    $("#slider").slider({ min: 100, max: 10000 });
+		    $("#slider").slider({ min: 100, value: 1000, max: 10000 });
 		    $("#slider").slider({
 			  change: function( event, ui ) {
 			  	demo.setIterationsPerCalculation(ui.value);
@@ -28,13 +29,14 @@
 		});
 
 		var demo = new Demo();
+		$("#slider").slider({ min: 100, max: 10000 });
 	</script>
 	<body onload="demo.init()">
 			<center>
 				iterations per calculation
 				<div id="slider"></div><br>
 				<canvas id="canvas" width="640" height="480"></canvas><br>
-				<b>EasyStar.js</b><br>Asynchronous A* Pathfinding library written in Javascript.<br>
+				<img src ="/assets/logo.png"><br>Asynchronous A* pathfinding API written in Javascript for use in your HTML5 games.<br>
 			</center>
 
 			<a href="http://github.com/prettymuchbryce/easystarjs"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png" alt="Fork me on GitHub"></a>

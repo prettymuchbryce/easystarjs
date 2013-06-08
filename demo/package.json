@@ -1,7 +1,7 @@
 {
   "name": "easystarjs-example",
-  "version": "0.1.0",
-  "devDependencies": {
+  "version": "0.1.4",
+  "dependencies": {
     "express": "~3.2.4"
   }
 }
