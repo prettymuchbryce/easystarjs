@@ -1,17 +1,14 @@
-easystar.js
-==========
-
 ![easystar.js logo](http://easystar.nodejitsu.com/assets/logo.png)
 
-#### Asynchronous Pathfinding Library #####
+#### HTML5 Pathfinding Library #####
 
-EasyStar.js is a simple A* API written in Javascript for use in HTML5 games. The aim of the project is to make it easy and fast to implement performance conscious pathfinding into your project. 
+EasyStar.js is a asynchronous A* pathfinding API written in Javascript for use in your HTML5 games. The aim of the project is to make it easy and fast to implement performance conscious pathfinding into your project. 
 
 Find the minified file in the __/bin__ folder.
 
 ## Demo
 
-	[Demo](http://easystar.nodejitsu.com)
+[Demo](http://easystar.nodejitsu.com)
 
 ## Features
 
@@ -21,27 +18,29 @@ Find the minified file in the __/bin__ folder.
 
 ## API
 
-	var easyStar = new EasyStar.js();
+`var easyStar = new EasyStar.js();`
 
-	easyStar.setGrid(twoDimensionalArray);
+`easyStar.setGrid(twoDimensionalArray);`
 
-	easyStar.setAcceptableTiles(arrayOfAcceptableTiles);
+`easyStar.setAcceptableTiles(arrayOfAcceptableTiles);`
 
-	easyStar.setIterationsPerCalculation(someValue);
+`easyStar.setIterationsPerCalculation(someValue);`
 
-	easyStar.avoidAdditionalPoint(x, y);
+`easyStar.avoidAdditionalPoint(x, y);`
 
-	easyStar.setPath(startX, startY, endX, endY, callback);
+`easyStar.setPath(startX, startY, endX, endY, callback);`
 
-	easyStar.calculate();
+`easyStar.calculate();`
 
 
 ## Usage
 
 First create EasyStar.
+	
 	var easystar = new EasyStar.js();
 
 Create a grid, or tilemap. You may have made this with a level editor, or procedurally. Let's keep it simple for this example.
+
 	var grid = [[0,0,1,0,0],
 		   	    [0,0,1,0,0],
 		        [0,0,1,0,0],
@@ -49,12 +48,15 @@ Create a grid, or tilemap. You may have made this with a level editor, or proced
 		        [0,0,0,0,0]];
 
 Set our grid.
+	
 	easystar.setGrid(grid);
 
 Set tiles which are "walkable".
+	
 	easystar.setAcceptableTiles([1]);
 
 Find a path.
+	
 	easystar.findPath(0, 0, 4, 0, function( path ) ) {
 		if (path === null) {
 			alert("Path was not found.");
