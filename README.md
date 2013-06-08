@@ -2,7 +2,7 @@
 
 #### HTML5 Pathfinding Library #####
 
-EasyStar.js is a asynchronous A* pathfinding API written in Javascript for use in your HTML5 games. The aim of the project is to make it easy and fast to implement performance conscious pathfinding into your project. 
+easystar.js is a asynchronous A* pathfinding API written in Javascript for use in your HTML5 games. The aim of the project is to make it easy and fast to implement performance conscious pathfinding into your project. 
 
 Find the minified file in the __/bin__ folder.
 
@@ -65,19 +65,19 @@ Find a path.
 		}
 	});
 
-EasyStar.js will not yet start calculating my path. 
+EasyStar will not yet start calculating my path. 
 
 In order for EasyStar to actually start calculating, I must call the calculate() method.
 
-You should call easystar.calculate() on a ticker, or setInterval.
+You should call `easystar.calculate()` on a ticker, or setInterval.
 
 If you have a large grid, then it is possible that these calculations could slow down the browser. 
-For this reason, it might be a good idea to give EasyStar.js a smaller iterationsPerCalculations value via 
+For this reason, it might be a good idea to give EasyStar a smaller `iterationsPerCalculation` value via 
 
 	easystar.setIterationsPerCalculation(1000); 
 
 It may take longer for you to find a path this way, but you won't completely halt your game trying to find one.
-The only thing left to do is to calculate the path.
+The only thing left to do now is to calculate the path.
 
 	easystar.calculate();
 
