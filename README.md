@@ -85,19 +85,19 @@ The only thing left to do now is to calculate the path.
 
 EasyStar.js is licensed under the MIT license. You may use it for commercial use.
 
-## Running the example locally
+## Running the demo locally
 
-In order to run the example you will need node.js, and npm installed.
+In order to run the demo you will need node.js, and npm installed.
 
 	git clone https://github.com/prettymuchbryce/easystarjs.git
 
-	cd easystarjs/example
+	cd easystarjs/demo
 
 	npm install
 
 	node app.js
 
-Now open your browser to 127.0.0.1:3000 to see the example.
+Open your browser to 127.0.0.1:3000 to see the example.
 
 ## Roadmap
 
@@ -107,4 +107,4 @@ Now open your browser to 127.0.0.1:3000 to see the example.
 
 ## Support
 
-If you have any questions, comments, or suggestions please feel free to open an issue.
+If you have any questions, comments, or suggestions please open an issue.
