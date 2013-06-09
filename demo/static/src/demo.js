@@ -29,7 +29,7 @@ var Demo = function() {
 		this._setupGrid();
 	
 		//Add some players		
-		for (var i = 0; i < 250; i++) {
+		for (var i = 0; i < 180; i++) {
 			this._addPlayer();
 		}
 
@@ -58,10 +58,10 @@ var Demo = function() {
 		for (var y = 0; y < Demo.MAP_HEIGHT; y++) {
 			this._grid.push([]);
 			for (var x = 0; x < Demo.MAP_WIDTH; x++) {
-				if (y == 0 || x == 0 || x == Demo.MAP_WIDTH-1 || y == Demo.MAP_HEIGHT-1) {
+				if (x == 0 || x == Demo.MAP_WIDTH-1) {
 					this._grid[y].push(1);
 				} else {
-					if (y > 5 && y < Demo.MAP_HEIGHT-6 && Math.random()<.2) {
+					if (x > 5 && x < Demo.MAP_WIDTH-6 && Math.random()<.2) {
 						this._grid[y].push(2 + Math.round(Math.random()));
 					} else {
 						this._grid[y].push(1);
@@ -91,6 +91,29 @@ var Demo = function() {
 				};
 				bitmap.x = x*Demo.TILE_SIZE;
 				bitmap.y = y*Demo.TILE_SIZE;
+
+				bitmap.addEventListener("click", function(mouseEvent) {
+					var y = Math.floor(mouseEvent.rawY / Demo.TILE_SIZE);
+					var x = Math.floor(mouseEvent.rawX / Demo.TILE_SIZE)
+
+					console.log("?");
+
+			    	if (demo._grid[y][x] === 2 || demo._grid[y][x] === 3) {
+			    		demo._grid[y][x] = 1;
+			    	} else {
+			    		demo._grid[y][x] = 2;
+			    	}
+
+			    	console.log(demo._grid[y][x]);
+
+					mouseEvent.target.sourceRect = {
+						x: Demo.TILE_SIZE * demo._grid[y][x], 
+						y: 0, 
+						width: Demo.TILE_SIZE, 
+						height: Demo.TILE_SIZE
+					};
+
+			    });
 				this._stage.addChild(bitmap);
 			}
 		}
@@ -116,17 +139,17 @@ var Demo = function() {
 	    	if (!this._players[i].moving) {
 	    		this._players[i].moving = true;
 
-	    		if (this._players[i].onTopOfMap) {
+	    		if (this._players[i].onLeftOfMap) {
 					this._findPath(this._players[i], 
-						1 + Math.floor( Math.random() * ( Demo.MAP_WIDTH - 2 ) ), 
-						Demo.MAP_HEIGHT - 3 - Math.floor( Math.random() * 3 ) );
+						Demo.MAP_WIDTH - 3 - Math.floor( Math.random() * 3 ),
+						1 + Math.floor( Math.random() * ( Demo.MAP_HEIGHT - 2 ) ));
 	    		} else {
 	    			this._findPath(this._players[i], 
-	    				1 + Math.floor( Math.random() * ( Demo.MAP_WIDTH - 2 ) ), 
-	    				2 + Math.floor( Math.random() * 3 ) );
+	    				2 + Math.floor( Math.random() * 3 ),
+	    				1 + Math.floor( Math.random() * ( Demo.MAP_HEIGHT - 2 ) ));
 	    		}
 
-	    		this._players[i].onTopOfMap = !this._players[i].onTopOfMap;
+	    		this._players[i].onLeftOfMap = !this._players[i].onLeftOfMap;
 	    	}
 	    }
 
@@ -139,8 +162,8 @@ var Demo = function() {
 	 */
 	this._addPlayer = function() {
 		//randomize position
-		var playerX = 1 + Math.floor( Math.random() * ( Demo.MAP_WIDTH-2 ) );
-		var playerY = 2 + Math.floor( Math.random() * 3 );
+		var playerY = 1 + Math.floor( Math.random() * ( Demo.MAP_HEIGHT-2 ) );
+		var playerX = 2 + Math.floor( Math.random() * 3 );
 		
 		//Create the player image.
 		var playerFrame = 4 + Math.floor( Math.random() * 6 );
@@ -161,7 +184,7 @@ var Demo = function() {
 		player.x = playerX;
 		player.y = playerY;
 		player.moving = false;
-		player.onTopOfMap = true;
+		player.onLeftOfMap = true;
 
 		//Add the player to the list of players.
 		this._players.push(player);
@@ -207,5 +230,5 @@ var Demo = function() {
 };
 
 Demo.TILE_SIZE = 16;
-Demo.MAP_WIDTH = 40;
-Demo.MAP_HEIGHT = 30;
+Demo.MAP_WIDTH = 62;
+Demo.MAP_HEIGHT = 25;
