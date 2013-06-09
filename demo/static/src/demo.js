@@ -96,15 +96,11 @@ var Demo = function() {
 					var y = Math.floor(mouseEvent.rawY / Demo.TILE_SIZE);
 					var x = Math.floor(mouseEvent.rawX / Demo.TILE_SIZE)
 
-					console.log("?");
-
 			    	if (demo._grid[y][x] === 2 || demo._grid[y][x] === 3) {
 			    		demo._grid[y][x] = 1;
 			    	} else {
 			    		demo._grid[y][x] = 2;
 			    	}
-
-			    	console.log(demo._grid[y][x]);
 
 					mouseEvent.target.sourceRect = {
 						x: Demo.TILE_SIZE * demo._grid[y][x], 
@@ -221,7 +217,8 @@ var Demo = function() {
 		//Use EasyStar to find the path.
 		this._easystar.findPath(player.x, player.y, x, y, function(path) {
 			if (path === null) {
-				//No path found..
+				player.moving = false;
+				player.onLeftOfMap = !player.onLeftOfMap;
 			} else {
 				demo._movePlayerTo(player, path);
 			}
