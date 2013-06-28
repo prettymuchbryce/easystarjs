@@ -20,6 +20,7 @@ EasyStar.js = function() {
 	var instances = [];
 	var iterationsPerCalculation = Number.MAX_VALUE;
 	var acceptableTiles;
+	var diagonalsEnabled = false;
 
 	/**
 	* Sets the collision grid that EasyStar uses.
@@ -31,6 +32,20 @@ EasyStar.js = function() {
 	this.setAcceptableTiles = function(tiles) {
 		acceptableTiles = tiles;
 	};
+
+	/**
+	 * Enable diagonal pathfinding.
+	 */
+	this.enableDiagonals = function() {
+		diagonalsEnabled = true;
+	}
+
+	/**
+	 * Disable diagonal pathfinding.
+	 */
+	this.disableDiagonals = function() {
+		diagonalsEnabled = false;
+	}
 
 	/**
 	* Sets the collision grid that EasyStar uses.
@@ -198,6 +213,36 @@ EasyStar.js = function() {
 				if (instances[0].isDoneCalculating===true) {
 					instances.shift();
 					continue;
+				}
+			}
+			if (diagonalsEnabled) {
+				if (searchNode.x > 0 && searchNode.y > 0) {
+					checkAdjacentNode(instances[0], searchNode, -1, -1,  DIAGONAL_COST);
+					if (instances[0].isDoneCalculating===true) {
+						instances.shift();
+						continue;
+					}
+				}
+				if (searchNode.x < collisionGrid[0].length-1 && searchNode.y < collisionGrid.length-1) {
+					checkAdjacentNode(instances[0], searchNode, 1, 1, STRAIGHT_COST);
+					if (instances[0].isDoneCalculating===true) {
+						instances.shift();
+						continue;
+					}
+				}
+				if (searchNode.x < collisionGrid[0].length-1 && searchNode.y > 0) {
+					checkAdjacentNode(instances[0], searchNode, 1, -1, STRAIGHT_COST);
+					if (instances[0].isDoneCalculating===true) {
+						instances.shift();
+						continue;
+					}
+				}
+				if (searchNode.x > 0 && searchNode.y < collisionGrid.length-1) {
+					checkAdjacentNode(instances[0], searchNode, -1, 1, STRAIGHT_COST);
+					if (instances[0].isDoneCalculating===true) {
+						instances.shift();
+						continue;
+					}
 				}
 			}
 		}

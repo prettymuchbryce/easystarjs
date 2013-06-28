@@ -12,7 +12,9 @@ var Demo = function() {
 	//easystar instance
 	this._easystar;
 
-	this._stage; 
+	this._stage;
+
+	this._diagonalsEnabled = false;
 
 	/** 
 	 * Initializes the demo. Called by demo.html
@@ -48,6 +50,20 @@ var Demo = function() {
 	 */
 	this.setIterationsPerCalculation = function(iterations) {
 		this._easystar.setIterationsPerCalculation(iterations);
+	}
+
+	/**
+	 * This method is called from the checkbox.
+	 *
+	 * It toggles the diagonals functionality of easystar.
+	 */
+	this.toggleDiagonals = function() {
+		if (this._diagonalsEnabled) {
+			this._easystar.disableDiagonals();
+		} else {
+			this._easystar.enableDiagonals();
+		}
+		this._diagonalsEnabled = !this._diagonalsEnabled;
 	}
 
 	/**
@@ -196,6 +212,15 @@ var Demo = function() {
 			player.moving = false;
 			return;
 		}
+
+		var timeTakenToMoveMS;
+		
+		if (Math.abs(player.x - path[0].x) + Math.abs(player.y - path[0].y) == 2) {
+			timeTakenToMoveMS = Demo.MOVE_TIME_MS * Demo.DIAGONAL_COST;
+		} else {
+			timeTakenToMoveMS = Demo.MOVE_TIME_MS;
+		}
+
 		player.x = path[0].x;
 		player.y = path[0].y;
 		setTimeout(function() {
@@ -203,7 +228,7 @@ var Demo = function() {
 			player.playerImage.y = player.y * Demo.TILE_SIZE;
 			path.shift();
 			demo._movePlayerTo(player, path);
-		},50);
+		},timeTakenToMoveMS);
 	}
 
 	/** 
@@ -229,3 +254,5 @@ var Demo = function() {
 Demo.TILE_SIZE = 16;
 Demo.MAP_WIDTH = 62;
 Demo.MAP_HEIGHT = 25;
+Demo.MOVE_TIME_MS = 50;
+Demo.DIAGONAL_COST = 1.4;

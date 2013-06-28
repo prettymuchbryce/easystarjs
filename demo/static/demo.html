@@ -1,27 +1,27 @@
 <html>
 	<head>
 		<link rel="stylesheet" href="/css/jquery-ui.css" />
+		<link rel="stylesheet" href="/css/bootstrap.min.css"/>
+		<script type="text/javascript" src="/js/bootstrap.min.js"></script>
+		<script type="text/javascript" src="/lib/jquery-1.9.1.js"></script>
 		<script type="text/javascript" src="/lib/jquery-1.9.1.js"></script>
 		<script type="text/javascript" src="/lib/jquery-ui.js"></script>
 		<script type="text/javascript" src="/lib/easeljs-0.6.1.min.js"></script>
 		<script type="text/javascript" src="/lib/tweenjs-0.3.0.min.js"></script>
 		<script type="text/javascript" src="/lib/easystar-0.1.4.min.js"></script>
 		<script type="text/javascript" src="/src/demo.js"></script>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	</head>
 	<style>
-		body {
-			font-family: "Helvetica";
-			color: #343434;
-			background-color: #FFFFFF;
-		}
 		#slider {
 			height:10px;
-			width: 640;
+			width: 240;
+			display: inline-block;
 		}
 	</style>
 	<script type="text/javascript">
 		$(function() {
-		    $("#slider").slider({ min: 10, value: 300, max: 10000 });
+		    $("#slider").slider({ min: 10, value: 300, max: 5000 });
 		    $("#slider").slider({
 			  change: function( event, ui ) {
 			  	demo.setIterationsPerCalculation(ui.value);
@@ -29,17 +29,31 @@
 			});
 		});
 
+		this.visitLink = function(value) {
+			window.location = value;
+		};
+
 		var demo = new Demo();
-		$("#slider").slider({ min: 100, max: 10000 });
+		$("#slider").slider({ min: 100, max: 5000 });
 	</script>
 	<body onload="demo.init()">
-			<center>
-				<img src ="/assets/logo.png"><br>Asynchronous A* pathfinding API written in Javascript.<br><br><a href = "https://raw.github.com/prettymuchbryce/easystarjs/master/bin/easystar-0.1.4.min.js">download</a> | <a href="http://github.com/prettymuchbryce/easystarjs">view on github</a><br>
-				<canvas id="canvas" width="992" height="400"></canvas><br>
-								iterations per calculation
-				<div id="slider"></div><br>
-			</center>
-
+			<div class="container">
+				<center><img src ="/assets/logo.png"><br>
+				<span class ="lead">Asynchronous A* pathfinding API written in Javascript.</span></center>
+				<canvas id="canvas" width="992" height="400"></canvas>
+				<br><br>
+				<form>
+					<div id="slider"></div> iterations per calculation<br>
+					<fieldset><label class="checkbox"><input type="checkbox" onClick="demo.toggleDiagonals()">diagonals allowed?</label></fieldset>
+				</form>
+				<span class="btn btn-primary" onClick="visitLink('https://raw.github.com/prettymuchbryce/easystarjs/master/bin/easystar-0.1.4.min.js')">
+					download
+				</span>
+				<span class="btn btn-success" onClick="visitLink('http://github.com/prettymuchbryce/easystarjs')">
+					view on github
+				</span>
+				<br><br>
+			</div>
 			<a href="http://github.com/prettymuchbryce/easystarjs"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png" alt="Fork me on GitHub"></a>
 	</body>
 </html>
