@@ -32,6 +32,7 @@ Find the minified file in the __/bin__ folder.
 
 `easyStar.calculate();`
 
+`easyStar.enableDiagonals();`
 
 ## Usage
 
