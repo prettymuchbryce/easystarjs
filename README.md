@@ -104,7 +104,6 @@ Open your browser to 127.0.0.1:3000 to see the example.
 
 * Better test coverage
 * Tiles with varying costs
-* Optional diagonals
 
 ## Support
 
