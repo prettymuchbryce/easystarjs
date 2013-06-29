@@ -224,21 +224,21 @@ EasyStar.js = function() {
 					}
 				}
 				if (searchNode.x < collisionGrid[0].length-1 && searchNode.y < collisionGrid.length-1) {
-					checkAdjacentNode(instances[0], searchNode, 1, 1, STRAIGHT_COST);
+					checkAdjacentNode(instances[0], searchNode, 1, 1, DIAGONAL_COST);
 					if (instances[0].isDoneCalculating===true) {
 						instances.shift();
 						continue;
 					}
 				}
 				if (searchNode.x < collisionGrid[0].length-1 && searchNode.y > 0) {
-					checkAdjacentNode(instances[0], searchNode, 1, -1, STRAIGHT_COST);
+					checkAdjacentNode(instances[0], searchNode, 1, -1, DIAGONAL_COST);
 					if (instances[0].isDoneCalculating===true) {
 						instances.shift();
 						continue;
 					}
 				}
 				if (searchNode.x > 0 && searchNode.y < collisionGrid.length-1) {
-					checkAdjacentNode(instances[0], searchNode, -1, 1, STRAIGHT_COST);
+					checkAdjacentNode(instances[0], searchNode, -1, 1, DIAGONAL_COST);
 					if (instances[0].isDoneCalculating===true) {
 						instances.shift();
 						continue;
