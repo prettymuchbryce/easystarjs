@@ -2,7 +2,7 @@
 
 #### HTML5 Pathfinding Library #####
 
-easystar.js is an asynchronous A* pathfinding API written in Javascript for use in your HTML5 games. The aim of the project is to make it easy and fast to implement performance conscious pathfinding into your project. 
+easystar.js is an asynchronous A* pathfinding API written in Javascript for use in your HTML5 games. The goal of this project is to make it easy and fast to implement performance conscious pathfinding into your games. 
 
 Find the minified file in the __/bin__ folder.
 
@@ -15,6 +15,7 @@ Find the minified file in the __/bin__ folder.
 * Simple API
 * Asynchronous. You can set the number of caculations to perform per frame.
 * Add separate points to avoid, outside of those that are avoided based on tile type.
+* Variable costs based on tile type. This allows you to prefer road tiles over swamp tiles when available, for instance.
 
 ## API
 
