@@ -79,8 +79,10 @@ var Demo = function() {
 				} else {
 					if (x > 5 && x < Demo.MAP_WIDTH-6 && Math.random()<.2) {
 						this._grid[y].push(2 + Math.round(Math.random()));
-					} else {
+					} else if (Math.random()<.9) {
 						this._grid[y].push(1);
+					} else {
+						this._grid[y].push(0);
 					}
 				}
 			}
@@ -92,8 +94,9 @@ var Demo = function() {
 		//with.
 		
 		this._easystar.setGrid(this._grid); //Tell EasyStar that this is the grid we want to use
-		this._easystar.setAcceptableTiles([1]); //Set acceptable tiles
+		this._easystar.setAcceptableTiles([0,1]); //Set acceptable tiles
 		this._easystar.setIterationsPerCalculation(300); //Set iterations per calculation
+		this._easystar.setTileCost(0,500); //Set swamp tiles as very costly
 
 		//Draw the grid onto the screen.
 		for (var y = 0; y < this._grid.length; y++) {

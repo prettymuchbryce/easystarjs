@@ -34,6 +34,8 @@ Find the minified file in the __/bin__ folder.
 
 `easyStar.enableDiagonals();`
 
+`easyStar.setTileCost(tileType, multiplicitiveCost);`
+
 ## Usage
 
 First create EasyStar.
@@ -103,7 +105,6 @@ Open your browser to 127.0.0.1:3000 to see the example.
 ## Roadmap
 
 * Better test coverage
-* Tiles with varying costs
 
 ## Support
 

@@ -16,6 +16,7 @@ EasyStar.js = function() {
 	var DIAGONAL_COST = 14;
 	var pointsToAvoid = {};
 	var collisionGrid;
+	var costMap = {};
 	var iterationsSoFar;
 	var instances = [];
 	var iterationsPerCalculation = Number.MAX_VALUE;
@@ -55,6 +56,23 @@ EasyStar.js = function() {
 	**/
 	this.setGrid = function(grid) {
 		collisionGrid = grid;
+
+		//Setup cost map
+		for (var y = 0; y < collisionGrid.length; y++) {
+			for (var x = 0; x < collisionGrid[0].length; x++) {
+				costMap[collisionGrid[y][x]] = 1;
+			}
+		}
+	};
+
+	/**
+	* Sets the tile cost for a particular tile type.
+	*
+	* @param {Number} The tile type to set the cost for.
+	* @param {Number} The multiplicitive cost associated with the given tile.
+	**/
+	this.setTileCost = function(tileType, cost) {
+		costMap[tileType] = cost;
 	};
 
 	/**
@@ -188,28 +206,32 @@ EasyStar.js = function() {
 			searchNode.list = EasyStar.Node.CLOSED_LIST;
 
 			if (searchNode.y > 0) {
-				checkAdjacentNode(instances[0], searchNode, 0, -1, STRAIGHT_COST);
+				checkAdjacentNode(instances[0], searchNode, 0, -1, STRAIGHT_COST * 
+					costMap[collisionGrid[searchNode.y-1][searchNode.x]]);
 				if (instances[0].isDoneCalculating===true) {
 					instances.shift();
 					continue;
 				}
 			}
 			if (searchNode.x < collisionGrid[0].length-1) {
-				checkAdjacentNode(instances[0], searchNode, 1, 0, STRAIGHT_COST);
+				checkAdjacentNode(instances[0], searchNode, 1, 0, STRAIGHT_COST *
+					costMap[collisionGrid[searchNode.y][searchNode.x+1]]);
 				if (instances[0].isDoneCalculating===true) {
 					instances.shift();
 					continue;
 				}
 			}
 			if (searchNode.y < collisionGrid.length-1) {
-				checkAdjacentNode(instances[0], searchNode, 0, 1, STRAIGHT_COST);
+				checkAdjacentNode(instances[0], searchNode, 0, 1, STRAIGHT_COST *
+					costMap[collisionGrid[searchNode.y+1][searchNode.x]]);
 				if (instances[0].isDoneCalculating===true) {
 					instances.shift();
 					continue;
 				}
 			}
 			if (searchNode.x > 0) {
-				checkAdjacentNode(instances[0], searchNode, -1, 0, STRAIGHT_COST);
+				checkAdjacentNode(instances[0], searchNode, -1, 0, STRAIGHT_COST *
+					costMap[collisionGrid[searchNode.y][searchNode.x-1]]);
 				if (instances[0].isDoneCalculating===true) {
 					instances.shift();
 					continue;
@@ -217,28 +239,32 @@ EasyStar.js = function() {
 			}
 			if (diagonalsEnabled) {
 				if (searchNode.x > 0 && searchNode.y > 0) {
-					checkAdjacentNode(instances[0], searchNode, -1, -1,  DIAGONAL_COST);
+					checkAdjacentNode(instances[0], searchNode, -1, -1,  DIAGONAL_COST *
+						costMap[collisionGrid[searchNode.y-1][searchNode.x-1]]);
 					if (instances[0].isDoneCalculating===true) {
 						instances.shift();
 						continue;
 					}
 				}
 				if (searchNode.x < collisionGrid[0].length-1 && searchNode.y < collisionGrid.length-1) {
-					checkAdjacentNode(instances[0], searchNode, 1, 1, DIAGONAL_COST);
+					checkAdjacentNode(instances[0], searchNode, 1, 1, DIAGONAL_COST *
+						costMap[collisionGrid[searchNode.y+1][searchNode.x+1]]);
 					if (instances[0].isDoneCalculating===true) {
 						instances.shift();
 						continue;
 					}
 				}
 				if (searchNode.x < collisionGrid[0].length-1 && searchNode.y > 0) {
-					checkAdjacentNode(instances[0], searchNode, 1, -1, DIAGONAL_COST);
+					checkAdjacentNode(instances[0], searchNode, 1, -1, DIAGONAL_COST *
+						costMap[collisionGrid[searchNode.y-1][searchNode.x+1]]);
 					if (instances[0].isDoneCalculating===true) {
 						instances.shift();
 						continue;
 					}
 				}
 				if (searchNode.x > 0 && searchNode.y < collisionGrid.length-1) {
-					checkAdjacentNode(instances[0], searchNode, -1, 1, DIAGONAL_COST);
+					checkAdjacentNode(instances[0], searchNode, -1, 1, DIAGONAL_COST *
+						costMap[collisionGrid[searchNode.y+1][searchNode.x-1]]);
 					if (instances[0].isDoneCalculating===true) {
 						instances.shift();
 						continue;
