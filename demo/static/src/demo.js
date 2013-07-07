@@ -53,6 +53,18 @@ var Demo = function() {
 	}
 
 	/**
+	 * This method is called from the slider.
+	 *
+	 * It sets the preference of roads by making grass tiles more
+	 * expensive.
+	 *
+	 * @param {Number} amount The new multiplicitive cost of grass tiles.
+	 */
+	this.setRoadPreference = function(amount) {
+		this._easystar.setTileCost(1,amount);
+	}
+
+	/**
 	 * This method is called from the checkbox.
 	 *
 	 * It toggles the diagonals functionality of easystar.
@@ -79,13 +91,23 @@ var Demo = function() {
 				} else {
 					if (x > 5 && x < Demo.MAP_WIDTH-6 && Math.random()<.2) {
 						this._grid[y].push(2 + Math.round(Math.random()));
-					} else if (Math.random()<.9) {
-						this._grid[y].push(1);
 					} else {
-						this._grid[y].push(0);
+						this._grid[y].push(1);
 					}
 				}
 			}
+		}
+
+		//Draw road
+		var y = Demo.MAP_HEIGHT/2;
+		for (var x = 0; x < Demo.MAP_WIDTH; x++) {
+			this._grid[y][x] = 0;
+			if (Math.random() < .5 && y > 1) {
+				y--;
+			} else if (y < Demo.MAP_HEIGHT-2) {
+				y++;
+			}
+			this._grid[y][x] = 0;
 		}
 
 		//Setup EasyStar.
@@ -96,7 +118,7 @@ var Demo = function() {
 		this._easystar.setGrid(this._grid); //Tell EasyStar that this is the grid we want to use
 		this._easystar.setAcceptableTiles([0,1]); //Set acceptable tiles
 		this._easystar.setIterationsPerCalculation(300); //Set iterations per calculation
-		this._easystar.setTileCost(0,500); //Set swamp tiles as very costly
+		this._easystar.setTileCost(1,1.1); //Make it slightly preferable to take roads
 
 		//Draw the grid onto the screen.
 		for (var y = 0; y < this._grid.length; y++) {
@@ -256,6 +278,6 @@ var Demo = function() {
 
 Demo.TILE_SIZE = 16;
 Demo.MAP_WIDTH = 62;
-Demo.MAP_HEIGHT = 25;
+Demo.MAP_HEIGHT = 18;
 Demo.MOVE_TIME_MS = 50;
 Demo.DIAGONAL_COST = 1.4;

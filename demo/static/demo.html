@@ -18,6 +18,14 @@
 			width: 240;
 			display: inline-block;
 		}
+		#slider2 {
+			height:10px;
+			width: 240;
+			display: inline-block;
+		}
+		.well {
+			width: 580px;
+		}
 	</style>
 	<script type="text/javascript">
 		$(function() {
@@ -27,6 +35,14 @@
 			  	demo.setIterationsPerCalculation(ui.value);
 			  }
 			});
+
+
+			$("#slider2").slider({ min: 1, value: 1.1, step: 0.1, max: 3 });
+		    $("#slider2").slider({
+			  change: function( event, ui ) {
+			  	demo.setRoadPreference(ui.value);
+			  }
+			});
 		});
 
 		this.visitLink = function(value) {
@@ -34,16 +50,16 @@
 		};
 
 		var demo = new Demo();
-		$("#slider").slider({ min: 100, max: 5000 });
 	</script>
 	<body onload="demo.init()">
 			<div class="container">
 				<center><img src ="/assets/logo.png"><br>
 				<span class ="lead">Asynchronous A* pathfinding API written in Javascript.</span></center>
-				<canvas id="canvas" width="992" height="400"></canvas>
+				<canvas id="canvas" width="992" height="300"></canvas>
 				<br><br>
 				<form>
 					<div id="slider"></div> iterations per calculation<br>
+					<div id="slider2"></div> road preference<br>
 					<fieldset><label class="checkbox"><input type="checkbox" onClick="demo.toggleDiagonals()">diagonals allowed?</label></fieldset>
 				</form>
 				<span class="btn btn-primary" onClick="visitLink('https://raw.github.com/prettymuchbryce/easystarjs/master/bin/easystar-0.1.4.min.js')">
@@ -54,6 +70,5 @@
 				</span>
 				<br><br>
 			</div>
-			<a href="http://github.com/prettymuchbryce/easystarjs"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png" alt="Fork me on GitHub"></a>
 	</body>
 </html>
