@@ -69,7 +69,7 @@ EasyStar.js = function() {
 	* Sets the tile cost for a particular tile type.
 	*
 	* @param {Number} The tile type to set the cost for.
-	* @param {Number} The multiplicitive cost associated with the given tile.
+	* @param {Number} The multiplicative cost associated with the given tile.
 	**/
 	this.setTileCost = function(tileType, cost) {
 		costMap[tileType] = cost;

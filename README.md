@@ -35,7 +35,7 @@ Find the minified file in the __/bin__ folder.
 
 `easyStar.enableDiagonals();`
 
-`easyStar.setTileCost(tileType, multiplicitiveCost);`
+`easyStar.setTileCost(tileType, multiplicativeCost);`
 
 ## Usage
 
