@@ -29,7 +29,7 @@ Find the minified file in the __/bin__ folder.
 
 `easyStar.avoidAdditionalPoint(x, y);`
 
-`easyStar.setPath(startX, startY, endX, endY, callback);`
+`easyStar.findPath(startX, startY, endX, endY, callback);`
 
 `easyStar.calculate();`
 
