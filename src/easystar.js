@@ -8,8 +8,6 @@
 *	
 *	Based on Patrick Lester's excellent "A* Pathfinding for beginners" 
 *	http://www.policyalmanac.org/games/aStarTutorial.htm
-*	
-*	EasyStar prefers the first path it finds over the "best" path.
 **/
 EasyStar.js = function() {
 	var STRAIGHT_COST = 10;
@@ -26,12 +24,18 @@ EasyStar.js = function() {
 	/**
 	* Sets the collision grid that EasyStar uses.
 	* 
-	* @param {Array} tiles An array of numbers that represent 
+	* @param {Array|Number} tiles An array of numbers that represent 
 	* which tiles in your grid should be considered
 	* acceptable, or "walkable".
 	**/
 	this.setAcceptableTiles = function(tiles) {
-		acceptableTiles = tiles;
+		if (tiles instanceof Array) {
+			//Array
+			acceptableTiles = tiles;
+		} else if (!isNaN(parseFloat(tiles)) && isFinite(tiles)) {
+			//Number
+			acceptableTiles = [tiles];
+		}
 	};
 
 	/**
