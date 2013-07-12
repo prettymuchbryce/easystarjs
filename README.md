@@ -19,23 +19,27 @@ Find the minified file in the __/bin__ folder.
 
 ## API
 
-`var easyStar = new EasyStar.js();`
+#### Main Methods
 
-`easyStar.setGrid(twoDimensionalArray);`
+`var easystar = new EasyStar.js();`
 
-`easyStar.setAcceptableTiles(arrayOfAcceptableTiles);`
+`easystar.setGrid(twoDimensionalArray);` 
 
-`easyStar.setIterationsPerCalculation(someValue);`
+`easystar.setAcceptableTiles(arrayOfAcceptableTiles);` 
 
-`easyStar.avoidAdditionalPoint(x, y);`
+`easystar.findPath(startX, startY, endX, endY, callback);`
 
-`easyStar.findPath(startX, startY, endX, endY, callback);`
+`easystar.calculate();`
 
-`easyStar.calculate();`
+#### Additional Features
 
-`easyStar.enableDiagonals();`
+`easystar.setIterationsPerCalculation(someValue);`
 
-`easyStar.setTileCost(tileType, multiplicativeCost);`
+`easystar.avoidAdditionalPoint(x, y);`
+
+`easystar.enableDiagonals();`
+
+`easystar.setTileCost(tileType, multiplicativeCost);`
 
 ## Usage
 
