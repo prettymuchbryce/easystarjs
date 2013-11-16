@@ -4,10 +4,6 @@
 *	Licensed under the MIT license.
 * 
 *	Implementation By Bryce Neal (@prettymuchbryce)
-*	hi@prettymuchbryce.com
-*	
-*	Based on Patrick Lester's excellent "A* Pathfinding for beginners" 
-*	http://www.policyalmanac.org/games/aStarTutorial.htm
 **/
 EasyStar.js = function() {
 	var STRAIGHT_COST = 10;
@@ -64,7 +60,9 @@ EasyStar.js = function() {
 		//Setup cost map
 		for (var y = 0; y < collisionGrid.length; y++) {
 			for (var x = 0; x < collisionGrid[0].length; x++) {
-				costMap[collisionGrid[y][x]] = 1;
+				if (!costMap[collisionGrid[y][x]]) {
+					costMap[collisionGrid[y][x]] = 1
+				}
 			}
 		}
 	};
