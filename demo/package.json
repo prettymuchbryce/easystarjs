@@ -1,7 +1,16 @@
 {
-  "name": "easystarjs-example",
-  "version": "0.1.4",
+  "name": "easystarjsdemo",
+  "version": "0.0.1",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "MIT",
   "dependencies": {
-    "express": "~3.2.4"
+    "express": "~3.4.4",
+    "consolidate": "~0.9.1",
+    "mustache": "~0.7.3"
   }
 }
