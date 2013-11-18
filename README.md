@@ -106,6 +106,19 @@ In order to run the demo you will need node.js, and npm installed.
 
 Open your browser to 127.0.0.1:3000 to see the example.
 
+## Testing
+
+This project is setup to use the [karma](http://karma-runner.github.io/0.10/index.html) test runner. 
+
+### Development Testing
+
+run `grunt karma:dev` to start the karma test runner in dev mode. Once the karma server is up and running open [http://localhost:9876](http://localhost:9876) in your web browser. The tests will run automatically. View the results in your terminal window where you started the karma server. Editing any of the source or spec files will cause the tests to run again. 
+
+### Coverage Testing
+
+run `grunt karma:coverage` to run the karma server in test coverage mode. Once the test run is complete open `coverage/Phantom**/index.html` in your web browser to view the test coverage report. 
+
+once the karma server is running in test coverage mode you can visit [http://localhost:9876](http://localhost:9876) with any web browser to get a test coverage report for the connected browser. 
 ## Roadmap
 
 * Better test coverage
