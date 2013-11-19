@@ -64,7 +64,7 @@ Set tiles which are "walkable".
 
 Find a path.
 	
-	easystar.findPath(0, 0, 4, 0, function( path ) ) {
+	easystar.findPath(0, 0, 4, 0, function( path ) {
 		if (path === null) {
 			alert("Path was not found.");
 		} else {
