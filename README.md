@@ -1,10 +1,11 @@
-![easystar.js logo](http://s3.amazonaws.com/easystar/logo.png)
+[<img src="http://s3.amazonaws.com/easystar/logo.png">](http://easystarjs.com/)
+
 
 #### HTML5/Javascript Pathfinding Library #####
 
 *Find the minified file in the __/bin__ folder.*
 
-[Click here for a demonstration](http://easystarjs.com)
+[Click here for a demonstration](http://easystarjs.com/)
 
 ## Description 
 easystar.js is an asynchronous A* pathfinding API written in Javascript for use in your HTML5 games and interactive projects. The goal of this project is to make it easy and fast to implement performance conscious pathfinding. 
