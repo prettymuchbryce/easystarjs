@@ -122,6 +122,9 @@ run `grunt karma:coverage` to run the karma server in test coverage mode. Once t
 once the karma server is running in test coverage mode you can visit [http://localhost:9876](http://localhost:9876) with any web browser to get a test coverage report for the connected browser. 
 ## Roadmap
 
+* TypeScript definition
+* Dart port
+* node.js support
 * Better test coverage
 * Performance and API improvements
 
