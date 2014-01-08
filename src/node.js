@@ -1,6 +1,11 @@
 //NameSpace
 var EasyStar = EasyStar || {};
 
+//For node.js
+if (typeof window === 'undefined' && typeof module !== 'undefined' && module.exports) {
+	module.exports = EasyStar;
+}
+
 /**
 * A simple Node that represents a single tile on the grid.
 * @param {Object} parent The parent node.

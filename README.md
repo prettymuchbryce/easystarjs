@@ -3,7 +3,7 @@
 
 #### HTML5/Javascript Pathfinding Library #####
 
-*Find the minified file in the __/bin__ folder.*
+*Find the minified file in the __/bin__ folder. -or- `npm install easystarjs` for node.js*
 
 [Click here for a demonstration](http://easystarjs.com/)
 
@@ -124,7 +124,6 @@ once the karma server is running in test coverage mode you can visit [http://loc
 
 * TypeScript definition
 * Dart port
-* node.js support
 * Better test coverage
 * Performance and API improvements
 
