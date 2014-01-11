@@ -3,9 +3,12 @@
 
 #### HTML5/Javascript Pathfinding Library #####
 
-*Find the minified file in the __/bin__ folder. -or- `npm install easystarjs` for node.js*
-
 [Click here for a demonstration](http://easystarjs.com/)
+
+##Installation
+* **Web:** Find the minified file in the __/bin__ directory
+* **node.js:** `npm install easystarjs`
+* **Phaser:** see [Phaser Plugin](https://github.com/appsbu-de/phaser_plugin_pathfinding)
 
 ## Description 
 easystar.js is an asynchronous A* pathfinding API written in Javascript for use in your HTML5 games and interactive projects. The goal of this project is to make it easy and fast to implement performance conscious pathfinding. 
