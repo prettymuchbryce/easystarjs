@@ -543,3 +543,8 @@ EasyStar.js = function() {
 		return Math.floor(Math.abs(x2-x1) + Math.abs(y2-y1));
 	};
 }
+if (typeof define === "function" && define.amd) {
+	define("easystar", [], function() {
+		return EasyStar;
+	});
+}

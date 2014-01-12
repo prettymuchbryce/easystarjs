@@ -1,6 +1,6 @@
 {
   "name": "easystarjs",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "description": "Asynchronous A* Pathfinding API",
   "keywords": ["A*", "pathfinding", "grid", "easystar"],
   "homepage": "http://www.easystarjs.com",
@@ -10,7 +10,7 @@
       "email": "brycedneal@gmail.com",
       "url": "http://bryce.is"
     },
-  "main": "./bin/easystar-0.1.5",
+  "main": "./bin/easystar-0.1.6",
   "devDependencies": {
     "grunt": "~0.4.1",
     "grunt-contrib-uglify": "~0.2.0",
