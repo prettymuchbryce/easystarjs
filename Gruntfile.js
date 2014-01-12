@@ -9,7 +9,7 @@ module.exports = function(grunt) {
     concat: {
       options: {},
       dist: {
-        src: ['src/node.js', 'src/priorityqueue.js', 'src/instance.js', 'src/easystar.js'],
+        src: ['src/node.js', 'src/priorityqueue.js', 'src/instance.js', 'src/easystar.js', 'src/amd.js'],
         dest: '',
       }
     },
@@ -37,7 +37,7 @@ module.exports = function(grunt) {
 
   var releaseFilename = "bin/easystar-" + grunt.file.readJSON('package.json').version + ".min.js";
   var files = {};
-  files[releaseFilename] = ['src/node.js', 'src/priorityqueue.js', 'src/instance.js', 'src/easystar.js'];
+  files[releaseFilename] = ['src/node.js', 'src/priorityqueue.js', 'src/instance.js', 'src/easystar.js', 'src/amd.js'];
   grunt.config.set('uglify.release.files',files)
 
   grunt.config.set('concat.dist.dest', "bin/easystar-" + grunt.file.readJSON('package.json').version + ".js")
