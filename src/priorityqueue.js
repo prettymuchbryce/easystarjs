@@ -82,8 +82,8 @@ EasyStar.PriorityQueue = function(criteria,heapType) {
 	}
 
 	var swapUntilQueueIsCorrect = function(value) {
-		left = getLeftOf(value);
-		right = getRightOf(value);
+		var left = getLeftOf(value);
+		var right = getRightOf(value);
 		if (evaluate(left,value)) {
 			swap(value,left);
 			swapUntilQueueIsCorrect(left);
@@ -107,7 +107,10 @@ EasyStar.PriorityQueue = function(criteria,heapType) {
 		if (queue[target]===undefined||queue[self]===undefined) {
 			return false;
 		}
-
+		
+		var selfValue;
+		var targetValue;
+		
 		//Check if the criteria should be the result of a function call.
 		if (typeof queue[self][criteria] === 'function') {
 			selfValue = queue[self][criteria]();
