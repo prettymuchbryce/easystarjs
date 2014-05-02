@@ -340,7 +340,7 @@ EasyStar.js = function() {
 		return node;
 	};
 
-	var getDistance = function(x1,x2,y1,y2) {
-		return Math.floor(Math.abs(x2-x1) + Math.abs(y2-y1));
+	var getDistance = function(x1,y1,x2,y2) {
+		return Math.sqrt(Math.abs(x2-x1)*Math.abs(x2-x1) + Math.abs(y2-y1)*Math.abs(y2-y1)) * STRAIGHT_COST;
 	};
 }
