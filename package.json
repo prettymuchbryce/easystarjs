@@ -1,6 +1,6 @@
 {
   "name": "easystarjs",
-  "version": "0.1.6",
+  "version": "0.1.7",
   "description": "Asynchronous A* Pathfinding API",
   "keywords": ["A*", "pathfinding", "grid", "easystar"],
   "homepage": "http://www.easystarjs.com",

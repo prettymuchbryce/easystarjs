@@ -116,8 +116,8 @@ EasyStar.PriorityQueue = function(criteria,heapType) {
 	}
 
 	var swapUntilQueueIsCorrect = function(value) {
-		left = getLeftOf(value);
-		right = getRightOf(value);
+		var left = getLeftOf(value);
+		var right = getRightOf(value);
 		if (evaluate(left,value)) {
 			swap(value,left);
 			swapUntilQueueIsCorrect(left);
@@ -141,7 +141,10 @@ EasyStar.PriorityQueue = function(criteria,heapType) {
 		if (queue[target]===undefined||queue[self]===undefined) {
 			return false;
 		}
-
+		
+		var selfValue;
+		var targetValue;
+		
 		//Check if the criteria should be the result of a function call.
 		if (typeof queue[self][criteria] === 'function') {
 			selfValue = queue[self][criteria]();
@@ -182,6 +185,7 @@ EasyStar.PriorityQueue = function(criteria,heapType) {
 //Constants
 EasyStar.PriorityQueue.MAX_HEAP = 0;
 EasyStar.PriorityQueue.MIN_HEAP = 1;
+
 /**
  * Represents a single instance of EasyStar.
  * A path that is in the queue to eventually be found.
@@ -539,8 +543,8 @@ EasyStar.js = function() {
 		return node;
 	};
 
-	var getDistance = function(x1,x2,y1,y2) {
-		return Math.floor(Math.abs(x2-x1) + Math.abs(y2-y1));
+	var getDistance = function(x1,y1,x2,y2) {
+		return Math.sqrt(Math.abs(x2-x1)*Math.abs(x2-x1) + Math.abs(y2-y1)*Math.abs(y2-y1)) * STRAIGHT_COST;
 	};
 }
 if (typeof define === "function" && define.amd) {
