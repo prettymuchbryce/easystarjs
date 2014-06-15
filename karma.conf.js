@@ -21,7 +21,7 @@ module.exports = function(config) {
     // list of files / patterns to load in the browser
     files: [
       'src/node.js',
-      'src/priorityqueue.js',
+      'src/priority-queue.js',
       'src/instance.js',
       'src/easystar.js',
       'test/spec/*.js'

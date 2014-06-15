@@ -1,10 +1,16 @@
-//NameSpace
-var EasyStar = EasyStar || {};
+//For require.js
+if (typeof define === "function" && define.amd) {
+	define("easystar", [], function() {
+		return EasyStar;
+	});
+}
 
-//For node.js
-if (typeof window === 'undefined' && typeof module !== 'undefined' && module.exports) {
+//For browserify and node.js
+if (typeof module !== 'undefined' && module.exports) {
 	module.exports = EasyStar;
 }
+//NameSpace
+var EasyStar = EasyStar || {};
 
 /**
 * A simple Node that represents a single tile on the grid.
@@ -546,9 +552,4 @@ EasyStar.js = function() {
 	var getDistance = function(x1,y1,x2,y2) {
 		return Math.sqrt(Math.abs(x2-x1)*Math.abs(x2-x1) + Math.abs(y2-y1)*Math.abs(y2-y1)) * STRAIGHT_COST;
 	};
-}
-if (typeof define === "function" && define.amd) {
-	define("easystar", [], function() {
-		return EasyStar;
-	});
 }

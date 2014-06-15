@@ -183,5 +183,25 @@ describe("EasyStar.js", function() {
 	}
   });
 
+  //TODO investigate this test failure
+  //See issue #17
+  /*
+  it("It should prefer straight paths when possible", function() {
+	var star = new EasyStar.js();
+    star.setAcceptableTiles([0]);
+    star.enableDiagonals();
+    star.setGrid([
+        [0, 0, 0],
+        [0, 0, 0],
+        [0, 0, 0]
+    ]);
+
+    star.findPath(0, 1, 2, 1, function(_path){
+   		expect(_path[1].x).toEqual(1);
+   		expect(_path[1].y).toEqual(1);
+    });
+
+    star.calculate();
+  });*/
 
 });
