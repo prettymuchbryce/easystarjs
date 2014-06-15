@@ -24,7 +24,7 @@ gulp.task('minify', function() {
 
 gulp.task('test', function() {
   // Be sure to return the stream
-  return gulp.src(['bin/easystar-0.1.7.js', 'test/spec/*.js'])
+  return gulp.src(['bin/easystar-' + config.version + '.js', 'test/*.js'])
     .pipe(karma({
       configFile: 'karma.conf.js',
       action: 'run'
