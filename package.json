@@ -1,6 +1,6 @@
 {
   "name": "easystarjs",
-  "version": "0.1.8",
+  "version": "0.1.10",
   "description": "Asynchronous A* Pathfinding API",
   "keywords": [
     "A*",
@@ -15,7 +15,7 @@
     "email": "brycedneal@gmail.com",
     "url": "http://bryce.is"
   },
-  "main": "./bin/easystar-0.1.8",
+  "main": "./bin/easystar-0.1.10",
   "devDependencies": {
     "gulp": "^3.8.0",
     "gulp-concat": "^2.2.0",

@@ -1,6 +1,3 @@
-//NameSpace
-var EasyStar = EasyStar || {};
-
 /**
 * A simple Node that represents a single tile on the grid.
 * @param {Object} parent The parent node.

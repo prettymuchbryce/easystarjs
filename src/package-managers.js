@@ -1,3 +1,6 @@
+//NameSpace
+var EasyStar = EasyStar || {};
+
 //For require.js
 if (typeof define === "function" && define.amd) {
 	define("easystar", [], function() {

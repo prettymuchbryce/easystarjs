@@ -1,3 +1,6 @@
+//NameSpace
+var EasyStar = EasyStar || {};
+
 //For require.js
 if (typeof define === "function" && define.amd) {
 	define("easystar", [], function() {
@@ -9,9 +12,6 @@ if (typeof define === "function" && define.amd) {
 if (typeof module !== 'undefined' && module.exports) {
 	module.exports = EasyStar;
 }
-//NameSpace
-var EasyStar = EasyStar || {};
-
 /**
 * A simple Node that represents a single tile on the grid.
 * @param {Object} parent The parent node.
