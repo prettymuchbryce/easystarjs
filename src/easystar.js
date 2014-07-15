@@ -281,26 +281,26 @@ EasyStar.js = function() {
 	var checkAdjacentNode = function(instance, searchNode, x, y, cost) {
 		var adjacentCoordinateX = searchNode.x+x;
 		var adjacentCoordinateY = searchNode.y+y;
-		
-		if (instance.endX === adjacentCoordinateX && instance.endY === adjacentCoordinateY) {
-			instance.isDoneCalculating = true;
-			var path = [];
-			var pathLen = 0;
-			path[pathLen] = {x: adjacentCoordinateX, y: adjacentCoordinateY};
-			pathLen++;
-			path[pathLen] = {x: searchNode.x, y:searchNode.y};
-			pathLen++;
-			var parent = searchNode.parent;
-			while (parent!=null) {
-				path[pathLen] = {x: parent.x, y:parent.y};
-				pathLen++;
-				parent = parent.parent;
-			}
-			path.reverse();
-			instance.callback(path);
-		}
 
-		if (pointsToAvoid[adjacentCoordinateX + "_" + adjacentCoordinateY] === undefined) {
+		if (pointsToAvoid[adjacentCoordinateX + "_" + adjacentCoordinateY] === undefined) {		
+			if (instance.endX === adjacentCoordinateX && instance.endY === adjacentCoordinateY) {
+				instance.isDoneCalculating = true;
+				var path = [];
+				var pathLen = 0;
+				path[pathLen] = {x: adjacentCoordinateX, y: adjacentCoordinateY};
+				pathLen++;
+				path[pathLen] = {x: searchNode.x, y:searchNode.y};
+				pathLen++;
+				var parent = searchNode.parent;
+				while (parent!=null) {
+					path[pathLen] = {x: parent.x, y:parent.y};
+					pathLen++;
+					parent = parent.parent;
+				}
+				path.reverse();
+				instance.callback(path);
+			}
+
 			for (var i = 0; i < acceptableTiles.length; i++) {
 				if (collisionGrid[adjacentCoordinateY][adjacentCoordinateX] === acceptableTiles[i]) {
 					
