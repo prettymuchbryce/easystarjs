@@ -1,0 +1,24 @@
+{
+  "name": "easystarjs",
+  "version": "0.1.12",
+  "homepage": "https://github.com/prettymuchbryce/easystarjs",
+  "description": "Asynchronous A* Pathfinding API",
+  "main": "./bin/easystar-0.1.12.min.js",
+  "keywords": [
+    "A*",
+    "pathfinding",
+    "grid",
+    "easystar"
+  ],
+  "authors": [
+    { "name": "Bryce Neal", "email": "brycedneal@gmail.com", "homepage": "http://bryce.is" }
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}

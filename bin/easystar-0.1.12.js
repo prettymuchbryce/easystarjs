@@ -340,18 +340,18 @@ EasyStar.js = function() {
 	this.findPath = function(startX, startY ,endX, endY, callback) {
 		//No acceptable tiles were set
 		if (acceptableTiles === undefined) {
-			throw "You can't set a path without first calling setAcceptableTiles() on EasyStar.";
+			throw new Error("You can't set a path without first calling setAcceptableTiles() on EasyStar.");
 		}
 		//No grid was set
 		if (collisionGrid === undefined) {
-			throw "You can't set a path without first calling setGrid() on EasyStar.";
+			throw new Error("You can't set a path without first calling setGrid() on EasyStar.");
 		}
 
 		//Start or endpoint outside of scope.
 		if (startX < 0 || startY < 0 || endX < 0 || endX < 0 || 
 		startX > collisionGrid[0].length-1 || startY > collisionGrid.length-1 || 
 		endX > collisionGrid[0].length-1 || endY > collisionGrid.length-1) {
-			throw "Your start or end point is outside the scope of your grid.";
+			throw new Error("Your start or end point is outside the scope of your grid.");
 		}
 
 		//Start and end are the same tile.
