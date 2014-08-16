@@ -9,6 +9,7 @@
 * **Web:** Find the minified file in the __/bin__ directory
 * **node.js:** `npm install easystarjs`
 * **Phaser:** see [Phaser Plugin](https://github.com/appsbu-de/phaser_plugin_pathfinding)
+* **Bower:** `bower install easystarjs`
 
 ## Description 
 easystar.js is an asynchronous A* pathfinding API written in Javascript for use in your HTML5 games and interactive projects. The goal of this project is to make it easy and fast to implement performance conscious pathfinding. 
