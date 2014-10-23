@@ -182,6 +182,28 @@ describe("EasyStar.js", function() {
 		expect(path[14].y).toEqual(12);
 	}
   });
+  
+  
+  it("It should return empty path when start and end are the same tile.", function() {
+  	var easyStar = new EasyStar.js();
+  	var map = [[1,1,0,1,1],
+  		   [1,1,0,1,1],
+  		   [1,1,0,1,1],
+  		   [1,1,1,1,1],
+  		   [1,1,1,1,1]];
+
+  	easyStar.setGrid(map);
+
+  	easyStar.setAcceptableTiles([1]);
+
+  	easyStar.findPath(1,2,1,2,onPathFound);
+
+  	easyStar.calculate();
+
+  	function onPathFound(path) {
+  		expect(path.length).toEqual(0);
+  	}
+  });
 
   //TODO investigate this test failure
   //See issue #17

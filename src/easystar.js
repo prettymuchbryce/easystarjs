@@ -148,6 +148,7 @@ EasyStar.js = function() {
 		//Start and end are the same tile.
 		if (startX===endX && startY===endY) {
 			callback([]);
+			return;
 		}
 
 		//End point is not an acceptable tile.
