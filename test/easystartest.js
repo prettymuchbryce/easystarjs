@@ -2,13 +2,68 @@ describe("EasyStar.js", function() {
 
   beforeEach(function() { });
 
-  it("It should find a path successfully.", function() {
+  it("It should find a path successfully with corner cutting enabled.", function(done) {
+	var easyStar = new EasyStar.js();
+	easyStar.enableDiagonals();
+	var map = [[1,0,0,0,0],
+			   [0,1,0,0,0],
+			   [0,0,1,0,0],
+			   [0,0,0,1,0],
+			   [0,0,0,0,1]];
+
+	easyStar.setGrid(map);
+
+	easyStar.enableCornerCutting();
+
+	easyStar.setAcceptableTiles([1]);
+
+	easyStar.findPath(0,0,4,4,onPathFound);
+
+	easyStar.calculate();
+
+	function onPathFound(path) {
+		expect(path).not.toBeNull();
+		expect(path.length).toEqual(5);
+		expect(path[0].x).toEqual(0);
+		expect(path[0].y).toEqual(0);
+		expect(path[3].x).toEqual(3);
+		expect(path[3].y).toEqual(3);
+		done()
+	}
+  });
+
+  it("It should fail to find a path successfully with corner cutting disabled.", function(done) {
+	var easyStar = new EasyStar.js();
+	easyStar.enableDiagonals();
+	var map = [[1,0,0,0,0],
+			   [0,1,0,0,0],
+			   [0,0,1,0,0],
+			   [0,0,0,1,0],
+			   [0,0,0,0,1]];
+
+	easyStar.setGrid(map);
+
+	easyStar.disableCornerCutting();
+
+	easyStar.setAcceptableTiles([1]);
+
+	easyStar.findPath(0,0,4,4,onPathFound);
+
+	easyStar.calculate();
+
+	function onPathFound(path) {
+		expect(path).toBeNull();
+		done();
+	}
+  });
+
+  it("It should find a path successfully.", function(done) {
 	var easyStar = new EasyStar.js();
 	var map = [[1,1,0,1,1],
-		   [1,1,0,1,1],
-		   [1,1,0,1,1],
-		   [1,1,1,1,1],
-		   [1,1,1,1,1]];
+			   [1,1,0,1,1],
+			   [1,1,0,1,1],
+			   [1,1,1,1,1],
+			   [1,1,1,1,1]];
 
 	easyStar.setGrid(map);
 
@@ -19,21 +74,23 @@ describe("EasyStar.js", function() {
 	easyStar.calculate();
 
 	function onPathFound(path) {
+		expect(path).not.toBeNull();
 		expect(path.length).toEqual(5);
 		expect(path[0].x).toEqual(1);
 		expect(path[0].y).toEqual(2);
 		expect(path[2].x).toEqual(2);
 		expect(path[2].y).toEqual(3);
+		done();
 	}
   });
 
-  it("It should be able to avoid a separate point successfully.", function() {
+  it("It should be able to avoid a separate point successfully.", function(done) {
 	var easyStar = new EasyStar.js();
 	var map = [[1,1,0,1,1],
-		   	[1,1,0,1,1],
-		   [1,1,0,1,1],
-		   [1,1,1,1,1],
-		   [1,1,1,1,1]];
+			   [1,1,0,1,1],
+			   [1,1,0,1,1],
+			   [1,1,1,1,1],
+			   [1,1,1,1,1]];
 
 	easyStar.setGrid(map);
 
@@ -46,15 +103,17 @@ describe("EasyStar.js", function() {
 	easyStar.calculate();
 
 	function onPathFound(path) {
+		expect(path).not.toBeNull();
 		expect(path.length).toEqual(7);
 		expect(path[0].x).toEqual(1);
 		expect(path[0].y).toEqual(2);
 		expect(path[2].x).toEqual(1);
 		expect(path[2].y).toEqual(4);
+		done();
 	}
   });
 
-  it("It should work with diagonals", function() {
+  it("It should work with diagonals", function(done) {
 	var easyStar = new EasyStar.js();
 	easyStar.enableDiagonals();
 	var map = [[1,1,1,1,1],
@@ -72,6 +131,7 @@ describe("EasyStar.js", function() {
 	easyStar.calculate();
 
 	function onPathFound(path) {
+		expect(path).not.toBeNull();
 		expect(path.length).toEqual(5);
 		expect(path[0].x).toEqual(0);
 		expect(path[0].y).toEqual(0);
@@ -83,10 +143,11 @@ describe("EasyStar.js", function() {
 		expect(path[3].y).toEqual(3);
 		expect(path[4].x).toEqual(4);
 		expect(path[4].y).toEqual(4);
+		done();
 	}
   });
 
-  it("It should move in a straight line with diagonals", function() {
+  it("It should move in a straight line with diagonals", function(done) {
 	var easyStar = new EasyStar.js();
 	easyStar.enableDiagonals();
 	var map = [[1,1,1,1,1,1,1,1,1,1],
@@ -111,14 +172,16 @@ describe("EasyStar.js", function() {
 	easyStar.calculate();
 
 	function onPathFound(path) {
+		expect(path).not.toBeNull();
 		for (var i = 0; i < path.length; i++) {
 			expect(path[i].y).toEqual(0);
 		}
+		done();
 	}
   });
 
 
-  it("It should prefer straight paths when possible", function() {
+  it("It should prefer straight paths when possible", function(done) {
 	var easyStar = new EasyStar.js();
 	easyStar.enableDiagonals();
 	var map = [];
@@ -150,6 +213,7 @@ describe("EasyStar.js", function() {
 	easyStar.calculate();
 
 	function onPathFound(path) {
+		expect(path).not.toBeNull();
 		expect(path[0].x).toEqual(18);
 		expect(path[0].y).toEqual(13);
 		expect(path[1].x).toEqual(17);
@@ -180,50 +244,56 @@ describe("EasyStar.js", function() {
 		expect(path[13].y).toEqual(13);
 		expect(path[14].x).toEqual(4);
 		expect(path[14].y).toEqual(12);
+		done();
 	}
   });
   
   
-  it("It should return empty path when start and end are the same tile.", function() {
-  	var easyStar = new EasyStar.js();
-  	var map = [[1,1,0,1,1],
-  		   [1,1,0,1,1],
-  		   [1,1,0,1,1],
-  		   [1,1,1,1,1],
-  		   [1,1,1,1,1]];
+  it("It should return empty path when start and end are the same tile.", function(done) {
+	var easyStar = new EasyStar.js();
+	var map = [[1,1,0,1,1],
+			   [1,1,0,1,1],
+			   [1,1,0,1,1],
+			   [1,1,1,1,1],
+			   [1,1,1,1,1]];
 
-  	easyStar.setGrid(map);
+	easyStar.setGrid(map);
 
-  	easyStar.setAcceptableTiles([1]);
+	easyStar.setAcceptableTiles([1]);
 
-  	easyStar.findPath(1,2,1,2,onPathFound);
+	easyStar.findPath(1,2,1,2,onPathFound);
 
-  	easyStar.calculate();
+	easyStar.calculate();
 
-  	function onPathFound(path) {
-  		expect(path.length).toEqual(0);
-  	}
+	function onPathFound(path) {
+		expect(path).not.toBeNull();
+		expect(path.length).toEqual(0);
+		done();
+	}
   });
+  
+/*
+	FIXME #17
 
-  //TODO investigate this test failure
-  //See issue #17
-  /*
-  it("It should prefer straight paths when possible", function() {
-	var star = new EasyStar.js();
-    star.setAcceptableTiles([0]);
-    star.enableDiagonals();
-    star.setGrid([
-        [0, 0, 0],
-        [0, 0, 0],
-        [0, 0, 0]
-    ]);
+  it("It should prefer straight paths when possible", function(done) {
+	var easyStar = new EasyStar.js();
+	easyStar.setAcceptableTiles([0]);
+	easyStar.enableDiagonals();
+	easyStar.setGrid([
+		[0, 0, 0],
+		[0, 0, 0],
+		[0, 0, 0]
+	]);
 
-    star.findPath(0, 1, 2, 1, function(_path){
-   		expect(_path[1].x).toEqual(1);
-   		expect(_path[1].y).toEqual(1);
-    });
+	easyStar.findPath(0, 1, 2, 1, function(path){
+		expect(path).not.toBeNull();
+		expect(path[1].x).toEqual(1);
+		expect(path[1].y).toEqual(1);
+		done();
+	});
 
-    star.calculate();
-  });*/
+	easyStar.calculate();
+  });
+*/
 
 });

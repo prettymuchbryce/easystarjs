@@ -11,6 +11,7 @@ EasyStar.js = function() {
 	var pointsToAvoid = {};
 	var collisionGrid;
 	var costMap = {};
+	var allowCornerCutting = true;
 	var iterationsSoFar;
 	var instances = [];
 	var iterationsPerCalculation = Number.MAX_VALUE;
@@ -111,6 +112,20 @@ EasyStar.js = function() {
 	};
 
 	/**
+	* Enables corner cutting in diagonal movement.
+	**/
+	this.enableCornerCutting = function() {
+		allowCornerCutting = true;
+	};
+
+	/**
+	* Disables corner cutting in diagonal movement.
+	**/
+	this.disableCornerCutting = function() {
+		allowCornerCutting = false;
+	};
+
+	/**
 	* Stop avoiding all additional points on the grid.
 	**/
 	this.stopAvoidingAllAdditionalPoints = function() {
@@ -147,7 +162,9 @@ EasyStar.js = function() {
 
 		//Start and end are the same tile.
 		if (startX===endX && startY===endY) {
-			callback([]);
+			setTimeout(function() {
+				callback([]);
+			});
 			return;
 		}
 
@@ -162,7 +179,9 @@ EasyStar.js = function() {
 		}
 
 		if (isAcceptable === false) {
-			callback(null);
+			setTimeout(function() {
+				callback(null);
+			});
 			return;
 		}
 
@@ -176,16 +195,16 @@ EasyStar.js = function() {
 		instance.endX = endX;
 		instance.endY = endY;
 		instance.callback = callback;
-		
+
 		instance.openList.insert(coordinateToNode(instance, instance.startX, 
 			instance.startY, null, STRAIGHT_COST));
-		
+
 		instances.push(instance);
 	};
 
 	/**
 	* This method steps through the A* Algorithm in an attempt to
-	* find your path(s). It will search 4 tiles for every calculation.
+	* find your path(s). It will search 4-8 tiles (depending on diagonals) for every calculation.
 	* You can change the number of calculations done in a call by using
 	* easystar.setIteratonsPerCalculation().
 	**/
@@ -199,8 +218,11 @@ EasyStar.js = function() {
 			}
 
 			//Couldn't find a path.
-			if (instances[0].openList.length===0) {
-				instances[0].callback(null);
+			if (instances[0].openList.length === 0) {
+				var ic = instances[0];
+				setTimeout(function() {
+					ic.callback(null);
+				});
 				instances.shift();
 				continue;
 			}
@@ -242,35 +264,59 @@ EasyStar.js = function() {
 			}
 			if (diagonalsEnabled) {
 				if (searchNode.x > 0 && searchNode.y > 0) {
-					checkAdjacentNode(instances[0], searchNode, -1, -1,  DIAGONAL_COST *
-						costMap[collisionGrid[searchNode.y-1][searchNode.x-1]]);
-					if (instances[0].isDoneCalculating===true) {
-						instances.shift();
-						continue;
+
+					if (allowCornerCutting ||
+						(isTileWalkable(collisionGrid, acceptableTiles, searchNode.x, searchNode.y-1) &&
+						isTileWalkable(collisionGrid, acceptableTiles, searchNode.x-1, searchNode.y))) {
+
+						checkAdjacentNode(instances[0], searchNode, -1, -1,  DIAGONAL_COST *
+							costMap[collisionGrid[searchNode.y-1][searchNode.x-1]]);
+						if (instances[0].isDoneCalculating===true) {
+							instances.shift();
+							continue;
+						}
 					}
 				}
 				if (searchNode.x < collisionGrid[0].length-1 && searchNode.y < collisionGrid.length-1) {
-					checkAdjacentNode(instances[0], searchNode, 1, 1, DIAGONAL_COST *
-						costMap[collisionGrid[searchNode.y+1][searchNode.x+1]]);
-					if (instances[0].isDoneCalculating===true) {
-						instances.shift();
-						continue;
+
+					if (allowCornerCutting ||
+						(isTileWalkable(collisionGrid, acceptableTiles, searchNode.x, searchNode.y+1) &&
+						isTileWalkable(collisionGrid, acceptableTiles, searchNode.x+1, searchNode.y))) {
+
+						checkAdjacentNode(instances[0], searchNode, 1, 1, DIAGONAL_COST *
+							costMap[collisionGrid[searchNode.y+1][searchNode.x+1]]);
+						if (instances[0].isDoneCalculating===true) {
+							instances.shift();
+							continue;
+						}
 					}
 				}
 				if (searchNode.x < collisionGrid[0].length-1 && searchNode.y > 0) {
-					checkAdjacentNode(instances[0], searchNode, 1, -1, DIAGONAL_COST *
-						costMap[collisionGrid[searchNode.y-1][searchNode.x+1]]);
-					if (instances[0].isDoneCalculating===true) {
-						instances.shift();
-						continue;
+
+					if (allowCornerCutting ||
+						(isTileWalkable(collisionGrid, acceptableTiles, searchNode.x, searchNode.y-1) &&
+						isTileWalkable(collisionGrid, acceptableTiles, searchNode.x+1, searchNode.y))) {
+
+						checkAdjacentNode(instances[0], searchNode, 1, -1, DIAGONAL_COST *
+							costMap[collisionGrid[searchNode.y-1][searchNode.x+1]]);
+						if (instances[0].isDoneCalculating===true) {
+							instances.shift();
+							continue;
+						}
 					}
 				}
 				if (searchNode.x > 0 && searchNode.y < collisionGrid.length-1) {
-					checkAdjacentNode(instances[0], searchNode, -1, 1, DIAGONAL_COST *
-						costMap[collisionGrid[searchNode.y+1][searchNode.x-1]]);
-					if (instances[0].isDoneCalculating===true) {
-						instances.shift();
-						continue;
+
+					if (allowCornerCutting ||
+						(isTileWalkable(collisionGrid, acceptableTiles, searchNode.x, searchNode.y+1) &&
+						isTileWalkable(collisionGrid, acceptableTiles, searchNode.x-1, searchNode.y))) {
+
+						checkAdjacentNode(instances[0], searchNode, -1, 1, DIAGONAL_COST *
+							costMap[collisionGrid[searchNode.y+1][searchNode.x-1]]);
+						if (instances[0].isDoneCalculating===true) {
+							instances.shift();
+							continue;
+						}
 					}
 				}
 			}
@@ -283,7 +329,7 @@ EasyStar.js = function() {
 		var adjacentCoordinateX = searchNode.x+x;
 		var adjacentCoordinateY = searchNode.y+y;
 
-		if (pointsToAvoid[adjacentCoordinateX + "_" + adjacentCoordinateY] === undefined) {		
+		if (pointsToAvoid[adjacentCoordinateX + "_" + adjacentCoordinateY] === undefined) {
 			if (instance.endX === adjacentCoordinateX && instance.endY === adjacentCoordinateY) {
 				instance.isDoneCalculating = true;
 				var path = [];
@@ -299,29 +345,38 @@ EasyStar.js = function() {
 					parent = parent.parent;
 				}
 				path.reverse();
-				instance.callback(path);
+				var ic = instance;
+				var ip = path;
+				setTimeout(function() {
+					ic.callback(ip);
+				});
 			}
 
-			for (var i = 0; i < acceptableTiles.length; i++) {
-				if (collisionGrid[adjacentCoordinateY][adjacentCoordinateX] === acceptableTiles[i]) {
-					
-					var node = coordinateToNode(instance, adjacentCoordinateX, 
-						adjacentCoordinateY, searchNode, cost);
-					
-					if (node.list === undefined) {
-						node.list = EasyStar.Node.OPEN_LIST;
-						instance.openList.insert(node);
-					} else if (node.list === EasyStar.Node.OPEN_LIST) {
-						if (searchNode.costSoFar + cost < node.costSoFar) {
-							node.costSoFar = searchNode.costSoFar + cost;
-							node.parent = searchNode;
-						}
+			if (isTileWalkable(collisionGrid, acceptableTiles, adjacentCoordinateX, adjacentCoordinateY)) {
+				var node = coordinateToNode(instance, adjacentCoordinateX, 
+					adjacentCoordinateY, searchNode, cost);
+
+				if (node.list === undefined) {
+					node.list = EasyStar.Node.OPEN_LIST;
+					instance.openList.insert(node);
+				} else if (node.list === EasyStar.Node.OPEN_LIST) {
+					if (searchNode.costSoFar + cost < node.costSoFar) {
+						node.costSoFar = searchNode.costSoFar + cost;
+						node.parent = searchNode;
 					}
-					break;
 				}
 			}
-
 		}
+	};
+
+	var isTileWalkable = function(collisionGrid, acceptableTiles, x, y) {
+		for (var i = 0; i < acceptableTiles.length; i++) {
+			if (collisionGrid[y][x] === acceptableTiles[i]) {
+				return true;
+			}
+		}
+
+		return false;
 	};
 
 	//Helpers

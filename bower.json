@@ -1,9 +1,9 @@
 {
   "name": "easystarjs",
-  "version": "0.1.13",
+  "version": "0.2.0",
   "homepage": "https://github.com/prettymuchbryce/easystarjs",
   "description": "Asynchronous A* Pathfinding API",
-  "main": "./bin/easystar-0.1.13.min.js",
+  "main": "./bin/easystar-0.2.0.min.js",
   "keywords": [
     "A*",
     "pathfinding",

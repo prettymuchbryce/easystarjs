@@ -1,7 +1,7 @@
 {
   "name": "easystarjs",
-  "version": "0.1.13",
-  "main": "./bin/easystar-0.1.13",
+  "version": "0.2.0",
+  "main": "./bin/easystar-0.2.0",
   "description": "Asynchronous A* Pathfinding API",
   "keywords": [
     "A*",
@@ -10,6 +10,10 @@
     "easystar"
   ],
   "homepage": "http://www.easystarjs.com",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/prettymuchbryce/easystarjs.git"
+  },
   "license": "MIT",
   "author": {
     "name": "Bryce Neal",
@@ -23,7 +27,7 @@
     "gulp-uglify": "^0.3.0",
     "karma": "^0.12.16",
     "karma-coverage": "^0.2.4",
-    "karma-jasmine": "^0.1.5",
+    "karma-jasmine": "^0.3.5",
     "karma-phantomjs-launcher": "^0.1.4"
   },
   "dependencies": {}
