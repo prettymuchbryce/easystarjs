@@ -43,7 +43,13 @@ easystar.js is an asynchronous A* pathfinding API written in Javascript for use 
 
 `easystar.enableDiagonals();`
 
+`easystar.enableCornerCutting();`
+
+`easystar.setAdditionalPointCost(x, y, cost);`
+
 `easystar.setTileCost(tileType, multiplicativeCost);`
+
+`easystar.enableSync();`
 
 ## Usage
 
