@@ -223,4 +223,28 @@ describe("EasyStar.js", function() {
 	easyStar.calculate();
   });
 
+  it("It should prefer diagonal paths when they are faster", function(done) {
+	var easyStar = new EasyStar.js();
+	var grid = [];
+	for (var i = 0; i < 20; i++) {
+		grid[i] = [];
+		for (var j = 0; j < 20; j++) {
+		  grid[i][j] = 0;
+		}
+	}
+	easyStar.setGrid(grid);
+	easyStar.setAcceptableTiles([0]);
+	easyStar.enableDiagonals();
+
+	easyStar.findPath(4, 4, 2, 2, function(path){
+		expect(path).not.toBeNull();
+		expect(path.length).toEqual(3);
+		expect(path[1].x).toEqual(3);
+		expect(path[1].y).toEqual(3);
+		done();
+	});
+
+	easyStar.calculate();
+  })
+
 });

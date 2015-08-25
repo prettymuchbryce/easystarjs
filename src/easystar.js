@@ -6,8 +6,8 @@
 *	Implementation By Bryce Neal (@prettymuchbryce)
 **/
 EasyStar.js = function() {
-	var STRAIGHT_COST = 10;
-	var DIAGONAL_COST = 14;
+	var STRAIGHT_COST = 1.0;
+	var DIAGONAL_COST = 1.4;
 	var syncEnabled = false;
 	var pointsToAvoid = {};
 	var collisionGrid;
@@ -349,11 +349,13 @@ EasyStar.js = function() {
 				}
 			}
 
-			// First sort all of the potential nodes we could search by their cost.
+			// First sort all of the potential nodes we could search by their cost + heuristic distance.
 			tilesToSearch.sort(function(a, b) {
-				if (a.cost < b.cost) {
+				var aCost = a.cost + getDistance(searchNode.x + a.x, searchNode.y + a.y, instances[0].endX, instances[0].endY)
+				var bCost = b.cost + getDistance(searchNode.x + b.x, searchNode.y + b.y, instances[0].endX, instances[0].endY)
+				if (aCost < bCost) {
 					return -1;
-				} else if (a.cost === b.cost) {
+				} else if (aCost === bCost) {
 					return 0;
 				} else {
 					return 1;
@@ -405,6 +407,7 @@ EasyStar.js = function() {
 				var ic = instance;
 				var ip = path;
 				ic.callback(ip);
+				return
 			}
 
 			if (isTileWalkable(collisionGrid, acceptableTiles, adjacentCoordinateX, adjacentCoordinateY)) {
