@@ -21,6 +21,6 @@ EasyStar.Node = function(parent, x, y, costSoFar, simpleDistanceToTarget) {
 	}
 };
 
-//Constants
+// Constants
 EasyStar.Node.OPEN_LIST = 0;
 EasyStar.Node.CLOSED_LIST = 1;

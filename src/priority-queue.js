@@ -111,7 +111,7 @@ EasyStar.PriorityQueue = function(criteria,heapType) {
 		var selfValue;
 		var targetValue;
 		
-		//Check if the criteria should be the result of a function call.
+		// Check if the criteria should be the result of a function call.
 		if (typeof queue[self][criteria] === 'function') {
 			selfValue = queue[self][criteria]();
 			targetValue = queue[target][criteria]();
@@ -148,6 +148,6 @@ EasyStar.PriorityQueue = function(criteria,heapType) {
 	}
 };
 
-//Constants
+// Constants
 EasyStar.PriorityQueue.MAX_HEAP = 0;
 EasyStar.PriorityQueue.MIN_HEAP = 1;

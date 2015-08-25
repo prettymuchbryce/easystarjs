@@ -29,10 +29,10 @@ EasyStar.js = function() {
 	**/
 	this.setAcceptableTiles = function(tiles) {
 		if (tiles instanceof Array) {
-			//Array
+			// Array
 			acceptableTiles = tiles;
 		} else if (!isNaN(parseFloat(tiles)) && isFinite(tiles)) {
-			//Number
+			// Number
 			acceptableTiles = [tiles];
 		}
 	};
@@ -190,7 +190,7 @@ EasyStar.js = function() {
 	* 
 	**/
 	this.findPath = function(startX, startY, endX, endY, callback) {
-		//Wraps the callback for sync vs async logic
+		// Wraps the callback for sync vs async logic
 		var callbackWrapper = function(result) {
 			if (syncEnabled) {
 				callback(result);
@@ -201,29 +201,29 @@ EasyStar.js = function() {
 			}
 		}
 
-		//No acceptable tiles were set
+		// No acceptable tiles were set
 		if (acceptableTiles === undefined) {
 			throw new Error("You can't set a path without first calling setAcceptableTiles() on EasyStar.");
 		}
-		//No grid was set
+		// No grid was set
 		if (collisionGrid === undefined) {
 			throw new Error("You can't set a path without first calling setGrid() on EasyStar.");
 		}
 
-		//Start or endpoint outside of scope.
+		// Start or endpoint outside of scope.
 		if (startX < 0 || startY < 0 || endX < 0 || endX < 0 || 
 		startX > collisionGrid[0].length-1 || startY > collisionGrid.length-1 || 
 		endX > collisionGrid[0].length-1 || endY > collisionGrid.length-1) {
 			throw new Error("Your start or end point is outside the scope of your grid.");
 		}
 
-		//Start and end are the same tile.
+		// Start and end are the same tile.
 		if (startX===endX && startY===endY) {
 			callbackWrapper([]);
 			return;
 		}
 
-		//End point is not an acceptable tile.
+		// End point is not an acceptable tile.
 		var endTile = collisionGrid[endY][endX];
 		var isAcceptable = false;
 		for (var i = 0; i < acceptableTiles.length; i++) {
@@ -238,7 +238,7 @@ EasyStar.js = function() {
 			return;
 		}
 
-		//Create the instance
+		// Create the instance
 		var instance = new EasyStar.instance();
 		instance.openList = new EasyStar.PriorityQueue("bestGuessDistance",EasyStar.PriorityQueue.MIN_HEAP);
 		instance.isDoneCalculating = false;
@@ -271,11 +271,11 @@ EasyStar.js = function() {
 			}
 
 			if (syncEnabled) {
-				//If this is a sync instance, we want to make sure that it calculates synchronously. 
+				// If this is a sync instance, we want to make sure that it calculates synchronously. 
 				iterationsSoFar = 0;
 			}
 
-			//Couldn't find a path.
+			// Couldn't find a path.
 			if (instances[0].openList.length === 0) {
 				var ic = instances[0];
 				ic.callback(null);
@@ -284,6 +284,7 @@ EasyStar.js = function() {
 			}
 
 			var searchNode = instances[0].openList.shiftHighestPriorityElement();
+
 			var tilesToSearch = [];
 			searchNode.list = EasyStar.Node.CLOSED_LIST;
 
@@ -361,7 +362,7 @@ EasyStar.js = function() {
 
 			var isDoneCalculating = false;
 
-			//Search all of the surrounding nodes
+			// Search all of the surrounding nodes
 			for (var i = 0; i < tilesToSearch.length; i++) {
 				checkAdjacentNode(tilesToSearch[i].instance, tilesToSearch[i].searchNode, 
 					tilesToSearch[i].x, tilesToSearch[i].y, tilesToSearch[i].cost);
@@ -379,12 +380,13 @@ EasyStar.js = function() {
 		}
 	};
 
-	//Private methods follow
+	// Private methods follow
 	var checkAdjacentNode = function(instance, searchNode, x, y, cost) {
 		var adjacentCoordinateX = searchNode.x+x;
 		var adjacentCoordinateY = searchNode.y+y;
 
 		if (pointsToAvoid[adjacentCoordinateX + "_" + adjacentCoordinateY] === undefined) {
+			// Handles the case where we have found the destination
 			if (instance.endX === adjacentCoordinateX && instance.endY === adjacentCoordinateY) {
 				instance.isDoneCalculating = true;
 				var path = [];
@@ -422,7 +424,7 @@ EasyStar.js = function() {
 		}
 	};
 
-	//Helpers
+	// Helpers
 	var isTileWalkable = function(collisionGrid, acceptableTiles, x, y) {
 		for (var i = 0; i < acceptableTiles.length; i++) {
 			if (collisionGrid[y][x] === acceptableTiles[i]) {
