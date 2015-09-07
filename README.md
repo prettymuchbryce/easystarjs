@@ -25,63 +25,81 @@ easystar.js is an asynchronous A* pathfinding API written in Javascript for use 
 
 #### Main Methods
 
-`var easystar = new EasyStar.js();`
-
-`easystar.setGrid(twoDimensionalArray);` 
-
-`easystar.setAcceptableTiles(arrayOfAcceptableTiles);` 
-
-`easystar.findPath(startX, startY, endX, endY, callback);`
-
-`easystar.calculate();`
+```javascript
+var easystar = new EasyStar.js();
+```
+```javascript
+easystar.setGrid(twoDimensionalArray);
+```
+```javascript
+easystar.setAcceptableTiles(arrayOfAcceptableTiles);
+```
+```javascript
+easystar.findPath(startX, startY, endX, endY, callback);
+```
+```javascript
+easystar.calculate();
+```
 
 #### Additional Features
 
-`easystar.setIterationsPerCalculation(someValue);`
-
-`easystar.avoidAdditionalPoint(x, y);`
-
-`easystar.enableDiagonals();`
-
-`easystar.enableCornerCutting();`
-
-`easystar.setAdditionalPointCost(x, y, cost);`
-
-`easystar.setTileCost(tileType, multiplicativeCost);`
-
-`easystar.enableSync();`
+```javascript
+easystar.setIterationsPerCalculation(someValue);
+```
+```javascript
+easystar.avoidAdditionalPoint(x, y);
+```
+```javascript
+easystar.enableDiagonals();
+```
+```javascript
+easystar.enableCornerCutting();
+```
+```javascript
+easystar.setAdditionalPointCost(x, y, cost);
+```
+```javascript
+easystar.setTileCost(tileType, multiplicativeCost);
+```
+```javascript
+easystar.enableSync();
+```
 
 ## Usage
 
 First create EasyStar.
-	
-	var easystar = new EasyStar.js();
+```javascript
+var easystar = new EasyStar.js();
+```
 
 Create a grid, or tilemap. You may have made this with a level editor, or procedurally. Let's keep it simple for this example.
-
-	var grid = [[0,0,1,0,0],
-		   	    [0,0,1,0,0],
-		        [0,0,1,0,0],
-		        [0,0,1,0,0],
-		        [0,0,0,0,0]];
+```javascript
+var grid = [[0,0,1,0,0],
+	        [0,0,1,0,0],
+	        [0,0,1,0,0],
+	        [0,0,1,0,0],
+	        [0,0,0,0,0]];
+```
 
 Set our grid.
-	
-	easystar.setGrid(grid);
-
+```javascript	
+easystar.setGrid(grid);
+```
 Set tiles which are "walkable".
-	
-	easystar.setAcceptableTiles([0]);
+```javascript
+easystar.setAcceptableTiles([0]);
+```
 
 Find a path.
-	
-	easystar.findPath(0, 0, 4, 0, function( path ) {
-		if (path === null) {
-			alert("Path was not found.");
-		} else {
-			alert("Path was found. The first Point is " + path[0].x + " " + path[0].y);
-		}
-	});
+```javascript
+easystar.findPath(0, 0, 4, 0, function( path ) {
+	if (path === null) {
+		alert("Path was not found.");
+	} else {
+		alert("Path was found. The first Point is " + path[0].x + " " + path[0].y);
+	}
+});
+```
 
 EasyStar will not yet start calculating my path. 
 
@@ -92,12 +110,16 @@ You should call `easystar.calculate()` on a ticker, or setInterval.
 If you have a large grid, then it is possible that these calculations could slow down the browser. 
 For this reason, it might be a good idea to give EasyStar a smaller `iterationsPerCalculation` value via 
 
-	easystar.setIterationsPerCalculation(1000); 
+```javascript
+easystar.setIterationsPerCalculation(1000);
+```
 
 It may take longer for you to find a path this way, but you won't completely halt your game trying to find one.
 The only thing left to do now is to calculate the path.
 
-	easystar.calculate();
+```javascript
+easystar.calculate();
+```
 
 ## License
 
@@ -107,13 +129,15 @@ easystar.js is licensed under the MIT license. You may use it for commercial use
 
 In order to run the demo you will need node.js, and npm installed.
 
-	git clone https://github.com/prettymuchbryce/easystarjs.git
+```sh
+git clone https://github.com/prettymuchbryce/easystarjs.git
 
-	cd easystarjs/demo
+cd easystarjs/demo
 
-	npm install
+npm install
 
-	node app.js
+node app.js
+```
 
 Open your browser to 127.0.0.1:3000 to see the example.
 
