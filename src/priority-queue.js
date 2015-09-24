@@ -136,7 +136,7 @@ EasyStar.PriorityQueue = function(criteria,heapType) {
 	}
 
 	var getParentOf = function(index) {
-		return Math.floor(index/2)-1;
+		return Math.floor((index-1) / 2);
 	}
 
 	var getLeftOf = function(index) {
