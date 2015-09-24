@@ -28,6 +28,24 @@ describe("PriorityQueue", function() {
 
   });
 
+	it("It should sort two objects by min value", function() {
+		p = new EasyStar.PriorityQueue("value", EasyStar.PriorityQueue.MIN_HEAP);
+
+		var object1 = {};
+		var object2 = {};
+
+		object1.value = 10;
+		object2.value = 5;
+
+		p.insert(object1);
+		expect(p.getHighestPriorityElement()).toBe(object1);
+
+		p.insert(object2);
+		expect(p.getHighestPriorityElement()).toBe(object2);
+
+		expect(p.shiftHighestPriorityElement()).toBe(object2);
+	});
+
   it("It should sort objects by max value.", function() {
   	p = new EasyStar.PriorityQueue("value", EasyStar.PriorityQueue.MAX_HEAP);
 	
