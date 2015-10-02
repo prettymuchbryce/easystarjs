@@ -111,8 +111,11 @@ EasyStar.PriorityQueue = function(criteria,heapType) {
 		var selfValue;
 		var targetValue;
 		
-		// Check if the criteria should be the result of a function call.
-		if (typeof queue[self][criteria] === 'function') {
+		if (criteria == 'compareTo' && typeof queue[self][criteria] === 'function') {
+            		return queue[self][criteria](queue[target]);
+        	}
+        	// Check if the criteria should be the result of a function call.
+        	else if (typeof queue[self][criteria] === 'function') {
 			selfValue = queue[self][criteria]();
 			targetValue = queue[target][criteria]();
 		} else {
