@@ -69,7 +69,12 @@ easystar.enableSync();
 
 First create EasyStar.
 ```javascript
+// for web
 var easystar = new EasyStar.js();
+
+// for node.js
+var easystarjs = require('easystarjs');
+var easystar = new easystarjs.js();
 ```
 
 Create a grid, or tilemap. You may have made this with a level editor, or procedurally. Let's keep it simple for this example.
