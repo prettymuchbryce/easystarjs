@@ -211,7 +211,7 @@ EasyStar.js = function() {
 		}
 
 		// Start or endpoint outside of scope.
-		if (startX < 0 || startY < 0 || endX < 0 || endX < 0 || 
+		if (startX < 0 || startY < 0 || endX < 0 || endY < 0 ||
 		startX > collisionGrid[0].length-1 || startY > collisionGrid.length-1 || 
 		endX > collisionGrid[0].length-1 || endY > collisionGrid.length-1) {
 			throw new Error("Your start or end point is outside the scope of your grid.");
