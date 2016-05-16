@@ -458,6 +458,20 @@ EasyStar.js = function() {
 	};
 
 	var getDistance = function(x1,y1,x2,y2) {
-		return Math.sqrt( (x2-=x1)*x2 + (y2-=y1)*y2 );
+		if (diagonalsEnabled) {
+			// Octile distance
+			var dx = Math.abs(x1 - x2);
+			var dy = Math.abs(y1 - y2);
+			if (dx < dy) {
+				return DIAGONAL_COST * dx + dy;
+			} else {
+				return DIAGONAL_COST * dy + dx;
+			}
+		} else {
+			// Manhattan distance
+			var dx = Math.abs(x1 - x2);
+			var dy = Math.abs(y1 - y2);
+			return (dx + dy)
+		}
 	};
 }
