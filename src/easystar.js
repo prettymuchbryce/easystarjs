@@ -403,6 +403,7 @@ EasyStar.js = function() {
 					instance.openList.push(node);
 				} else if (searchNode.costSoFar + cost < node.costSoFar) {
 					node.costSoFar = searchNode.costSoFar + cost;
+					node.parent = searchNode;
 					instance.openList.updateItem(node);
 				}
 			}
