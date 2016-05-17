@@ -445,7 +445,7 @@ EasyStar.js = function() {
 		if (parent!==null) {
 			var costSoFar = parent.costSoFar + cost;
 		} else {
-			costSoFar = simpleDistanceToTarget;
+			costSoFar = 0;
 		}
 		var node = new EasyStar.Node(parent,x,y,costSoFar,simpleDistanceToTarget);
 		instance.nodeHash[x + "_" + y] = node;
