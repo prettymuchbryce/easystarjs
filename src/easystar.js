@@ -368,19 +368,6 @@ EasyStar.js = function() {
 				}
 			}
 
-			// First sort all of the potential nodes we could search by their cost + heuristic distance.
-			tilesToSearch.sort(function(a, b) {
-				var aCost = a.cost + getDistance(searchNode.x + a.x, searchNode.y + a.y, instances[0].endX, instances[0].endY)
-				var bCost = b.cost + getDistance(searchNode.x + b.x, searchNode.y + b.y, instances[0].endX, instances[0].endY)
-				if (aCost < bCost) {
-					return -1;
-				} else if (aCost === bCost) {
-					return 0;
-				} else {
-					return 1;
-				}
-			});
-
 			var isDoneCalculating = false;
 
 			// Search all of the surrounding nodes
