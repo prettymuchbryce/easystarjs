@@ -240,7 +240,9 @@ EasyStar.js = function() {
 
 		// Create the instance
 		var instance = new EasyStar.instance();
-		instance.openList = new EasyStar.PriorityQueue("bestGuessDistance",EasyStar.PriorityQueue.MIN_HEAP);
+		instance.openList = new Heap(function(nodeA, nodeB) {
+			return nodeA.bestGuessDistance() - nodeB.bestGuessDistance();
+		})
 		instance.isDoneCalculating = false;
 		instance.nodeHash = {};
 		instance.startX = startX;
@@ -249,7 +251,7 @@ EasyStar.js = function() {
 		instance.endY = endY;
 		instance.callback = callbackWrapper;
 
-		instance.openList.insert(coordinateToNode(instance, instance.startX, 
+		instance.openList.push(coordinateToNode(instance, instance.startX, 
 			instance.startY, null, STRAIGHT_COST));
 
 		instances.push(instance);
@@ -276,14 +278,14 @@ EasyStar.js = function() {
 			}
 
 			// Couldn't find a path.
-			if (instances[0].openList.length === 0) {
+			if (instances[0].openList.size() === 0) {
 				var ic = instances[0];
 				ic.callback(null);
 				instances.shift();
 				continue;
 			}
 
-			var searchNode = instances[0].openList.shiftHighestPriorityElement();
+			var searchNode = instances[0].openList.pop();
 
 			var tilesToSearch = [];
 			searchNode.list = EasyStar.Node.CLOSED_LIST;
@@ -416,12 +418,10 @@ EasyStar.js = function() {
 
 				if (node.list === undefined) {
 					node.list = EasyStar.Node.OPEN_LIST;
-					instance.openList.insert(node);
-				} else if (node.list === EasyStar.Node.OPEN_LIST) {
-					if (searchNode.costSoFar + cost < node.costSoFar) {
-						node.costSoFar = searchNode.costSoFar + cost;
-						node.parent = searchNode;
-					}
+					instance.openList.push(node);
+				} else if (searchNode.costSoFar + cost < node.costSoFar) {
+					node.costSoFar = searchNode.costSoFar + cost;
+					instance.openList.updateItem(node);
 				}
 			}
 		}

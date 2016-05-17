@@ -1,7 +1,7 @@
 var gulp = require('gulp');
 var concat = require('gulp-concat');
 var config = require('./package.json');
-var sources = ['src/package-managers.js', 'src/node.js', 'src/priority-queue.js', 'src/instance.js', 'src/easystar.js'];
+var sources = ['node_modules/heap/lib/heap.js', 'src/package-managers.js', 'src/node.js', 'src/priority-queue.js', 'src/instance.js', 'src/easystar.js'];
 var uglify = require('gulp-uglify');
 var karma = require('gulp-karma');
 

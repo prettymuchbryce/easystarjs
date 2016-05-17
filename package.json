@@ -30,5 +30,7 @@
     "karma-jasmine": "^0.3.5",
     "karma-phantomjs-launcher": "^0.1.4"
   },
-  "dependencies": {}
+  "dependencies": {
+    "heap": "^0.2.6"
+  }
 }
