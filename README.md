@@ -143,7 +143,7 @@ Open your browser to 127.0.0.1:3000 to see the example.
 
 ## Testing
 
-`gulp test`
+`npm run test`
 
 ## Support
 
