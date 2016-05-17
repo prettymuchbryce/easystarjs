@@ -287,6 +287,23 @@ EasyStar.js = function() {
 
 			var searchNode = instances[0].openList.pop();
 
+			// Handles the case where we have found the destination
+			if (instances[0].endX === searchNode.x && instances[0].endY === searchNode.y) {
+				instances[0].isDoneCalculating = true;
+				var path = [];
+				path.push(x: searchNode.x, y: searchNode.y);
+				var parent = searchNode.parent;
+				while (parent!=null) {
+					path.push({x: parent.x, y:parent.y});
+					parent = parent.parent;
+				}
+				path.reverse();
+				var ic = instances[0];
+				var ip = path;
+				ic.callback(ip);
+				return
+			}
+
 			var tilesToSearch = [];
 			searchNode.list = EasyStar.Node.CLOSED_LIST;
 
@@ -389,30 +406,8 @@ EasyStar.js = function() {
 		var adjacentCoordinateX = searchNode.x+x;
 		var adjacentCoordinateY = searchNode.y+y;
 
-		if (pointsToAvoid[adjacentCoordinateX + "_" + adjacentCoordinateY] === undefined) {
-			// Handles the case where we have found the destination
-			if (instance.endX === adjacentCoordinateX && instance.endY === adjacentCoordinateY) {
-				instance.isDoneCalculating = true;
-				var path = [];
-				var pathLen = 0;
-				path[pathLen] = {x: adjacentCoordinateX, y: adjacentCoordinateY};
-				pathLen++;
-				path[pathLen] = {x: searchNode.x, y:searchNode.y};
-				pathLen++;
-				var parent = searchNode.parent;
-				while (parent!=null) {
-					path[pathLen] = {x: parent.x, y:parent.y};
-					pathLen++;
-					parent = parent.parent;
-				}
-				path.reverse();
-				var ic = instance;
-				var ip = path;
-				ic.callback(ip);
-				return
-			}
-
-			if (isTileWalkable(collisionGrid, acceptableTiles, adjacentCoordinateX, adjacentCoordinateY)) {
+		if (pointsToAvoid[adjacentCoordinateX + "_" + adjacentCoordinateY] === undefined &&
+			isTileWalkable(collisionGrid, acceptableTiles, adjacentCoordinateX, adjacentCoordinateY)) {
 				var node = coordinateToNode(instance, adjacentCoordinateX, 
 					adjacentCoordinateY, searchNode, cost);
 
