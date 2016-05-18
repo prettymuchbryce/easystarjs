@@ -1,34 +1,40 @@
 {
-  "name": "easystarjs",
-  "version": "0.2.3",
-  "main": "./bin/easystar-0.2.3",
-  "description": "Asynchronous A* Pathfinding API",
-  "keywords": [
-    "A*",
-    "pathfinding",
-    "grid",
-    "easystar"
-  ],
-  "homepage": "http://www.easystarjs.com",
-  "repository": {
-    "type": "git",
-    "url": "git://github.com/prettymuchbryce/easystarjs.git"
-  },
-  "license": "MIT",
-  "author": {
-    "name": "Bryce Neal",
-    "email": "brycedneal@gmail.com",
-    "url": "http://bryce.is"
-  },
-  "devDependencies": {
-    "gulp": "^3.8.0",
-    "gulp-concat": "^2.2.0",
-    "gulp-karma": "0.0.4",
-    "gulp-uglify": "^0.3.0",
-    "karma": "^0.12.16",
-    "karma-coverage": "^0.2.4",
-    "karma-jasmine": "^0.3.5",
-    "karma-phantomjs-launcher": "^0.1.4"
-  },
-  "dependencies": {}
+    "name": "easystarjs",
+    "version": "0.3.0",
+    "main": "./src/easystar.js",
+    "description": "Asynchronous A* Pathfinding API",
+    "scripts": {
+        "build": "webpack && webpack --minify",
+        "test": "./node_modules/karma/bin/karma start ./karma.conf.js"
+    },
+    "keywords": [
+        "A*",
+        "pathfinding",
+        "grid",
+        "easystar"
+    ],
+    "homepage": "http://www.easystarjs.com",
+    "repository": {
+        "type": "git",
+        "url": "git://github.com/prettymuchbryce/easystarjs.git"
+    },
+    "license": "MIT",
+    "author": {
+        "name": "Bryce Neal",
+        "email": "brycedneal@gmail.com",
+        "url": "http://bryce.is"
+    },
+    "devDependencies": {
+        "karma": "^0.12.16",
+        "karma-coverage": "^0.2.4",
+        "karma-jasmine": "^0.3.5",
+        "karma-phantomjs-launcher": "^0.1.4",
+        "webpack": "^1.13.0",
+        "babel-core": "^6.8.0",
+        "babel-loader": "^6.2.4",
+        "webpack": "^1.13.0"
+    },
+    "dependencies": {
+        "heap": "0.2.6"
+    }
 }

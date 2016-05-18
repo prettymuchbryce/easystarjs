@@ -26,12 +26,8 @@
         <div class="demo"></div>
         <div class = "container">
             <div class="demo-controls col-md-12 text-center panel panel-default">
-                Iterations-Per-Calculation (asynchronicity)<br>
+                Iterations-Per-Calculation (asynchrony)<br>
                 <div id="slider" class="ui-slider ui-slider-horizontal ui-widget ui-widget-content ui-corner-all" aria-disabled="false">
-                    <div class="ui-slider-segment" style="margin-left: 50%;"></div>
-                    <div class="ui-slider-segment"></div>
-                    <div class="ui-slider-segment"></div>
-                    <div class="ui-slider-segment"></div>
                     <div class="ui-slider-range ui-widget-header ui-corner-all ui-slider-range-min" style="width: 0%;"></div>
                     <a class="ui-slider-handle ui-state-default ui-corner-all" href="#" style="left: 25%;"></a>
                 </div>
@@ -71,7 +67,7 @@
     <script type="text/javascript" src="js/pixi.js"></script>
     <script type="text/javascript" src="js/async.js"></script>
     <script type="text/javascript" src="js/tweenjs.min.js"></script>
-    <script type="text/javascript" src="js/easystar-0.1.7.min.js"></script>
+    <script type="text/javascript" src="js/easystar-0.3.0.min.js"></script>
     <script type="text/javascript" src="js/easy-star-demo.js"></script>
     <script>
         var easyStarDemo = new EasyStarDemo($('.demo').width(), $('.demo').height());
@@ -102,18 +98,12 @@
         if ($slider.length) {
             $slider.slider({
                 min: 1,
-                max: 3,
+                max: 4,
                 value: 2,
                 orientation: "horizontal",
                 range: "min",
                 change: function( event, ui ) {
-                   if (ui.value === 1) {
-                        easyStarDemo.setIterationsPerCalculation(5);
-                    } else if (ui.value === 2) {
-                        easyStarDemo.setIterationsPerCalculation(100);
-                    } else if (ui.value === 3) {
-                        easyStarDemo.setIterationsPerCalculation(Number.MAX_VALUE);
-                    }
+                    easyStarDemo.setIterationsPerCalculation(Math.pow(ui.value,3));
                 }
             });
         }

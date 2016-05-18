@@ -18,7 +18,7 @@ easystar.js is an asynchronous A* pathfinding API written in Javascript for use 
 
 * Calculates asynchronously for better overall performance
 * Simple API
-* Small. ~5kb
+* Small. ~7kb
 * Use it with any existing Javascript Framework
 
 ## API
@@ -143,7 +143,7 @@ Open your browser to 127.0.0.1:3000 to see the example.
 
 ## Testing
 
-`gulp test`
+`npm run test`
 
 ## Support
 
