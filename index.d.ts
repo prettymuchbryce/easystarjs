@@ -1,4 +1,4 @@
-type Direction = 'up' | 'up-right' | 'right' | 'down-right' | 'down' | 'down-left' | 'left' | 'up-left'
+type Direction = 'top' | 'top-right' | 'right' | 'bottom-right' | 'bottom' | 'bottom-left' | 'left' | 'top-left'
 
 export class js {
 
@@ -136,26 +136,9 @@ export class js {
    *
    * @param {Number} x The x value of the point.
    * @param {Number} y The y value of the point.
-   * @param {Array|String} list of all the allowed directions that can access
-   * the tile.
+   * @param {Array|String} list of all the allowed directions from which the tile is accessible.
+   *
+   * eg. easystar.setDirectionalCondition(1, 1, ['top']): You can only access the tile by walking down onto it,
    */
   setDirectionalCondition(x: number, y: number, allowedDirections: Direction[]): void
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

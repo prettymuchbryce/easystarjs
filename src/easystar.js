@@ -2,7 +2,7 @@
 *   EasyStar.js
 *   github.com/prettymuchbryce/EasyStarJS
 *   Licensed under the MIT license.
-* 
+*
 *   Implementation By Bryce Neal (@prettymuchbryce)
 **/
 
@@ -10,6 +10,7 @@ var EasyStar = {}
 var Instance = require('./instance');
 var Node = require('./node');
 var Heap = require('heap');
+var includes = require('lodash.includes');
 
 const CLOSED_LIST = 0;
 const OPEN_LIST = 1;
@@ -24,6 +25,7 @@ EasyStar.js = function() {
     var collisionGrid;
     var costMap = {};
     var pointsToCost = {};
+    var directionalConditions = {};
     var allowCornerCutting = true;
     var iterationsSoFar;
     var instances = [];
@@ -127,7 +129,7 @@ EasyStar.js = function() {
     * the tile.
     **/
     this.setDirectionalCondition = function(x, y, allowedDirections) {
-        // TODO: implement
+        directionalConditions[x + '_' + y] = allowedDirections;
     };
 
     /**
@@ -417,7 +419,7 @@ EasyStar.js = function() {
         var adjacentCoordinateY = searchNode.y+y;
 
         if (pointsToAvoid[adjacentCoordinateX + "_" + adjacentCoordinateY] === undefined &&
-            isTileWalkable(collisionGrid, acceptableTiles, adjacentCoordinateX, adjacentCoordinateY)) {
+            isTileWalkable(collisionGrid, acceptableTiles, adjacentCoordinateX, adjacentCoordinateY, searchNode)) {
             var node = coordinateToNode(instance, adjacentCoordinateX,
                 adjacentCoordinateY, searchNode, cost);
 
@@ -433,7 +435,11 @@ EasyStar.js = function() {
     };
 
     // Helpers
-    var isTileWalkable = function(collisionGrid, acceptableTiles, x, y) {
+    var isTileWalkable = function(collisionGrid, acceptableTiles, x, y, sourceNode) {
+        if (directionalConditions[x + "_" + y]) {
+            var direction = calculateDirection(sourceNode.x - x, sourceNode.y - y)
+            if (!includes(directionalConditions[x + "_" + y], direction)) return false
+        }
         for (var i = 0; i < acceptableTiles.length; i++) {
             if (collisionGrid[y][x] === acceptableTiles[i]) {
                 return true;
@@ -441,6 +447,23 @@ EasyStar.js = function() {
         }
 
         return false;
+    };
+
+    /**
+     * -1, -1 | 0, -1  | 1, -1
+     * -1,  0 | SOURCE | 1,  0
+     * -1,  1 | 0,  1  | 1,  1
+     */
+    var calculateDirection = function (diffX, diffY) {
+        if (diffX === 0, diffY === -1) return 'bottom'
+        else if (diffX === 1, diffY === -1) return 'bottom-left'
+        else if (diffX === 1, diffY === 0) return 'left'
+        else if (diffX === 1, diffY === 1) return 'top-left'
+        else if (diffX === 0, diffY === 1) return 'top'
+        else if (diffX === -1, diffY === 1) return 'top-right'
+        else if (diffX === -1, diffY === 0) return 'right'
+        else if (diffX === -1, diffY === -1) return 'bottom-right'
+        throw new Error('These differences are not valid: ' + diffX + ', ' + diffY)
     };
 
     var getTileCost = function(x, y) {

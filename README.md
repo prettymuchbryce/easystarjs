@@ -65,6 +65,12 @@ easystar.setTileCost(tileType, multiplicativeCost);
 easystar.enableSync();
 ```
 
+Add condition that a tile is only accessible from certain directions
+
+```javascript
+easystar.setDirectionalCondition(x, y, ['top', 'left']) // only accessible from the top and left
+```
+
 ## Usage
 
 First create EasyStar.
