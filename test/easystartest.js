@@ -179,7 +179,7 @@ describe("EasyStar.js", function() {
         done();
     }
   });
-  
+
   it("It should return empty path when start and end are the same tile.", function(done) {
     var easyStar = new EasyStar.js();
     var map = [[1,1,0,1,1],
@@ -202,7 +202,7 @@ describe("EasyStar.js", function() {
         done();
     }
   });
-  
+
   it("It should prefer straight paths when possible", function(done) {
     var easyStar = new EasyStar.js();
     easyStar.setAcceptableTiles([0]);
@@ -247,4 +247,25 @@ describe("EasyStar.js", function() {
     easyStar.calculate();
   })
 
+  it("It should handle tiles with a directional condition", function (done) {
+      var easyStar = new EasyStar.js();
+      var grid = [
+          [0, 1, 0],
+          [0, 0, 0],
+          [0, 0, 0],
+      ];
+      easyStar.setGrid(grid);
+      easyStar.setAcceptableTiles([0]);
+      easyStar.setDirectionalCondition(1,1, ['right'])
+      easyStar.setDirectionalCondition(1,2, ['left'])
+
+      easyStar.findPath(0, 0, 2, 0, function (path) {
+          expect(path).not.toBeNull();
+          expect(path[3]).toEqual({ x: 2, y: 1})
+          expect(path.length).toEqual(7);
+          done();
+      });
+
+      easyStar.calculate();
+  })
 });

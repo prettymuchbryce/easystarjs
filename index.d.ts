@@ -1,9 +1,11 @@
+type Direction = 'up' | 'up-right' | 'right' | 'down-right' | 'down' | 'down-left' | 'left' | 'up-left'
+
 export class js {
 
   /**
   * Sets the collision grid that EasyStar uses.
-  * 
-  * @param {Array|Number} tiles An array of numbers that represent 
+  *
+  * @param {Array|Number} tiles An array of numbers that represent
   * which tiles in your grid should be considered
   * acceptable, or "walkable".
   */
@@ -26,11 +28,11 @@ export class js {
    * Disable diagonal pathfinding.
    */
   disableDiagonals(): void
-  
+
   /**
    * Sets the collision grid that EasyStar uses.
-   * 
-   * @param {Array} grid The collision grid that this EasyStar instance will read from. 
+   *
+   * @param {Array} grid The collision grid that this EasyStar instance will read from.
    * This should be a 2D Array of Numbers.
    */
   setGrid(grid: number[][]): void
@@ -62,22 +64,22 @@ export class js {
   removeAdditionalPointCost(x: number, y: number): void
 
   /**
-   * Remove all additional point costs. 
+   * Remove all additional point costs.
    */
   removeAllAdditionalPointCosts(): void
 
   /**
-   * Sets the number of search iterations per calculation. 
-   * A lower number provides a slower result, but more practical if you 
+   * Sets the number of search iterations per calculation.
+   * A lower number provides a slower result, but more practical if you
    * have a large tile-map and don't want to block your thread while
    * finding a path.
-   * 
+   *
    * @param {Number} iterations The number of searches to prefrom per calculate() call.
    */
   setIterationsPerCalculation(iterations: number): void
 
   /**
-   * Avoid a particular point on the grid, 
+   * Avoid a particular point on the grid,
    * regardless of whether or not it is an acceptable tile.
    *
    * @param {Number} x The x value of the point to avoid.
@@ -110,14 +112,14 @@ export class js {
 
   /**
    * Find a path.
-   * 
+   *
    * @param {Number} startX The X position of the starting point.
    * @param {Number} startY The Y position of the starting point.
    * @param {Number} endX The X position of the ending point.
    * @param {Number} endY The Y position of the ending point.
    * @param {Function} callback A function that is called when your path
    * is found, or no path is found.
-   * 
+   *
    */
   findPath(startX: number, startY: number, endX: number, endY: number, callback: (path: { x: number, y: number }[]) => void): void
 
@@ -128,6 +130,16 @@ export class js {
    * easystar.setIteratonsPerCalculation().
    */
   calculate(): void
+
+  /**
+   * Sets a directional condition on a tile
+   *
+   * @param {Number} x The x value of the point.
+   * @param {Number} y The y value of the point.
+   * @param {Array|String} list of all the allowed directions that can access
+   * the tile.
+   */
+  setDirectionalCondition(x: number, y: number, allowedDirections: Direction[]): void
 }
 
 
