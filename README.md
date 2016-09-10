@@ -20,6 +20,7 @@ easystar.js is an asynchronous A* pathfinding API written in Javascript for use 
 * Simple API
 * Small. ~7kb
 * Use it with any existing Javascript Framework
+* TypeScript support
 
 ## API
 
@@ -64,13 +65,8 @@ easystar.setTileCost(tileType, multiplicativeCost);
 ```javascript
 easystar.enableSync();
 ```
-
-Add condition that a tile is only accessible from certain directions
-
 ```javascript
-easystar.setDirectionalCondition(x, y, [EasyStar.TOP, EasyStar.BOTTOM]) // only accessible from the top and left
-
-easystar.removeAllDirectionalConditions() // unset all directional conditions
+easystar.setDirectionalCondition(x, y, [EasyStar.TOP, EasyStar.BOTTOM]); // only accessible from the top and left
 ```
 
 ## Usage
