@@ -1,42 +1,42 @@
 {
-  "name": "easystarjs",
-  "version": "0.3.0",
-  "main": "./src/easystar.js",
-  "typings": "./index.d.ts",
-  "description": "Asynchronous A* Pathfinding API",
-  "scripts": {
-    "build": "webpack && webpack --minify",
-    "test": "./node_modules/karma/bin/karma start ./karma.conf.js",
-    "watch": "webpack -w"
-  },
-  "keywords": [
-    "A*",
-    "pathfinding",
-    "grid",
-    "easystar"
-  ],
-  "homepage": "http://www.easystarjs.com",
-  "repository": {
-    "type": "git",
-    "url": "git://github.com/prettymuchbryce/easystarjs.git"
-  },
-  "license": "MIT",
-  "author": {
-    "name": "Bryce Neal",
-    "email": "brycedneal@gmail.com",
-    "url": "http://bryce.is"
-  },
-  "devDependencies": {
-    "babel-core": "^6.8.0",
-    "babel-loader": "^6.2.4",
-    "jasmine-core": "^2.5.1",
-    "karma": "^0.12.16",
-    "karma-coverage": "^0.2.4",
-    "karma-jasmine": "^0.3.5",
-    "karma-phantomjs-launcher": "^0.1.4",
-    "webpack": "^1.13.0"
-  },
-  "dependencies": {
-    "heap": "0.2.6"
-  }
+    "name": "easystarjs",
+    "version": "0.3.0",
+    "main": "./src/easystar.js",
+    "typings": "./index.d.ts",
+    "description": "Asynchronous A* Pathfinding API",
+    "scripts": {
+        "build": "webpack && webpack --minify",
+        "test": "./node_modules/karma/bin/karma start ./karma.conf.js",
+        "watch": "webpack -w"
+    },
+    "keywords": [
+        "A*",
+        "pathfinding",
+        "grid",
+        "easystar"
+    ],
+    "homepage": "http://www.easystarjs.com",
+    "repository": {
+        "type": "git",
+        "url": "git://github.com/prettymuchbryce/easystarjs.git"
+    },
+    "license": "MIT",
+    "author": {
+        "name": "Bryce Neal",
+        "email": "brycedneal@gmail.com",
+        "url": "http://bryce.is"
+    },
+    "devDependencies": {
+        "babel-core": "^6.8.0",
+        "babel-loader": "^6.2.4",
+        "jasmine-core": "^2.5.1",
+        "karma": "^0.12.16",
+        "karma-coverage": "^0.2.4",
+        "karma-jasmine": "^0.3.5",
+        "karma-phantomjs-launcher": "^0.1.4",
+        "webpack": "^1.13.0"
+    },
+    "dependencies": {
+        "heap": "0.2.6"
+    }
 }
