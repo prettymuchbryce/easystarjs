@@ -268,4 +268,29 @@ describe("EasyStar.js", function() {
 
       easyStar.calculate();
   })
+  it("It should handle tiles with a custom condition", function (done) {
+      var easyStar = new EasyStar.js();
+      var grid = [
+          [0, 1, 0],
+          [0, 0, 4],
+          [4, 0, 0],
+      ];
+      easyStar.setGrid(grid);
+      easyStar.setAcceptableTiles([0, 4, 5]);
+      easyStar.setCustomCondition(1, 1, function(source, thisNode, grid) {
+          return grid[source.y][source.x] === 4
+      })
+      easyStar.setCustomCondition(1, 2, function (source, thisNode, grid) {
+          return EasyStar.calculateDirection(source, thisNode) === 'left' && grid[source.y][source.x] === 4
+      })
+
+      easyStar.findPath(0, 0, 2, 0, function (path) {
+          expect(path).not.toBeNull();
+          expect(path[3]).toEqual({ x: 1, y: 2 })
+          expect(path.length).toEqual(7);
+          done();
+      });
+
+      easyStar.calculate();
+  })
 });
