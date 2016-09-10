@@ -122,30 +122,6 @@ EasyStar.js = function() {
     };
 
     /**
-    * Sets a directional condition on a tile
-    *
-    * @param {Number} x The x value of the point.
-    * @param {Number} y The y value of the point.
-    * @param {Array|String} list of all the allowed directions that can access
-    * the tile.
-    **/
-    this.setDirectionalCondition = function(x, y, allowedDirections) {
-        directionalConditions[x + '_' + y] = allowedDirections;
-    };
-
-    /**
-    * Sets a custom condition on a tile
-    *
-    * @param {Number} x The x value of the point.
-    * @param {Number} y The y value of the point.
-    * @param {Function} function that takes the sourceNode and the grid as an argument
-    * and returns a boolean.
-    **/
-    this.setCustomCondition = function(x, y, customCheck) {
-        customConditions[x + '_' + y] = customCheck;
-    }
-
-    /**
     * Remove the additional cost for a particular point.
     *
     * @param {Number} x The x value of the point to stop costing.
@@ -160,6 +136,37 @@ EasyStar.js = function() {
     **/
     this.removeAllAdditionalPointCosts = function() {
         pointsToCost = {};
+    }
+
+    /**
+    * Sets a directional condition on a tile
+    *
+    * @param {Number} x The x value of the point.
+    * @param {Number} y The y value of the point.
+    * @param {Array.<String>} allowedDirections A list of all the allowed directions that can access
+    * the tile.
+    **/
+    this.setDirectionalCondition = function(x, y, allowedDirections) {
+        directionalConditions[x + '_' + y] = allowedDirections;
+    };
+
+    /**
+    * Remove all directional conditions
+    **/
+    this.removeAllDirectionalConditions = function() {
+        directionalConditions = {};
+    };
+
+    /**
+    * Sets a custom condition on a tile
+    *
+    * @param {Number} x The x value of the point.
+    * @param {Number} y The y value of the point.
+    * @param {Function} function that takes the sourceNode and the grid as an argument
+    * and returns a boolean.
+    **/
+    this.setCustomCondition = function(x, y, customCheck) {
+        customConditions[x + '_' + y] = customCheck;
     }
 
     /**
@@ -451,7 +458,13 @@ EasyStar.js = function() {
     var isTileWalkable = function(collisionGrid, acceptableTiles, x, y, sourceNode) {
         if (directionalConditions[x + "_" + y]) {
             var direction = EasyStar.calculateDirection(sourceNode, { x: x, y: y })
-            if (!includes(directionalConditions[x + "_" + y], direction)) return false
+            var directionIncluded = function () {
+                for (var i = 0; i < directionalConditions[x + "_" + y].length; i++) {
+                    if (directionalConditions[x + "_" + y] === direction) return true
+                }
+                return false
+            }
+            if (!directionIncluded()) return false
         }
 
         if (customConditions[x + "_" + y] &&
@@ -506,6 +519,7 @@ EasyStar.js = function() {
     };
 }
 
+
 /**
  * -1, -1 | 0, -1  | 1, -1
  * -1,  0 | SOURCE | 1,  0
@@ -524,3 +538,12 @@ EasyStar.calculateDirection = function (sourceNode, destinationNode) {
     else if (diffX === -1, diffY === -1) return 'bottom-right'
     throw new Error('These differences are not valid: ' + diffX + ', ' + diffY)
 };
+
+EasyStar.TOP = 'TOP'
+EasyStar.TOP_RIGHT = 'TOP_RIGHT'
+EasyStar.RIGHT = 'RIGHT'
+EasyStar.BOTTOM_RIGHT = 'BOTTOM_RIGHT'
+EasyStar.BOTTOM = 'BOTTOM'
+EasyStar.BOTTOM_LEFT = 'BOTTOM_LEFT'
+EasyStar.LEFT = 'LEFT'
+EasyStar.TOP_LEFT = 'TOP_LEFT'

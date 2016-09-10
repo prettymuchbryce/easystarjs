@@ -1,4 +1,13 @@
-type Direction = 'top' | 'top-right' | 'right' | 'bottom-right' | 'bottom' | 'bottom-left' | 'left' | 'top-left'
+export const TOP: 'TOP'
+export const TOP_RIGHT: 'TOP_RIGHT'
+export const RIGHT: 'RIGHT'
+export const BOTTOM_RIGHT: 'BOTTOM_RIGHT'
+export const BOTTOM: 'BOTTOM'
+export const BOTTOM_LEFT: 'BOTTOM_LEFT'
+export const LEFT: 'LEFT'
+export const TOP_LEFT: 'TOP_LEFT'
+
+type Direction = "TOP" | "TOP_RIGHT" | "RIGHT" | "BOTTOM_RIGHT" | "BOTTOM" | "BOTTOM_LEFT" | "LEFT" | "TOP_LEFT"
 type CustomCheck = (source?: { x: number, y: number }, thisNode?: { x: number, y: number}, grid?: number[][]) => boolean
 
 export class js {
@@ -10,15 +19,18 @@ export class js {
   * acceptable, or "walkable".
   */
   setAcceptableTiles(tiles: number[] | number): void
+
   /**
-    * Enables sync mode for this EasyStar instance..
-    * if you're into that sort of thing.
-    */
+   * Enables sync mode for this EasyStar instance..
+   * if you're into that sort of thing.
+   */
   enableSync(): void
+
   /**
-  * Disables sync mode for this EasyStar instance.
-  */
+   * Disables sync mode for this EasyStar instance.
+   */
   disableSync(): void
+
   /**
    * Enable diagonal pathfinding.
    */
@@ -38,11 +50,11 @@ export class js {
   setGrid(grid: number[][]): void
 
   /**
-  * Sets the tile cost for a particular tile type.
-  *
-  * @param {Number} The tile type to set the cost for.
-  * @param {Number} The multiplicative cost associated with the given tile.
-  */
+   * Sets the tile cost for a particular tile type.
+   *
+   * @param {Number} The tile type to set the cost for.
+   * @param {Number} The multiplicative cost associated with the given tile.
+   */
   setTileCost(tileType: number, cost: number): void
 
   /**
@@ -136,7 +148,7 @@ export class js {
    *
    * @param {Number} x The x value of the point.
    * @param {Number} y The y value of the point.
-   * @param {Array|String} list of all the allowed directions from which the tile is accessible.
+   * @param {Array.<String>} list of all the allowed directions from which the tile is accessible.
    *
    * eg. easystar.setDirectionalCondition(1, 1, ['top']): You can only access the tile by walking down onto it,
    */
@@ -150,6 +162,11 @@ export class js {
    * @param {Function} function to check whether a movement onto a tile is valid
    */
   setCustomCondition(x: number, y: number, customCheck: CustomCheck): void
+
+  /**
+   * Remove all directional conditions
+   */
+  removeAllDirectionalConditions(): void
 }
 
 /**
