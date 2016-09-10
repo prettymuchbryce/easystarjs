@@ -12,12 +12,12 @@ type Direction = "TOP" | "TOP_RIGHT" | "RIGHT" | "BOTTOM_RIGHT" | "BOTTOM" | "BO
 export class js {
 
   /**
-  * Sets the collision grid that EasyStar uses.
-  *
-  * @param {Array|Number} tiles An array of numbers that represent
-  * which tiles in your grid should be considered
-  * acceptable, or "walkable".
-  */
+   * Sets the collision grid that EasyStar uses.
+   *
+   * @param {Array|Number} tiles An array of numbers that represent
+   * which tiles in your grid should be considered
+   * acceptable, or "walkable".
+   */
   setAcceptableTiles(tiles: number[] | number): void
 
   /**
