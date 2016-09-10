@@ -23,12 +23,14 @@ export class js {
   /**
    * Enables sync mode for this EasyStar instance..
    * if you're into that sort of thing.
-*/
+   */
   enableSync(): void
+
   /**
-  * Disables sync mode for this EasyStar instance.
-  */
+   * Disables sync mode for this EasyStar instance.
+   */
   disableSync(): void
+
   /**
    * Enable diagonal pathfinding.
    */
@@ -48,11 +50,11 @@ export class js {
   setGrid(grid: number[][]): void
 
   /**
-  * Sets the tile cost for a particular tile type.
-  *
-  * @param {Number} The tile type to set the cost for.
-  * @param {Number} The multiplicative cost associated with the given tile.
-  */
+   * Sets the tile cost for a particular tile type.
+   *
+   * @param {Number} The tile type to set the cost for.
+   * @param {Number} The multiplicative cost associated with the given tile.
+   */
   setTileCost(tileType: number, cost: number): void
 
   /**
