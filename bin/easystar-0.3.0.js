@@ -73,6 +73,7 @@ var EasyStar =
 	    var costMap = {};
 	    var pointsToCost = {};
 	    var directionalConditions = {};
+	    var customConditions = {};
 	    var allowCornerCutting = true;
 	    var iterationsSoFar;
 	    var instances = [];
@@ -177,6 +178,18 @@ var EasyStar =
 	    **/
 	    this.setDirectionalCondition = function (x, y, allowedDirections) {
 	        directionalConditions[x + '_' + y] = allowedDirections;
+	    };
+
+	    /**
+	    * Sets a custom condition on a tile
+	    *
+	    * @param {Number} x The x value of the point.
+	    * @param {Number} y The y value of the point.
+	    * @param {Function} function that takes the sourceNode and the grid as an argument
+	    * and returns a boolean.
+	    **/
+	    this.setCustomCondition = function (x, y, customCheck) {
+	        customConditions[x + '_' + y] = customCheck;
 	    };
 
 	    /**
@@ -467,9 +480,14 @@ var EasyStar =
 	    // Helpers
 	    var isTileWalkable = function (collisionGrid, acceptableTiles, x, y, sourceNode) {
 	        if (directionalConditions[x + "_" + y]) {
-	            var direction = calculateDirection(sourceNode.x - x, sourceNode.y - y);
+	            var direction = EasyStar.calculateDirection(sourceNode, { x: x, y: y });
 	            if (!includes(directionalConditions[x + "_" + y], direction)) return false;
 	        }
+
+	        if (customConditions[x + "_" + y] && !customConditions[x + "_" + y](sourceNode, { x: x, y: y }, collisionGrid)) {
+	            return false;
+	        }
+
 	        for (var i = 0; i < acceptableTiles.length; i++) {
 	            if (collisionGrid[y][x] === acceptableTiles[i]) {
 	                return true;
@@ -477,16 +495,6 @@ var EasyStar =
 	        }
 
 	        return false;
-	    };
-
-	    /**
-	     * -1, -1 | 0, -1  | 1, -1
-	     * -1,  0 | SOURCE | 1,  0
-	     * -1,  1 | 0,  1  | 1,  1
-	     */
-	    var calculateDirection = function (diffX, diffY) {
-	        if (diffX === 0, diffY === -1) return 'bottom';else if (diffX === 1, diffY === -1) return 'bottom-left';else if (diffX === 1, diffY === 0) return 'left';else if (diffX === 1, diffY === 1) return 'top-left';else if (diffX === 0, diffY === 1) return 'top';else if (diffX === -1, diffY === 1) return 'top-right';else if (diffX === -1, diffY === 0) return 'right';else if (diffX === -1, diffY === -1) return 'bottom-right';
-	        throw new Error('These differences are not valid: ' + diffX + ', ' + diffY);
 	    };
 
 	    var getTileCost = function (x, y) {
@@ -525,6 +533,18 @@ var EasyStar =
 	            return dx + dy;
 	        }
 	    };
+	};
+
+	/**
+	 * -1, -1 | 0, -1  | 1, -1
+	 * -1,  0 | SOURCE | 1,  0
+	 * -1,  1 | 0,  1  | 1,  1
+	 */
+	EasyStar.calculateDirection = function (sourceNode, destinationNode) {
+	    var diffX = sourceNode.x - destinationNode.x;
+	    var diffY = sourceNode.y - destinationNode.y;
+	    if (diffX === 0, diffY === -1) return 'bottom';else if (diffX === 1, diffY === -1) return 'bottom-left';else if (diffX === 1, diffY === 0) return 'left';else if (diffX === 1, diffY === 1) return 'top-left';else if (diffX === 0, diffY === 1) return 'top';else if (diffX === -1, diffY === 1) return 'top-right';else if (diffX === -1, diffY === 0) return 'right';else if (diffX === -1, diffY === -1) return 'bottom-right';
+	    throw new Error('These differences are not valid: ' + diffX + ', ' + diffY);
 	};
 
 /***/ },
