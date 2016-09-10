@@ -161,12 +161,19 @@ EasyStar.js = function() {
     *
     * @param {Number} x The x value of the point.
     * @param {Number} y The y value of the point.
-    * @param {Function} function that takes the sourceNode and the grid as an argument
+    * @param {Function} customCheck Function that takes the sourceNode and the grid as an argument
     * and returns a boolean.
     **/
     this.setCustomCondition = function(x, y, customCheck) {
         customConditions[x + '_' + y] = customCheck;
-    }
+    };
+
+    /**
+    * Remove all custom conditions
+    **/
+    this.removeAllCustomConditions = function () {
+        customConditions = {}
+    };
 
     /**
     * Sets the number of search iterations per calculation.

@@ -155,24 +155,29 @@ export class js {
   setDirectionalCondition(x: number, y: number, allowedDirections: Direction[]): void
 
   /**
+   * Remove all directional conditions
+   */
+  removeAllDirectionalConditions(): void
+
+  /**
    * Sets a custom condition on a tile
    *
    * @param {Number} x The x value of the point.
    * @param {Number} y The y value of the point.
-   * @param {Function} function to check whether a movement onto a tile is valid
+   * @param {Function} customCheck Function to check whether a movement onto a tile is valid
    */
   setCustomCondition(x: number, y: number, customCheck: CustomCheck): void
 
   /**
-   * Remove all directional conditions
+   * Remove all custom conditions
    */
-  removeAllDirectionalConditions(): void
+  removeAllCustomConditions(): void
 }
 
 /**
  * Calculate the direction to a node
  *
- * @param {Object} the source node
- * @param {Object} the destination node
+ * @param {Object} sourceNode The source node
+ * @param {Object} destinationNode The destination node
  */
 export function calculateDirection(sourceNode: { x: number, y: number }, destinationNode: { x: number, y: number }): Direction
