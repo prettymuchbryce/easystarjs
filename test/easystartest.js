@@ -281,7 +281,7 @@ describe("EasyStar.js", function() {
           return grid[source.y][source.x] === 4
       })
       easyStar.setCustomCondition(1, 2, function (source, thisNode, grid) {
-          return EasyStar.calculateDirection(source, thisNode) === 'left' && grid[source.y][source.x] === 4
+          return EasyStar.calculateDirection(source, thisNode) === 'LEFT' && grid[source.y][source.x] === 4
       })
 
       easyStar.findPath(0, 0, 2, 0, function (path) {

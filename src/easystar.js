@@ -534,14 +534,14 @@ EasyStar.js = function() {
 EasyStar.calculateDirection = function (sourceNode, destinationNode) {
     var diffX = sourceNode.x - destinationNode.x
     var diffY = sourceNode.y - destinationNode.y
-    if (diffX === 0, diffY === -1) return 'bottom'
-    else if (diffX === 1, diffY === -1) return 'bottom-left'
-    else if (diffX === 1, diffY === 0) return 'left'
-    else if (diffX === 1, diffY === 1) return 'top-left'
-    else if (diffX === 0, diffY === 1) return 'top'
-    else if (diffX === -1, diffY === 1) return 'top-right'
-    else if (diffX === -1, diffY === 0) return 'right'
-    else if (diffX === -1, diffY === -1) return 'bottom-right'
+    if (diffX === 0, diffY === -1) return EasyStar.BOTTOM
+    else if (diffX === 1, diffY === -1) return EasyStar.BOTTOM_LEFT
+    else if (diffX === 1, diffY === 0) return EasyStar.LEFT
+    else if (diffX === 1, diffY === 1) return EasyStar.TOP_LEFT
+    else if (diffX === 0, diffY === 1) return EasyStar.TOP
+    else if (diffX === -1, diffY === 1) return EasyStar.TOP_RIGHT
+    else if (diffX === -1, diffY === 0) return EasyStar.RIGHT
+    else if (diffX === -1, diffY === -1) return EasyStar.BOTTOM_RIGHT
     throw new Error('These differences are not valid: ' + diffX + ', ' + diffY)
 };
 
