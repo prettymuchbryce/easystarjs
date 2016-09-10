@@ -256,8 +256,8 @@ describe("EasyStar.js", function() {
       ];
       easyStar.setGrid(grid);
       easyStar.setAcceptableTiles([0]);
-      easyStar.setDirectionalCondition(1,1, ['right', 'top-right'])
-      easyStar.setDirectionalCondition(1,2, ['left'])
+      easyStar.setDirectionalCondition(1,1, [EasyStar.RIGHT, EasyStar.TOP_RIGHT]);
+      easyStar.setDirectionalCondition(1,2, [EasyStar.LEFT]);
 
       easyStar.findPath(0, 0, 2, 0, function (path) {
           expect(path).not.toBeNull();

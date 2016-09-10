@@ -121,18 +121,6 @@ EasyStar.js = function() {
     };
 
     /**
-    * Sets a directional condition on a tile
-    *
-    * @param {Number} x The x value of the point.
-    * @param {Number} y The y value of the point.
-    * @param {Array|String} list of all the allowed directions that can access
-    * the tile.
-    **/
-    this.setDirectionalCondition = function(x, y, allowedDirections) {
-        directionalConditions[x + '_' + y] = allowedDirections;
-    };
-
-    /**
     * Remove the additional cost for a particular point.
     *
     * @param {Number} x The x value of the point to stop costing.
@@ -148,6 +136,25 @@ EasyStar.js = function() {
     this.removeAllAdditionalPointCosts = function() {
         pointsToCost = {};
     }
+
+    /**
+    * Sets a directional condition on a tile
+    *
+    * @param {Number} x The x value of the point.
+    * @param {Number} y The y value of the point.
+    * @param {Array.<String>} allowedDirections A list of all the allowed directions that can access
+    * the tile.
+    **/
+    this.setDirectionalCondition = function(x, y, allowedDirections) {
+        directionalConditions[x + '_' + y] = allowedDirections;
+    };
+
+    /**
+    * Remove all directional conditions
+    **/
+    this.removeAllDirectionalConditions = function() {
+        directionalConditions = {};
+    };
 
     /**
     * Sets the number of search iterations per calculation.
@@ -438,7 +445,13 @@ EasyStar.js = function() {
     var isTileWalkable = function(collisionGrid, acceptableTiles, x, y, sourceNode) {
         if (directionalConditions[x + "_" + y]) {
             var direction = calculateDirection(sourceNode.x - x, sourceNode.y - y)
-            if (!includes(directionalConditions[x + "_" + y], direction)) return false
+            var directionIncluded = function () {
+                for (var i = 0; i < directionalConditions[x + "_" + y].length; i++) {
+                    if (directionalConditions[x + "_" + y] === direction) return true
+                }
+                return false
+            }
+            if (!directionIncluded()) return false
         }
         for (var i = 0; i < acceptableTiles.length; i++) {
             if (collisionGrid[y][x] === acceptableTiles[i]) {
@@ -455,14 +468,14 @@ EasyStar.js = function() {
      * -1,  1 | 0,  1  | 1,  1
      */
     var calculateDirection = function (diffX, diffY) {
-        if (diffX === 0, diffY === -1) return 'bottom'
-        else if (diffX === 1, diffY === -1) return 'bottom-left'
-        else if (diffX === 1, diffY === 0) return 'left'
-        else if (diffX === 1, diffY === 1) return 'top-left'
-        else if (diffX === 0, diffY === 1) return 'top'
-        else if (diffX === -1, diffY === 1) return 'top-right'
-        else if (diffX === -1, diffY === 0) return 'right'
-        else if (diffX === -1, diffY === -1) return 'bottom-right'
+        if (diffX === 0, diffY === -1) return EasyStar.BOTTOM
+        else if (diffX === 1, diffY === -1) return EasyStar.BOTTOM_LEFT
+        else if (diffX === 1, diffY === 0) return EasyStar.LEFT
+        else if (diffX === 1, diffY === 1) return EasyStar.TOP_LEFT
+        else if (diffX === 0, diffY === 1) return EasyStar.TOP
+        else if (diffX === -1, diffY === 1) return EasyStar.TOP_RIGHT
+        else if (diffX === -1, diffY === 0) return EasyStar.RIGHT
+        else if (diffX === -1, diffY === -1) return EasyStar.BOTTOM_RIGHT
         throw new Error('These differences are not valid: ' + diffX + ', ' + diffY)
     };
 
@@ -503,3 +516,12 @@ EasyStar.js = function() {
         }
     };
 }
+
+EasyStar.TOP = 'TOP'
+EasyStar.TOP_RIGHT = 'TOP_RIGHT'
+EasyStar.RIGHT = 'RIGHT'
+EasyStar.BOTTOM_RIGHT = 'BOTTOM_RIGHT'
+EasyStar.BOTTOM = 'BOTTOM'
+EasyStar.BOTTOM_LEFT = 'BOTTOM_LEFT'
+EasyStar.LEFT = 'LEFT'
+EasyStar.TOP_LEFT = 'TOP_LEFT'

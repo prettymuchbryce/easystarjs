@@ -1,4 +1,13 @@
-type Direction = 'top' | 'top-right' | 'right' | 'bottom-right' | 'bottom' | 'bottom-left' | 'left' | 'top-left'
+export const TOP: 'TOP'
+export const TOP_RIGHT: 'TOP_RIGHT'
+export const RIGHT: 'RIGHT'
+export const BOTTOM_RIGHT: 'BOTTOM_RIGHT'
+export const BOTTOM: 'BOTTOM'
+export const BOTTOM_LEFT: 'BOTTOM_LEFT'
+export const LEFT: 'LEFT'
+export const TOP_LEFT: 'TOP_LEFT'
+
+type Direction = "TOP" | "TOP_RIGHT" | "RIGHT" | "BOTTOM_RIGHT" | "BOTTOM" | "BOTTOM_LEFT" | "LEFT" | "TOP_LEFT"
 
 export class js {
 
@@ -10,10 +19,11 @@ export class js {
   * acceptable, or "walkable".
   */
   setAcceptableTiles(tiles: number[] | number): void
+
   /**
-    * Enables sync mode for this EasyStar instance..
-    * if you're into that sort of thing.
-    */
+   * Enables sync mode for this EasyStar instance..
+   * if you're into that sort of thing.
+*/
   enableSync(): void
   /**
   * Disables sync mode for this EasyStar instance.
@@ -136,9 +146,14 @@ export class js {
    *
    * @param {Number} x The x value of the point.
    * @param {Number} y The y value of the point.
-   * @param {Array|String} list of all the allowed directions from which the tile is accessible.
+   * @param {Array.<String>} list of all the allowed directions from which the tile is accessible.
    *
    * eg. easystar.setDirectionalCondition(1, 1, ['top']): You can only access the tile by walking down onto it,
    */
   setDirectionalCondition(x: number, y: number, allowedDirections: Direction[]): void
+
+  /**
+   * Remove all directional conditions
+   */
+  removeAllDirectionalConditions(): void
 }
