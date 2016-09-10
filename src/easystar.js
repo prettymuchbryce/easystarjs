@@ -10,7 +10,6 @@ var EasyStar = {}
 var Instance = require('./instance');
 var Node = require('./node');
 var Heap = require('heap');
-var includes = require('lodash.includes');
 
 const CLOSED_LIST = 0;
 const OPEN_LIST = 1;
@@ -460,7 +459,7 @@ EasyStar.js = function() {
             var direction = EasyStar.calculateDirection(sourceNode, { x: x, y: y })
             var directionIncluded = function () {
                 for (var i = 0; i < directionalConditions[x + "_" + y].length; i++) {
-                    if (directionalConditions[x + "_" + y] === direction) return true
+                    if (directionalConditions[x + "_" + y][i] === direction) return true
                 }
                 return false
             }

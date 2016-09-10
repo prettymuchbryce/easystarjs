@@ -37,7 +37,6 @@
         "webpack": "^1.13.0"
     },
     "dependencies": {
-        "heap": "0.2.6",
-        "lodash.includes": "^4.3.0"
+        "heap": "0.2.6"
     }
 }
