@@ -2,7 +2,7 @@
 *   EasyStar.js
 *   github.com/prettymuchbryce/EasyStarJS
 *   Licensed under the MIT license.
-* 
+*
 *   Implementation By Bryce Neal (@prettymuchbryce)
 **/
 
@@ -24,6 +24,7 @@ EasyStar.js = function() {
     var collisionGrid;
     var costMap = {};
     var pointsToCost = {};
+    var directionalConditions = {};
     var allowCornerCutting = true;
     var iterationsSoFar;
     var instances = [];
@@ -33,8 +34,8 @@ EasyStar.js = function() {
 
     /**
     * Sets the collision grid that EasyStar uses.
-    * 
-    * @param {Array|Number} tiles An array of numbers that represent 
+    *
+    * @param {Array|Number} tiles An array of numbers that represent
     * which tiles in your grid should be considered
     * acceptable, or "walkable".
     **/
@@ -79,8 +80,8 @@ EasyStar.js = function() {
 
     /**
     * Sets the collision grid that EasyStar uses.
-    * 
-    * @param {Array} grid The collision grid that this EasyStar instance will read from. 
+    *
+    * @param {Array} grid The collision grid that this EasyStar instance will read from.
     * This should be a 2D Array of Numbers.
     **/
     this.setGrid = function(grid) {
@@ -136,19 +137,38 @@ EasyStar.js = function() {
     }
 
     /**
-    * Sets the number of search iterations per calculation. 
-    * A lower number provides a slower result, but more practical if you 
+    * Sets a directional condition on a tile
+    *
+    * @param {Number} x The x value of the point.
+    * @param {Number} y The y value of the point.
+    * @param {Array.<String>} allowedDirections A list of all the allowed directions that can access
+    * the tile.
+    **/
+    this.setDirectionalCondition = function(x, y, allowedDirections) {
+        directionalConditions[x + '_' + y] = allowedDirections;
+    };
+
+    /**
+    * Remove all directional conditions
+    **/
+    this.removeAllDirectionalConditions = function() {
+        directionalConditions = {};
+    };
+
+    /**
+    * Sets the number of search iterations per calculation.
+    * A lower number provides a slower result, but more practical if you
     * have a large tile-map and don't want to block your thread while
     * finding a path.
-    * 
+    *
     * @param {Number} iterations The number of searches to prefrom per calculate() call.
     **/
     this.setIterationsPerCalculation = function(iterations) {
         iterationsPerCalculation = iterations;
     };
-    
+
     /**
-    * Avoid a particular point on the grid, 
+    * Avoid a particular point on the grid,
     * regardless of whether or not it is an acceptable tile.
     *
     * @param {Number} x The x value of the point to avoid.
@@ -191,14 +211,14 @@ EasyStar.js = function() {
 
     /**
     * Find a path.
-    * 
+    *
     * @param {Number} startX The X position of the starting point.
     * @param {Number} startY The Y position of the starting point.
     * @param {Number} endX The X position of the ending point.
     * @param {Number} endY The Y position of the ending point.
     * @param {Function} callback A function that is called when your path
     * is found, or no path is found.
-    * 
+    *
     **/
     this.findPath = function(startX, startY, endX, endY, callback) {
         // Wraps the callback for sync vs async logic
@@ -223,7 +243,7 @@ EasyStar.js = function() {
 
         // Start or endpoint outside of scope.
         if (startX < 0 || startY < 0 || endX < 0 || endY < 0 ||
-        startX > collisionGrid[0].length-1 || startY > collisionGrid.length-1 || 
+        startX > collisionGrid[0].length-1 || startY > collisionGrid.length-1 ||
         endX > collisionGrid[0].length-1 || endY > collisionGrid.length-1) {
             throw new Error("Your start or end point is outside the scope of your grid.");
         }
@@ -262,7 +282,7 @@ EasyStar.js = function() {
         instance.endY = endY;
         instance.callback = callbackWrapper;
 
-        instance.openList.push(coordinateToNode(instance, instance.startX, 
+        instance.openList.push(coordinateToNode(instance, instance.startX,
             instance.startY, null, STRAIGHT_COST));
 
         instances.push(instance);
@@ -284,7 +304,7 @@ EasyStar.js = function() {
             }
 
             if (syncEnabled) {
-                // If this is a sync instance, we want to make sure that it calculates synchronously. 
+                // If this is a sync instance, we want to make sure that it calculates synchronously.
                 iterationsSoFar = 0;
             }
 
@@ -319,19 +339,19 @@ EasyStar.js = function() {
             searchNode.list = CLOSED_LIST;
 
             if (searchNode.y > 0) {
-                tilesToSearch.push({ instance: instances[0], searchNode: searchNode, 
+                tilesToSearch.push({ instance: instances[0], searchNode: searchNode,
                     x: 0, y: -1, cost: STRAIGHT_COST * getTileCost(searchNode.x, searchNode.y-1)});
             }
             if (searchNode.x < collisionGrid[0].length-1) {
-                tilesToSearch.push({ instance: instances[0], searchNode: searchNode, 
+                tilesToSearch.push({ instance: instances[0], searchNode: searchNode,
                     x: 1, y: 0, cost: STRAIGHT_COST * getTileCost(searchNode.x+1, searchNode.y)});
             }
             if (searchNode.y < collisionGrid.length-1) {
-                tilesToSearch.push({ instance: instances[0], searchNode: searchNode, 
+                tilesToSearch.push({ instance: instances[0], searchNode: searchNode,
                     x: 0, y: 1, cost: STRAIGHT_COST * getTileCost(searchNode.x, searchNode.y+1)});
             }
             if (searchNode.x > 0) {
-                tilesToSearch.push({ instance: instances[0], searchNode: searchNode, 
+                tilesToSearch.push({ instance: instances[0], searchNode: searchNode,
                     x: -1, y: 0, cost: STRAIGHT_COST * getTileCost(searchNode.x-1, searchNode.y)});
             }
             if (diagonalsEnabled) {
@@ -340,8 +360,8 @@ EasyStar.js = function() {
                     if (allowCornerCutting ||
                         (isTileWalkable(collisionGrid, acceptableTiles, searchNode.x, searchNode.y-1) &&
                         isTileWalkable(collisionGrid, acceptableTiles, searchNode.x-1, searchNode.y))) {
-                        
-                        tilesToSearch.push({ instance: instances[0], searchNode: searchNode, 
+
+                        tilesToSearch.push({ instance: instances[0], searchNode: searchNode,
                             x: -1, y: -1, cost: DIAGONAL_COST * getTileCost(searchNode.x-1, searchNode.y-1)});
                     }
                 }
@@ -350,8 +370,8 @@ EasyStar.js = function() {
                     if (allowCornerCutting ||
                         (isTileWalkable(collisionGrid, acceptableTiles, searchNode.x, searchNode.y+1) &&
                         isTileWalkable(collisionGrid, acceptableTiles, searchNode.x+1, searchNode.y))) {
-                        
-                        tilesToSearch.push({ instance: instances[0], searchNode: searchNode, 
+
+                        tilesToSearch.push({ instance: instances[0], searchNode: searchNode,
                             x: 1, y: 1, cost: DIAGONAL_COST * getTileCost(searchNode.x+1, searchNode.y+1)});
                     }
                 }
@@ -362,7 +382,7 @@ EasyStar.js = function() {
                         isTileWalkable(collisionGrid, acceptableTiles, searchNode.x+1, searchNode.y))) {
 
 
-                        tilesToSearch.push({ instance: instances[0], searchNode: searchNode, 
+                        tilesToSearch.push({ instance: instances[0], searchNode: searchNode,
                             x: 1, y: -1, cost: DIAGONAL_COST * getTileCost(searchNode.x+1, searchNode.y-1)});
                     }
                 }
@@ -373,7 +393,7 @@ EasyStar.js = function() {
                         isTileWalkable(collisionGrid, acceptableTiles, searchNode.x-1, searchNode.y))) {
 
 
-                        tilesToSearch.push({ instance: instances[0], searchNode: searchNode, 
+                        tilesToSearch.push({ instance: instances[0], searchNode: searchNode,
                             x: -1, y: 1, cost: DIAGONAL_COST * getTileCost(searchNode.x-1, searchNode.y+1)});
                     }
                 }
@@ -383,7 +403,7 @@ EasyStar.js = function() {
 
             // Search all of the surrounding nodes
             for (var i = 0; i < tilesToSearch.length; i++) {
-                checkAdjacentNode(tilesToSearch[i].instance, tilesToSearch[i].searchNode, 
+                checkAdjacentNode(tilesToSearch[i].instance, tilesToSearch[i].searchNode,
                     tilesToSearch[i].x, tilesToSearch[i].y, tilesToSearch[i].cost);
                 if (tilesToSearch[i].instance.isDoneCalculating === true) {
                     isDoneCalculating = true;
@@ -405,8 +425,8 @@ EasyStar.js = function() {
         var adjacentCoordinateY = searchNode.y+y;
 
         if (pointsToAvoid[adjacentCoordinateX + "_" + adjacentCoordinateY] === undefined &&
-            isTileWalkable(collisionGrid, acceptableTiles, adjacentCoordinateX, adjacentCoordinateY)) {
-            var node = coordinateToNode(instance, adjacentCoordinateX, 
+            isTileWalkable(collisionGrid, acceptableTiles, adjacentCoordinateX, adjacentCoordinateY, searchNode)) {
+            var node = coordinateToNode(instance, adjacentCoordinateX,
                 adjacentCoordinateY, searchNode, cost);
 
             if (node.list === undefined) {
@@ -421,7 +441,17 @@ EasyStar.js = function() {
     };
 
     // Helpers
-    var isTileWalkable = function(collisionGrid, acceptableTiles, x, y) {
+    var isTileWalkable = function(collisionGrid, acceptableTiles, x, y, sourceNode) {
+        if (directionalConditions[x + "_" + y]) {
+            var direction = calculateDirection(sourceNode.x - x, sourceNode.y - y)
+            var directionIncluded = function () {
+                for (var i = 0; i < directionalConditions[x + "_" + y].length; i++) {
+                    if (directionalConditions[x + "_" + y][i] === direction) return true
+                }
+                return false
+            }
+            if (!directionIncluded()) return false
+        }
         for (var i = 0; i < acceptableTiles.length; i++) {
             if (collisionGrid[y][x] === acceptableTiles[i]) {
                 return true;
@@ -429,6 +459,23 @@ EasyStar.js = function() {
         }
 
         return false;
+    };
+
+    /**
+     * -1, -1 | 0, -1  | 1, -1
+     * -1,  0 | SOURCE | 1,  0
+     * -1,  1 | 0,  1  | 1,  1
+     */
+    var calculateDirection = function (diffX, diffY) {
+        if (diffX === 0, diffY === -1) return EasyStar.BOTTOM
+        else if (diffX === 1, diffY === -1) return EasyStar.BOTTOM_LEFT
+        else if (diffX === 1, diffY === 0) return EasyStar.LEFT
+        else if (diffX === 1, diffY === 1) return EasyStar.TOP_LEFT
+        else if (diffX === 0, diffY === 1) return EasyStar.TOP
+        else if (diffX === -1, diffY === 1) return EasyStar.TOP_RIGHT
+        else if (diffX === -1, diffY === 0) return EasyStar.RIGHT
+        else if (diffX === -1, diffY === -1) return EasyStar.BOTTOM_RIGHT
+        throw new Error('These differences are not valid: ' + diffX + ', ' + diffY)
     };
 
     var getTileCost = function(x, y) {
@@ -468,3 +515,12 @@ EasyStar.js = function() {
         }
     };
 }
+
+EasyStar.TOP = 'TOP'
+EasyStar.TOP_RIGHT = 'TOP_RIGHT'
+EasyStar.RIGHT = 'RIGHT'
+EasyStar.BOTTOM_RIGHT = 'BOTTOM_RIGHT'
+EasyStar.BOTTOM = 'BOTTOM'
+EasyStar.BOTTOM_LEFT = 'BOTTOM_LEFT'
+EasyStar.LEFT = 'LEFT'
+EasyStar.TOP_LEFT = 'TOP_LEFT'

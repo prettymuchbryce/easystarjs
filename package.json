@@ -6,7 +6,8 @@
     "description": "Asynchronous A* Pathfinding API",
     "scripts": {
         "build": "webpack && webpack --minify",
-        "test": "./node_modules/karma/bin/karma start ./karma.conf.js"
+        "test": "./node_modules/karma/bin/karma start ./karma.conf.js",
+        "watch": "webpack -w"
     },
     "keywords": [
         "A*",

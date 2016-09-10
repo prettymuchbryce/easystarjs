@@ -1,3 +1,14 @@
+export const TOP: 'TOP'
+export const TOP_RIGHT: 'TOP_RIGHT'
+export const RIGHT: 'RIGHT'
+export const BOTTOM_RIGHT: 'BOTTOM_RIGHT'
+export const BOTTOM: 'BOTTOM'
+export const BOTTOM_LEFT: 'BOTTOM_LEFT'
+export const LEFT: 'LEFT'
+export const TOP_LEFT: 'TOP_LEFT'
+
+type Direction = 'TOP' | 'TOP_RIGHT' | 'RIGHT' | 'BOTTOM_RIGHT' | 'BOTTOM' | 'BOTTOM_LEFT' | 'LEFT' | 'TOP_LEFT'
+
 export class js {
 
   /**
@@ -131,4 +142,20 @@ export class js {
    * easystar.setIteratonsPerCalculation().
    */
   calculate(): void
+
+  /**
+   * Sets a directional condition on a tile
+   *
+   * @param {Number} x The x value of the point.
+   * @param {Number} y The y value of the point.
+   * @param {Array.<String>} allowedDirections A list of all the allowed directions from which the tile is accessible.
+   *
+   * eg. easystar.setDirectionalCondition(1, 1, ['TOP']): You can only access the tile by walking down onto it,
+   */
+  setDirectionalCondition(x: number, y: number, allowedDirections: Direction[]): void
+
+  /**
+   * Remove all directional conditions
+   */
+  removeAllDirectionalConditions(): void
 }
