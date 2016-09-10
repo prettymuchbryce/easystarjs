@@ -66,7 +66,7 @@ easystar.setTileCost(tileType, multiplicativeCost);
 easystar.enableSync();
 ```
 ```javascript
-easystar.setDirectionalCondition(x, y, [EasyStar.TOP, EasyStar.BOTTOM]); // only accessible from the top and left
+easystar.setDirectionalCondition(x, y, [EasyStar.TOP, EasyStar.LEFT]); // only accessible from the top and left
 ```
 
 ## Usage
