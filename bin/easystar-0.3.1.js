@@ -49,7 +49,7 @@ var EasyStar =
 	*   EasyStar.js
 	*   github.com/prettymuchbryce/EasyStarJS
 	*   Licensed under the MIT license.
-	* 
+	*
 	*   Implementation By Bryce Neal (@prettymuchbryce)
 	**/
 
@@ -71,6 +71,7 @@ var EasyStar =
 	    var collisionGrid;
 	    var costMap = {};
 	    var pointsToCost = {};
+	    var directionalConditions = {};
 	    var allowCornerCutting = true;
 	    var iterationsSoFar;
 	    var instances = [];
@@ -80,8 +81,8 @@ var EasyStar =
 
 	    /**
 	    * Sets the collision grid that EasyStar uses.
-	    * 
-	    * @param {Array|Number} tiles An array of numbers that represent 
+	    *
+	    * @param {Array|Number} tiles An array of numbers that represent
 	    * which tiles in your grid should be considered
 	    * acceptable, or "walkable".
 	    **/
@@ -126,8 +127,8 @@ var EasyStar =
 
 	    /**
 	    * Sets the collision grid that EasyStar uses.
-	    * 
-	    * @param {Array} grid The collision grid that this EasyStar instance will read from. 
+	    *
+	    * @param {Array} grid The collision grid that this EasyStar instance will read from.
 	    * This should be a 2D Array of Numbers.
 	    **/
 	    this.setGrid = function (grid) {
@@ -183,11 +184,30 @@ var EasyStar =
 	    };
 
 	    /**
-	    * Sets the number of search iterations per calculation. 
-	    * A lower number provides a slower result, but more practical if you 
+	    * Sets a directional condition on a tile
+	    *
+	    * @param {Number} x The x value of the point.
+	    * @param {Number} y The y value of the point.
+	    * @param {Array.<String>} allowedDirections A list of all the allowed directions that can access
+	    * the tile.
+	    **/
+	    this.setDirectionalCondition = function (x, y, allowedDirections) {
+	        directionalConditions[x + '_' + y] = allowedDirections;
+	    };
+
+	    /**
+	    * Remove all directional conditions
+	    **/
+	    this.removeAllDirectionalConditions = function () {
+	        directionalConditions = {};
+	    };
+
+	    /**
+	    * Sets the number of search iterations per calculation.
+	    * A lower number provides a slower result, but more practical if you
 	    * have a large tile-map and don't want to block your thread while
 	    * finding a path.
-	    * 
+	    *
 	    * @param {Number} iterations The number of searches to prefrom per calculate() call.
 	    **/
 	    this.setIterationsPerCalculation = function (iterations) {
@@ -195,7 +215,7 @@ var EasyStar =
 	    };
 
 	    /**
-	    * Avoid a particular point on the grid, 
+	    * Avoid a particular point on the grid,
 	    * regardless of whether or not it is an acceptable tile.
 	    *
 	    * @param {Number} x The x value of the point to avoid.
@@ -238,14 +258,14 @@ var EasyStar =
 
 	    /**
 	    * Find a path.
-	    * 
+	    *
 	    * @param {Number} startX The X position of the starting point.
 	    * @param {Number} startY The Y position of the starting point.
 	    * @param {Number} endX The X position of the ending point.
 	    * @param {Number} endY The Y position of the ending point.
 	    * @param {Function} callback A function that is called when your path
 	    * is found, or no path is found.
-	    * 
+	    *
 	    **/
 	    this.findPath = function (startX, startY, endX, endY, callback) {
 	        // Wraps the callback for sync vs async logic
@@ -436,7 +456,7 @@ var EasyStar =
 	        var adjacentCoordinateX = searchNode.x + x;
 	        var adjacentCoordinateY = searchNode.y + y;
 
-	        if (pointsToAvoid[adjacentCoordinateX + "_" + adjacentCoordinateY] === undefined && isTileWalkable(collisionGrid, acceptableTiles, adjacentCoordinateX, adjacentCoordinateY)) {
+	        if (pointsToAvoid[adjacentCoordinateX + "_" + adjacentCoordinateY] === undefined && isTileWalkable(collisionGrid, acceptableTiles, adjacentCoordinateX, adjacentCoordinateY, searchNode)) {
 	            var node = coordinateToNode(instance, adjacentCoordinateX, adjacentCoordinateY, searchNode, cost);
 
 	            if (node.list === undefined) {
@@ -451,7 +471,17 @@ var EasyStar =
 	    };
 
 	    // Helpers
-	    var isTileWalkable = function (collisionGrid, acceptableTiles, x, y) {
+	    var isTileWalkable = function (collisionGrid, acceptableTiles, x, y, sourceNode) {
+	        if (directionalConditions[x + "_" + y]) {
+	            var direction = calculateDirection(sourceNode.x - x, sourceNode.y - y);
+	            var directionIncluded = function () {
+	                for (var i = 0; i < directionalConditions[x + "_" + y].length; i++) {
+	                    if (directionalConditions[x + "_" + y][i] === direction) return true;
+	                }
+	                return false;
+	            };
+	            if (!directionIncluded()) return false;
+	        }
 	        for (var i = 0; i < acceptableTiles.length; i++) {
 	            if (collisionGrid[y][x] === acceptableTiles[i]) {
 	                return true;
@@ -459,6 +489,16 @@ var EasyStar =
 	        }
 
 	        return false;
+	    };
+
+	    /**
+	     * -1, -1 | 0, -1  | 1, -1
+	     * -1,  0 | SOURCE | 1,  0
+	     * -1,  1 | 0,  1  | 1,  1
+	     */
+	    var calculateDirection = function (diffX, diffY) {
+	        if (diffX === 0, diffY === -1) return EasyStar.BOTTOM;else if (diffX === 1, diffY === -1) return EasyStar.BOTTOM_LEFT;else if (diffX === 1, diffY === 0) return EasyStar.LEFT;else if (diffX === 1, diffY === 1) return EasyStar.TOP_LEFT;else if (diffX === 0, diffY === 1) return EasyStar.TOP;else if (diffX === -1, diffY === 1) return EasyStar.TOP_RIGHT;else if (diffX === -1, diffY === 0) return EasyStar.RIGHT;else if (diffX === -1, diffY === -1) return EasyStar.BOTTOM_RIGHT;
+	        throw new Error('These differences are not valid: ' + diffX + ', ' + diffY);
 	    };
 
 	    var getTileCost = function (x, y) {
@@ -498,6 +538,15 @@ var EasyStar =
 	        }
 	    };
 	};
+
+	EasyStar.TOP = 'TOP';
+	EasyStar.TOP_RIGHT = 'TOP_RIGHT';
+	EasyStar.RIGHT = 'RIGHT';
+	EasyStar.BOTTOM_RIGHT = 'BOTTOM_RIGHT';
+	EasyStar.BOTTOM = 'BOTTOM';
+	EasyStar.BOTTOM_LEFT = 'BOTTOM_LEFT';
+	EasyStar.LEFT = 'LEFT';
+	EasyStar.TOP_LEFT = 'TOP_LEFT';
 
 /***/ },
 /* 1 */

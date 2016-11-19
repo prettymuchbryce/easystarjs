@@ -20,7 +20,7 @@ module.exports = function(config) {
 
     // list of files / patterns to load in the browser
     files: [
-        './bin/easystar-0.3.0.js',
+        './bin/easystar-0.3.1.js',
         './test/easystartest.js'
     ],
 
