@@ -63,6 +63,8 @@ var EasyStar =
 
 	module.exports = EasyStar;
 
+	EasyStar._nextId = 0;
+
 	EasyStar.js = function () {
 	    var STRAIGHT_COST = 1.0;
 	    var DIAGONAL_COST = 1.4;
@@ -265,6 +267,7 @@ var EasyStar =
 	    * @param {Number} endY The Y position of the ending point.
 	    * @param {Function} callback A function that is called when your path
 	    * is found, or no path is found.
+	    * @return {Number} an ID that can be used to cancel the path calcualation
 	    *
 	    **/
 	    this.findPath = function (startX, startY, endX, endY, callback) {
@@ -316,6 +319,7 @@ var EasyStar =
 
 	        // Create the instance
 	        var instance = new Instance();
+	        instance.id = EasyStar._nextId++;
 	        instance.openList = new Heap(function (nodeA, nodeB) {
 	            return nodeA.bestGuessDistance() - nodeB.bestGuessDistance();
 	        });
@@ -330,6 +334,23 @@ var EasyStar =
 	        instance.openList.push(coordinateToNode(instance, instance.startX, instance.startY, null, STRAIGHT_COST));
 
 	        instances.push(instance);
+	        return instance.id;
+	    };
+
+	    /**
+	     * Cancel a path calculation.
+	     *
+	     * @param {Number} id The ID of the path being calculated.
+	     *
+	     **/
+	    this.cancelPath = function (id) {
+	        for (var i = 0; i < instances.length; i++) {
+	            var instance = instances[i];
+	            if (instance.id === id) {
+	                instances.splice(i, 1);
+	                return;
+	            }
+	        }
 	    };
 
 	    /**
