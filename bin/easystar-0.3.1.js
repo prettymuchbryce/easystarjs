@@ -76,7 +76,8 @@ var EasyStar =
 	    var directionalConditions = {};
 	    var allowCornerCutting = true;
 	    var iterationsSoFar;
-	    var instances = [];
+	    var instances = {};
+	    var instanceQueue = [];
 	    var iterationsPerCalculation = Number.MAX_VALUE;
 	    var acceptableTiles;
 	    var diagonalsEnabled = false;
@@ -317,9 +318,10 @@ var EasyStar =
 	            return;
 	        }
 
+	        var instanceId = nextInstanceId++;
+
 	        // Create the instance
 	        var instance = new Instance();
-	        instance.id = nextInstanceId++;
 	        instance.openList = new Heap(function (nodeA, nodeB) {
 	            return nodeA.bestGuessDistance() - nodeB.bestGuessDistance();
 	        });
@@ -333,8 +335,9 @@ var EasyStar =
 
 	        instance.openList.push(coordinateToNode(instance, instance.startX, instance.startY, null, STRAIGHT_COST));
 
-	        instances.push(instance);
-	        return instance.id;
+	        instances[instanceId] = instance;
+	        instanceQueue.push(instanceId);
+	        return instanceId;
 	    };
 
 	    /**
@@ -345,12 +348,10 @@ var EasyStar =
 	     *
 	     **/
 	    this.cancelPath = function (instanceId) {
-	        for (var i = 0; i < instances.length; i++) {
-	            var instance = instances[i];
-	            if (instance.id === instanceId) {
-	                instances.splice(i, 1);
-	                return true;
-	            }
+	        if (instanceId in instances) {
+	            delete instances[instanceId];
+	            // No need to remove it from instanceQueue
+	            return true;
 	        }
 	        return false;
 	    };
@@ -362,11 +363,11 @@ var EasyStar =
 	    * easystar.setIteratonsPerCalculation().
 	    **/
 	    this.calculate = function () {
-	        if (instances.length === 0 || collisionGrid === undefined || acceptableTiles === undefined) {
+	        if (instanceQueue.length === 0 || collisionGrid === undefined || acceptableTiles === undefined) {
 	            return;
 	        }
 	        for (iterationsSoFar = 0; iterationsSoFar < iterationsPerCalculation; iterationsSoFar++) {
-	            if (instances.length === 0) {
+	            if (instanceQueue.length === 0) {
 	                return;
 	            }
 
@@ -375,19 +376,27 @@ var EasyStar =
 	                iterationsSoFar = 0;
 	            }
 
-	            // Couldn't find a path.
-	            if (instances[0].openList.size() === 0) {
-	                var ic = instances[0];
-	                ic.callback(null);
-	                instances.shift();
+	            var instanceId = instanceQueue[0];
+	            var instance = instances[instanceId];
+	            if (typeof instance == 'undefined') {
+	                // This instance was cancelled
+	                instanceQueue.shift();
 	                continue;
 	            }
 
-	            var searchNode = instances[0].openList.pop();
+	            // Couldn't find a path.
+	            if (instance.openList.size() === 0) {
+	                instance.callback(null);
+	                delete instances[instanceId];
+	                instanceQueue.shift();
+	                continue;
+	            }
+
+	            var searchNode = instance.openList.pop();
 
 	            // Handles the case where we have found the destination
-	            if (instances[0].endX === searchNode.x && instances[0].endY === searchNode.y) {
-	                instances[0].isDoneCalculating = true;
+	            if (instance.endX === searchNode.x && instance.endY === searchNode.y) {
+	                instance.isDoneCalculating = true;
 	                var path = [];
 	                path.push({ x: searchNode.x, y: searchNode.y });
 	                var parent = searchNode.parent;
@@ -396,9 +405,8 @@ var EasyStar =
 	                    parent = parent.parent;
 	                }
 	                path.reverse();
-	                var ic = instances[0];
 	                var ip = path;
-	                ic.callback(ip);
+	                instance.callback(ip);
 	                return;
 	            }
 
@@ -406,19 +414,19 @@ var EasyStar =
 	            searchNode.list = CLOSED_LIST;
 
 	            if (searchNode.y > 0) {
-	                tilesToSearch.push({ instance: instances[0], searchNode: searchNode,
+	                tilesToSearch.push({ instance: instance, searchNode: searchNode,
 	                    x: 0, y: -1, cost: STRAIGHT_COST * getTileCost(searchNode.x, searchNode.y - 1) });
 	            }
 	            if (searchNode.x < collisionGrid[0].length - 1) {
-	                tilesToSearch.push({ instance: instances[0], searchNode: searchNode,
+	                tilesToSearch.push({ instance: instance, searchNode: searchNode,
 	                    x: 1, y: 0, cost: STRAIGHT_COST * getTileCost(searchNode.x + 1, searchNode.y) });
 	            }
 	            if (searchNode.y < collisionGrid.length - 1) {
-	                tilesToSearch.push({ instance: instances[0], searchNode: searchNode,
+	                tilesToSearch.push({ instance: instance, searchNode: searchNode,
 	                    x: 0, y: 1, cost: STRAIGHT_COST * getTileCost(searchNode.x, searchNode.y + 1) });
 	            }
 	            if (searchNode.x > 0) {
-	                tilesToSearch.push({ instance: instances[0], searchNode: searchNode,
+	                tilesToSearch.push({ instance: instance, searchNode: searchNode,
 	                    x: -1, y: 0, cost: STRAIGHT_COST * getTileCost(searchNode.x - 1, searchNode.y) });
 	            }
 	            if (diagonalsEnabled) {
@@ -426,7 +434,7 @@ var EasyStar =
 
 	                    if (allowCornerCutting || isTileWalkable(collisionGrid, acceptableTiles, searchNode.x, searchNode.y - 1) && isTileWalkable(collisionGrid, acceptableTiles, searchNode.x - 1, searchNode.y)) {
 
-	                        tilesToSearch.push({ instance: instances[0], searchNode: searchNode,
+	                        tilesToSearch.push({ instance: instance, searchNode: searchNode,
 	                            x: -1, y: -1, cost: DIAGONAL_COST * getTileCost(searchNode.x - 1, searchNode.y - 1) });
 	                    }
 	                }
@@ -434,7 +442,7 @@ var EasyStar =
 
 	                    if (allowCornerCutting || isTileWalkable(collisionGrid, acceptableTiles, searchNode.x, searchNode.y + 1) && isTileWalkable(collisionGrid, acceptableTiles, searchNode.x + 1, searchNode.y)) {
 
-	                        tilesToSearch.push({ instance: instances[0], searchNode: searchNode,
+	                        tilesToSearch.push({ instance: instance, searchNode: searchNode,
 	                            x: 1, y: 1, cost: DIAGONAL_COST * getTileCost(searchNode.x + 1, searchNode.y + 1) });
 	                    }
 	                }
@@ -442,7 +450,7 @@ var EasyStar =
 
 	                    if (allowCornerCutting || isTileWalkable(collisionGrid, acceptableTiles, searchNode.x, searchNode.y - 1) && isTileWalkable(collisionGrid, acceptableTiles, searchNode.x + 1, searchNode.y)) {
 
-	                        tilesToSearch.push({ instance: instances[0], searchNode: searchNode,
+	                        tilesToSearch.push({ instance: instance, searchNode: searchNode,
 	                            x: 1, y: -1, cost: DIAGONAL_COST * getTileCost(searchNode.x + 1, searchNode.y - 1) });
 	                    }
 	                }
@@ -450,7 +458,7 @@ var EasyStar =
 
 	                    if (allowCornerCutting || isTileWalkable(collisionGrid, acceptableTiles, searchNode.x, searchNode.y + 1) && isTileWalkable(collisionGrid, acceptableTiles, searchNode.x - 1, searchNode.y)) {
 
-	                        tilesToSearch.push({ instance: instances[0], searchNode: searchNode,
+	                        tilesToSearch.push({ instance: instance, searchNode: searchNode,
 	                            x: -1, y: 1, cost: DIAGONAL_COST * getTileCost(searchNode.x - 1, searchNode.y + 1) });
 	                    }
 	                }
@@ -468,7 +476,8 @@ var EasyStar =
 	            }
 
 	            if (isDoneCalculating) {
-	                instances.shift();
+	                delete instances[instanceId];
+	                instanceQueue.shift();
 	                continue;
 	            }
 	        }
