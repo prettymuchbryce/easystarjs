@@ -319,7 +319,7 @@ var EasyStar =
 
 	        // Create the instance
 	        var instance = new Instance();
-	        instance.id = EasyStar._nextId++;
+	        instance.id = nextInstanceId++;
 	        instance.openList = new Heap(function (nodeA, nodeB) {
 	            return nodeA.bestGuessDistance() - nodeB.bestGuessDistance();
 	        });
