@@ -63,7 +63,7 @@ var EasyStar =
 
 	module.exports = EasyStar;
 
-	EasyStar._nextId = 0;
+	var nextInstanceId = 1;
 
 	EasyStar.js = function () {
 	    var STRAIGHT_COST = 1.0;
@@ -267,7 +267,7 @@ var EasyStar =
 	    * @param {Number} endY The Y position of the ending point.
 	    * @param {Function} callback A function that is called when your path
 	    * is found, or no path is found.
-	    * @return {Number} an ID that can be used to cancel the path calcualation
+	    * @return {Number} A numeric, non-zero value which identifies the created instance. This value can be passed to cancelPath to cancel the path calculation.
 	    *
 	    **/
 	    this.findPath = function (startX, startY, endX, endY, callback) {
@@ -340,17 +340,19 @@ var EasyStar =
 	    /**
 	     * Cancel a path calculation.
 	     *
-	     * @param {Number} id The ID of the path being calculated.
+	     * @param {Number} instanceId The instance ID of the path being calculated
+	     * @return {Boolean} True if an instance was found and cancelled.
 	     *
 	     **/
-	    this.cancelPath = function (id) {
+	    this.cancelPath = function (instanceId) {
 	        for (var i = 0; i < instances.length; i++) {
 	            var instance = instances[i];
-	            if (instance.id === id) {
+	            if (instance.id === instanceId) {
 	                instances.splice(i, 1);
-	                return;
+	                return true;
 	            }
 	        }
+	        return false;
 	    };
 
 	    /**
