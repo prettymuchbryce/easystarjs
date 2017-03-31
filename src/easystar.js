@@ -119,7 +119,10 @@ EasyStar.js = function() {
     * @param {Number} The multiplicative cost associated with the given point.
     **/
     this.setAdditionalPointCost = function(x, y, cost) {
-        pointsToCost[x + '_' + y] = cost;
+        if (pointsToCost[y]===undefined) {
+            pointsToCost[y] = {};
+        }
+        pointsToCost[y][x] = cost;
     };
 
     /**
@@ -129,7 +132,9 @@ EasyStar.js = function() {
     * @param {Number} y The y value of the point to stop costing.
     **/
     this.removeAdditionalPointCost = function(x, y) {
-        delete pointsToCost[x + '_' + y];
+        if (pointsToCost[y]) {
+            delete pointsToCost[y][x];
+        }
     }
 
     /**
@@ -491,7 +496,7 @@ EasyStar.js = function() {
     };
 
     var getTileCost = function(x, y) {
-        return pointsToCost[x + '_' + y] || costMap[collisionGrid[y][x]]
+        return (pointsToCost[y] && pointsToCost[y][x]) || costMap[collisionGrid[y][x]]
     };
 
     var coordinateToNode = function(instance, x, y, parent, cost) {
