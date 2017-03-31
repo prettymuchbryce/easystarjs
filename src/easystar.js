@@ -495,8 +495,12 @@ EasyStar.js = function() {
     };
 
     var coordinateToNode = function(instance, x, y, parent, cost) {
-        if (instance.nodeHash[x + "_" + y]!==undefined) {
-            return instance.nodeHash[x + "_" + y];
+        if (instance.nodeHash[y]!==undefined) {
+            if (instance.nodeHash[y][x]!==undefined) {
+                return instance.nodeHash[y][x];
+            }
+        } else {
+            instance.nodeHash[y] = {};
         }
         var simpleDistanceToTarget = getDistance(x, y, instance.endX, instance.endY);
         if (parent!==null) {
@@ -505,7 +509,7 @@ EasyStar.js = function() {
             costSoFar = 0;
         }
         var node = new Node(parent,x,y,costSoFar,simpleDistanceToTarget);
-        instance.nodeHash[x + "_" + y] = node;
+        instance.nodeHash[y][x] = node;
         return node;
     };
 
