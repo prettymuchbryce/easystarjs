@@ -8,9 +8,9 @@ export const LEFT: 'LEFT'
 export const TOP_LEFT: 'TOP_LEFT'
 
 type Direction = 'TOP' | 'TOP_RIGHT' | 'RIGHT' | 'BOTTOM_RIGHT' | 'BOTTOM' | 'BOTTOM_LEFT' | 'LEFT' | 'TOP_LEFT'
+type CustomCheck = (source?: { x: number, y: number }, thisNode?: { x: number, y: number}, grid?: number[][]) => boolean
 
 export class js {
-
   /**
    * Sets the collision grid that EasyStar uses.
    *
@@ -168,4 +168,26 @@ export class js {
    * Remove all directional conditions
    */
   removeAllDirectionalConditions(): void
+
+  /**
+   * Sets a custom condition on a tile
+   *
+   * @param {Number} x The x value of the point.
+   * @param {Number} y The y value of the point.
+   * @param {Function} customCheck Function to check whether a movement onto a tile is valid
+   */
+  setCustomCondition(x: number, y: number, customCheck: CustomCheck): void
+
+  /**
+   * Remove all custom conditions
+   */
+  removeAllCustomConditions(): void
 }
+
+/**
+ * Calculate the direction to a node
+ *
+ * @param {Object} sourceNode The source node
+ * @param {Object} destinationNode The destination node
+ */
+export function calculateDirection(sourceNode: { x: number, y: number }, destinationNode: { x: number, y: number }): Direction

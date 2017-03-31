@@ -73,6 +73,11 @@ var instanceId = easystar.findPath(startX, startY, endX, endY, callback);
 // ...
 easystar.cancelPath(instanceId);
 ```
+```javascript
+easystar.setCustomCondition(x, y, function(sourceNode, thisNode, grid) {
+    return grid[sourceNode.y][sourceNode.x] === 2 // only allow '2' nodes to access the node a [x, y]
+}) 
+```
 
 ## Usage
 
