@@ -119,7 +119,7 @@ EasyStar.js = function() {
     * @param {Number} The multiplicative cost associated with the given point.
     **/
     this.setAdditionalPointCost = function(x, y, cost) {
-        if (pointsToCost[y]===undefined) {
+        if (pointsToCost[y] === undefined) {
             pointsToCost[y] = {};
         }
         pointsToCost[y][x] = cost;
@@ -132,7 +132,7 @@ EasyStar.js = function() {
     * @param {Number} y The y value of the point to stop costing.
     **/
     this.removeAdditionalPointCost = function(x, y) {
-        if (pointsToCost[y]) {
+        if (pointsToCost[y] !== undefined) {
             delete pointsToCost[y][x];
         }
     }
@@ -153,7 +153,10 @@ EasyStar.js = function() {
     * the tile.
     **/
     this.setDirectionalCondition = function(x, y, allowedDirections) {
-        directionalConditions[x + '_' + y] = allowedDirections;
+        if (directionalConditions[y] === undefined) {
+            directionalConditions[y] = {};
+        }
+        directionalConditions[y][x] = allowedDirections;
     };
 
     /**
@@ -459,11 +462,12 @@ EasyStar.js = function() {
 
     // Helpers
     var isTileWalkable = function(collisionGrid, acceptableTiles, x, y, sourceNode) {
-        if (directionalConditions[x + "_" + y]) {
+        var directionalCondition = directionalConditions[y] && directionalConditions[y][x];
+        if (directionalCondition) {
             var direction = calculateDirection(sourceNode.x - x, sourceNode.y - y)
             var directionIncluded = function () {
-                for (var i = 0; i < directionalConditions[x + "_" + y].length; i++) {
-                    if (directionalConditions[x + "_" + y][i] === direction) return true
+                for (var i = 0; i < directionalCondition.length; i++) {
+                    if (directionalCondition[i] === direction) return true
                 }
                 return false
             }
