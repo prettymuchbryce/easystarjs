@@ -510,8 +510,8 @@ EasyStar.js = function() {
     };
 
     var coordinateToNode = function(instance, x, y, parent, cost) {
-        if (instance.nodeHash[y]!==undefined) {
-            if (instance.nodeHash[y][x]!==undefined) {
+        if (instance.nodeHash[y] !== undefined) {
+            if (instance.nodeHash[y][x] !== undefined) {
                 return instance.nodeHash[y][x];
             }
         } else {
