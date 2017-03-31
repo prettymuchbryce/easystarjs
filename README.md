@@ -68,6 +68,11 @@ easystar.enableSync();
 ```javascript
 easystar.setDirectionalCondition(x, y, [EasyStar.TOP, EasyStar.LEFT]); // only accessible from the top and left
 ```
+```javascript
+var instanceId = easystar.findPath(startX, startY, endX, endY, callback);
+// ...
+easystar.cancelPath(instanceId);
+```
 
 ## Usage
 

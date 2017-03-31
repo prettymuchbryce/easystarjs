@@ -131,9 +131,19 @@ export class js {
    * @param {Number} endY The Y position of the ending point.
    * @param {Function} callback A function that is called when your path
    * is found, or no path is found.
+   * @return {Number} A numeric, non-zero value which identifies the created instance. This value can be passed to cancelPath to cancel the path calculation.
    *
    */
-  findPath(startX: number, startY: number, endX: number, endY: number, callback: (path: { x: number, y: number }[]) => void): void
+  findPath(startX: number, startY: number, endX: number, endY: number, callback: (path: { x: number, y: number }[]) => void): number
+
+  /**
+   * Cancel a path calculation.
+   *
+   * @param {Number} instanceId The instance ID of the path being calculated
+   * @return {Boolean} True if an instance was found and cancelled.
+   *
+   **/
+  cancelPath(instanceId: number): boolean
 
   /**
    * This method steps through the A* Algorithm in an attempt to

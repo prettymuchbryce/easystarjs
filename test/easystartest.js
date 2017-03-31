@@ -84,6 +84,53 @@ describe("EasyStar.js", function() {
     }
   });
 
+  it("It should be able to cancel a path.", function(done) {
+    var easyStar = new EasyStar.js();
+    var map = [[1,1,0,1,1],
+               [1,1,0,1,1],
+               [1,1,0,1,1],
+               [1,1,1,1,1],
+               [1,1,1,1,1]];
+
+    easyStar.setGrid(map);
+
+    easyStar.setAcceptableTiles([1]);
+
+    var id = easyStar.findPath(1,2,3,2,onPathFound);
+
+    easyStar.cancelPath(id);
+
+    easyStar.calculate();
+
+    function onPathFound(path) {
+        fail("path wasn't cancelled");
+    }
+
+    setTimeout(done, 0);
+  });
+
+  it("Paths should have different IDs.", function() {
+    var easyStar = new EasyStar.js();
+    var map = [[1,1,0,1,1],
+               [1,1,0,1,1],
+               [1,1,0,1,1],
+               [1,1,1,1,1],
+               [1,1,1,1,1]];
+
+    easyStar.setGrid(map);
+
+    easyStar.setAcceptableTiles([1]);
+
+    var id1 = easyStar.findPath(1,2,3,2,onPathFound);
+    var id2 = easyStar.findPath(3,2,1,2,onPathFound);
+    expect(id1).toBeGreaterThan(0);
+    expect(id2).toBeGreaterThan(0);
+    expect(id1).not.toEqual(id2);
+
+    function onPathFound(path) {
+    }
+  });
+
   it("It should be able to avoid a separate point successfully.", function(done) {
     var easyStar = new EasyStar.js();
     var map = [[1,1,0,1,1],
