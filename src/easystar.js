@@ -186,7 +186,10 @@ EasyStar.js = function() {
     * @param {Number} y The y value of the point to avoid.
     **/
     this.avoidAdditionalPoint = function(x, y) {
-        pointsToAvoid[x + "_" + y] = 1;
+        if (pointsToAvoid[y] === undefined) {
+            pointsToAvoid[y] = {};
+        }
+        pointsToAvoid[y][x] = 1;
     };
 
     /**
@@ -196,7 +199,9 @@ EasyStar.js = function() {
     * @param {Number} y The y value of the point to stop avoiding.
     **/
     this.stopAvoidingAdditionalPoint = function(x, y) {
-        delete pointsToAvoid[x + "_" + y];
+        if (pointsToAvoid[y] !== undefined) {
+            delete pointsToAvoid[y][x];
+        }
     };
 
     /**
@@ -444,7 +449,8 @@ EasyStar.js = function() {
         var adjacentCoordinateX = searchNode.x+x;
         var adjacentCoordinateY = searchNode.y+y;
 
-        if (pointsToAvoid[adjacentCoordinateX + "_" + adjacentCoordinateY] === undefined &&
+        if ((pointsToAvoid[adjacentCoordinateY] === undefined ||
+             pointsToAvoid[adjacentCoordinateY][adjacentCoordinateX] === undefined) &&
             isTileWalkable(collisionGrid, acceptableTiles, adjacentCoordinateX, adjacentCoordinateY, searchNode)) {
             var node = coordinateToNode(instance, adjacentCoordinateX,
                 adjacentCoordinateY, searchNode, cost);
