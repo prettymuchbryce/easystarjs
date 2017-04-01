@@ -302,14 +302,19 @@ describe("EasyStar.js", function() {
           [0, 0, 0],
       ];
       easyStar.setGrid(grid);
+      easyStar.enableDiagonals();
       easyStar.setAcceptableTiles([0]);
-      easyStar.setDirectionalCondition(1,1, [EasyStar.RIGHT, EasyStar.TOP_RIGHT]);
-      easyStar.setDirectionalCondition(1,2, [EasyStar.LEFT]);
+      easyStar.setDirectionalCondition(2, 1, [EasyStar.TOP]);
+      easyStar.setDirectionalCondition(1, 2, [EasyStar.TOP_RIGHT]);
+      easyStar.setDirectionalCondition(2, 2, [EasyStar.LEFT]);
+      easyStar.setDirectionalCondition(1, 1, [EasyStar.BOTTOM_RIGHT]);
+      easyStar.setDirectionalCondition(0, 1, [EasyStar.RIGHT]);
+      easyStar.setDirectionalCondition(0, 0, [EasyStar.BOTTOM]);
 
-      easyStar.findPath(0, 0, 2, 0, function (path) {
+      easyStar.findPath(2, 0, 0, 0, function (path) {
           expect(path).not.toBeNull();
-          expect(path[3]).toEqual({ x: 1, y: 2})
           expect(path.length).toEqual(7);
+          expect(path[3]).toEqual({ x: 2, y: 2})
           done();
       });
 
