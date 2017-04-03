@@ -119,7 +119,10 @@ EasyStar.js = function() {
     * @param {Number} The multiplicative cost associated with the given point.
     **/
     this.setAdditionalPointCost = function(x, y, cost) {
-        pointsToCost[x + '_' + y] = cost;
+        if (pointsToCost[y] === undefined) {
+            pointsToCost[y] = {};
+        }
+        pointsToCost[y][x] = cost;
     };
 
     /**
@@ -129,7 +132,9 @@ EasyStar.js = function() {
     * @param {Number} y The y value of the point to stop costing.
     **/
     this.removeAdditionalPointCost = function(x, y) {
-        delete pointsToCost[x + '_' + y];
+        if (pointsToCost[y] !== undefined) {
+            delete pointsToCost[y][x];
+        }
     }
 
     /**
@@ -148,7 +153,10 @@ EasyStar.js = function() {
     * the tile.
     **/
     this.setDirectionalCondition = function(x, y, allowedDirections) {
-        directionalConditions[x + '_' + y] = allowedDirections;
+        if (directionalConditions[y] === undefined) {
+            directionalConditions[y] = {};
+        }
+        directionalConditions[y][x] = allowedDirections;
     };
 
     /**
@@ -178,7 +186,10 @@ EasyStar.js = function() {
     * @param {Number} y The y value of the point to avoid.
     **/
     this.avoidAdditionalPoint = function(x, y) {
-        pointsToAvoid[x + "_" + y] = 1;
+        if (pointsToAvoid[y] === undefined) {
+            pointsToAvoid[y] = {};
+        }
+        pointsToAvoid[y][x] = 1;
     };
 
     /**
@@ -188,7 +199,9 @@ EasyStar.js = function() {
     * @param {Number} y The y value of the point to stop avoiding.
     **/
     this.stopAvoidingAdditionalPoint = function(x, y) {
-        delete pointsToAvoid[x + "_" + y];
+        if (pointsToAvoid[y] !== undefined) {
+            delete pointsToAvoid[y][x];
+        }
     };
 
     /**
@@ -351,7 +364,6 @@ EasyStar.js = function() {
 
             // Handles the case where we have found the destination
             if (instance.endX === searchNode.x && instance.endY === searchNode.y) {
-                instance.isDoneCalculating = true;
                 var path = [];
                 path.push({x: searchNode.x, y: searchNode.y});
                 var parent = searchNode.parent;
@@ -362,27 +374,29 @@ EasyStar.js = function() {
                 path.reverse();
                 var ip = path;
                 instance.callback(ip);
-                return
+                delete instances[instanceId];
+                instanceQueue.shift();
+                continue;
             }
 
             var tilesToSearch = [];
             searchNode.list = CLOSED_LIST;
 
             if (searchNode.y > 0) {
-                tilesToSearch.push({ instance: instance, searchNode: searchNode,
-                    x: 0, y: -1, cost: STRAIGHT_COST * getTileCost(searchNode.x, searchNode.y-1)});
+                checkAdjacentNode(instance, searchNode,
+                    0, -1, STRAIGHT_COST * getTileCost(searchNode.x, searchNode.y-1));
             }
             if (searchNode.x < collisionGrid[0].length-1) {
-                tilesToSearch.push({ instance: instance, searchNode: searchNode,
-                    x: 1, y: 0, cost: STRAIGHT_COST * getTileCost(searchNode.x+1, searchNode.y)});
+                checkAdjacentNode(instance, searchNode,
+                    1, 0, STRAIGHT_COST * getTileCost(searchNode.x+1, searchNode.y));
             }
             if (searchNode.y < collisionGrid.length-1) {
-                tilesToSearch.push({ instance: instance, searchNode: searchNode,
-                    x: 0, y: 1, cost: STRAIGHT_COST * getTileCost(searchNode.x, searchNode.y+1)});
+                checkAdjacentNode(instance, searchNode,
+                    0, 1, STRAIGHT_COST * getTileCost(searchNode.x, searchNode.y+1));
             }
             if (searchNode.x > 0) {
-                tilesToSearch.push({ instance: instance, searchNode: searchNode,
-                    x: -1, y: 0, cost: STRAIGHT_COST * getTileCost(searchNode.x-1, searchNode.y)});
+                checkAdjacentNode(instance, searchNode,
+                    -1, 0, STRAIGHT_COST * getTileCost(searchNode.x-1, searchNode.y));
             }
             if (diagonalsEnabled) {
                 if (searchNode.x > 0 && searchNode.y > 0) {
@@ -391,8 +405,8 @@ EasyStar.js = function() {
                         (isTileWalkable(collisionGrid, acceptableTiles, searchNode.x, searchNode.y-1) &&
                         isTileWalkable(collisionGrid, acceptableTiles, searchNode.x-1, searchNode.y))) {
 
-                        tilesToSearch.push({ instance: instance, searchNode: searchNode,
-                            x: -1, y: -1, cost: DIAGONAL_COST * getTileCost(searchNode.x-1, searchNode.y-1)});
+                        checkAdjacentNode(instance, searchNode,
+                            -1, -1, DIAGONAL_COST * getTileCost(searchNode.x-1, searchNode.y-1));
                     }
                 }
                 if (searchNode.x < collisionGrid[0].length-1 && searchNode.y < collisionGrid.length-1) {
@@ -401,8 +415,8 @@ EasyStar.js = function() {
                         (isTileWalkable(collisionGrid, acceptableTiles, searchNode.x, searchNode.y+1) &&
                         isTileWalkable(collisionGrid, acceptableTiles, searchNode.x+1, searchNode.y))) {
 
-                        tilesToSearch.push({ instance: instance, searchNode: searchNode,
-                            x: 1, y: 1, cost: DIAGONAL_COST * getTileCost(searchNode.x+1, searchNode.y+1)});
+                        checkAdjacentNode(instance, searchNode,
+                            1, 1, DIAGONAL_COST * getTileCost(searchNode.x+1, searchNode.y+1));
                     }
                 }
                 if (searchNode.x < collisionGrid[0].length-1 && searchNode.y > 0) {
@@ -411,9 +425,8 @@ EasyStar.js = function() {
                         (isTileWalkable(collisionGrid, acceptableTiles, searchNode.x, searchNode.y-1) &&
                         isTileWalkable(collisionGrid, acceptableTiles, searchNode.x+1, searchNode.y))) {
 
-
-                        tilesToSearch.push({ instance: instance, searchNode: searchNode,
-                            x: 1, y: -1, cost: DIAGONAL_COST * getTileCost(searchNode.x+1, searchNode.y-1)});
+                        checkAdjacentNode(instance, searchNode,
+                            1, -1, DIAGONAL_COST * getTileCost(searchNode.x+1, searchNode.y-1));
                     }
                 }
                 if (searchNode.x > 0 && searchNode.y < collisionGrid.length-1) {
@@ -422,29 +435,10 @@ EasyStar.js = function() {
                         (isTileWalkable(collisionGrid, acceptableTiles, searchNode.x, searchNode.y+1) &&
                         isTileWalkable(collisionGrid, acceptableTiles, searchNode.x-1, searchNode.y))) {
 
-
-                        tilesToSearch.push({ instance: instance, searchNode: searchNode,
-                            x: -1, y: 1, cost: DIAGONAL_COST * getTileCost(searchNode.x-1, searchNode.y+1)});
+                        checkAdjacentNode(instance, searchNode,
+                            -1, 1, DIAGONAL_COST * getTileCost(searchNode.x-1, searchNode.y+1));
                     }
                 }
-            }
-
-            var isDoneCalculating = false;
-
-            // Search all of the surrounding nodes
-            for (var i = 0; i < tilesToSearch.length; i++) {
-                checkAdjacentNode(tilesToSearch[i].instance, tilesToSearch[i].searchNode,
-                    tilesToSearch[i].x, tilesToSearch[i].y, tilesToSearch[i].cost);
-                if (tilesToSearch[i].instance.isDoneCalculating === true) {
-                    isDoneCalculating = true;
-                    break;
-                }
-            }
-
-            if (isDoneCalculating) {
-                delete instances[instanceId];
-                instanceQueue.shift();
-                continue;
             }
 
         }
@@ -455,7 +449,8 @@ EasyStar.js = function() {
         var adjacentCoordinateX = searchNode.x+x;
         var adjacentCoordinateY = searchNode.y+y;
 
-        if (pointsToAvoid[adjacentCoordinateX + "_" + adjacentCoordinateY] === undefined &&
+        if ((pointsToAvoid[adjacentCoordinateY] === undefined ||
+             pointsToAvoid[adjacentCoordinateY][adjacentCoordinateX] === undefined) &&
             isTileWalkable(collisionGrid, acceptableTiles, adjacentCoordinateX, adjacentCoordinateY, searchNode)) {
             var node = coordinateToNode(instance, adjacentCoordinateX,
                 adjacentCoordinateY, searchNode, cost);
@@ -473,11 +468,12 @@ EasyStar.js = function() {
 
     // Helpers
     var isTileWalkable = function(collisionGrid, acceptableTiles, x, y, sourceNode) {
-        if (directionalConditions[x + "_" + y]) {
+        var directionalCondition = directionalConditions[y] && directionalConditions[y][x];
+        if (directionalCondition) {
             var direction = calculateDirection(sourceNode.x - x, sourceNode.y - y)
             var directionIncluded = function () {
-                for (var i = 0; i < directionalConditions[x + "_" + y].length; i++) {
-                    if (directionalConditions[x + "_" + y][i] === direction) return true
+                for (var i = 0; i < directionalCondition.length; i++) {
+                    if (directionalCondition[i] === direction) return true
                 }
                 return false
             }
@@ -510,12 +506,16 @@ EasyStar.js = function() {
     };
 
     var getTileCost = function(x, y) {
-        return pointsToCost[x + '_' + y] || costMap[collisionGrid[y][x]]
+        return (pointsToCost[y] && pointsToCost[y][x]) || costMap[collisionGrid[y][x]]
     };
 
     var coordinateToNode = function(instance, x, y, parent, cost) {
-        if (instance.nodeHash[x + "_" + y]!==undefined) {
-            return instance.nodeHash[x + "_" + y];
+        if (instance.nodeHash[y] !== undefined) {
+            if (instance.nodeHash[y][x] !== undefined) {
+                return instance.nodeHash[y][x];
+            }
+        } else {
+            instance.nodeHash[y] = {};
         }
         var simpleDistanceToTarget = getDistance(x, y, instance.endX, instance.endY);
         if (parent!==null) {
@@ -524,7 +524,7 @@ EasyStar.js = function() {
             costSoFar = 0;
         }
         var node = new Node(parent,x,y,costSoFar,simpleDistanceToTarget);
-        instance.nodeHash[x + "_" + y] = node;
+        instance.nodeHash[y][x] = node;
         return node;
     };
 

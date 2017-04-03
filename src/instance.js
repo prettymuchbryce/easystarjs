@@ -3,7 +3,6 @@
  * A path that is in the queue to eventually be found.
  */
 module.exports = function() {
-    this.isDoneCalculating = true;
     this.pointsToAvoid = {};
     this.startX;
     this.callback;
