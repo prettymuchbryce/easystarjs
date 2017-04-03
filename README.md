@@ -5,7 +5,7 @@
 
 [Click here for a demonstration](http://easystarjs.com/)
 
-##Installation
+## Installation
 * **Web:** Find the minified file in the __/bin__ directory
 * **node.js:** `npm install easystarjs`
 * **Phaser:** see [Phaser Plugin](https://github.com/appsbu-de/phaser_plugin_pathfinding)
