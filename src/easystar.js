@@ -379,7 +379,6 @@ EasyStar.js = function() {
                 continue;
             }
 
-            var tilesToSearch = [];
             searchNode.list = CLOSED_LIST;
 
             if (searchNode.y > 0) {
