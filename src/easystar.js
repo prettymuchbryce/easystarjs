@@ -243,7 +243,7 @@ EasyStar.js = function() {
         var callbackWrapper = function(result) {
             if (syncEnabled) {
                 val = result;
-                callback(result);
+                if(callback) callback(result);
             } else {
                 setTimeout(function() {
                     callback(result);
