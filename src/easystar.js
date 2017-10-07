@@ -238,9 +238,11 @@ EasyStar.js = function() {
     *
     **/
     this.findPath = function(startX, startY, endX, endY, callback) {
+        let val;
         // Wraps the callback for sync vs async logic
         var callbackWrapper = function(result) {
             if (syncEnabled) {
+                val = result;
                 callback(result);
             } else {
                 setTimeout(function() {
@@ -305,7 +307,12 @@ EasyStar.js = function() {
         var instanceId = nextInstanceId ++;
         instances[instanceId] = instance;
         instanceQueue.push(instanceId);
-        return instanceId;
+        if (syncEnabled) {
+            this.calculate()
+            return val
+        }else{
+            return instanceId
+        }
     };
 
     /**
