@@ -134,7 +134,7 @@ export class js {
    * @return {Number} A numeric, non-zero value which identifies the created instance. This value can be passed to cancelPath to cancel the path calculation.
    *
    */
-  findPath(startX: number, startY: number, endX: number, endY: number, callback: (path: { x: number, y: number }[]) => void): number
+  findPath(startX: number, startY: number, endX: number, endY: number, callback?: (path: { x: number, y: number }[]) => void): number
 
   /**
    * Cancel a path calculation.
