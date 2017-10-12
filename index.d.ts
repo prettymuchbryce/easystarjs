@@ -21,17 +21,6 @@ export class js {
   setAcceptableTiles(tiles: number[] | number): void
 
   /**
-   * Enables sync mode for this EasyStar instance..
-   * if you're into that sort of thing.
-   */
-  enableSync(): void
-
-  /**
-   * Disables sync mode for this EasyStar instance.
-   */
-  disableSync(): void
-
-  /**
    * Enable diagonal pathfinding.
    */
   enableDiagonals(): void
@@ -129,12 +118,24 @@ export class js {
    * @param {Number} startY The Y position of the starting point.
    * @param {Number} endX The X position of the ending point.
    * @param {Number} endY The Y position of the ending point.
+   * @return {Array} The path or null
+   *
+   */
+  findPathSync(startX: number, startY: number, endX: number, endY: number): ({ x: number, y: number }[]) | null
+
+  /**
+   * Find a path.
+   *
+   * @param {Number} startX The X position of the starting point.
+   * @param {Number} startY The Y position of the starting point.
+   * @param {Number} endX The X position of the ending point.
+   * @param {Number} endY The Y position of the ending point.
    * @param {Function} callback A function that is called when your path
    * is found, or no path is found.
    * @return {Number} A numeric, non-zero value which identifies the created instance. This value can be passed to cancelPath to cancel the path calculation.
    *
    */
-  findPath(startX: number, startY: number, endX: number, endY: number, callback?: (path: { x: number, y: number }[]) => void): number
+  findPath(startX: number, startY: number, endX: number, endY: number, callback: (path: { x: number, y: number }[]) => void): number
 
   /**
    * Cancel a path calculation.
