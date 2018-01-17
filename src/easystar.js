@@ -401,8 +401,8 @@ EasyStar.js = function() {
                 if (searchNode.x > 0 && searchNode.y > 0) {
 
                     if (allowCornerCutting ||
-                        (isTileWalkable(collisionGrid, acceptableTiles, searchNode.x, searchNode.y-1) &&
-                        isTileWalkable(collisionGrid, acceptableTiles, searchNode.x-1, searchNode.y))) {
+                        (isTileWalkable(collisionGrid, acceptableTiles, searchNode.x, searchNode.y-1, searchNode) &&
+                        isTileWalkable(collisionGrid, acceptableTiles, searchNode.x-1, searchNode.y, searchNode))) {
 
                         checkAdjacentNode(instance, searchNode,
                             -1, -1, DIAGONAL_COST * getTileCost(searchNode.x-1, searchNode.y-1));
@@ -411,8 +411,8 @@ EasyStar.js = function() {
                 if (searchNode.x < collisionGrid[0].length-1 && searchNode.y < collisionGrid.length-1) {
 
                     if (allowCornerCutting ||
-                        (isTileWalkable(collisionGrid, acceptableTiles, searchNode.x, searchNode.y+1) &&
-                        isTileWalkable(collisionGrid, acceptableTiles, searchNode.x+1, searchNode.y))) {
+                        (isTileWalkable(collisionGrid, acceptableTiles, searchNode.x, searchNode.y+1, searchNode) &&
+                        isTileWalkable(collisionGrid, acceptableTiles, searchNode.x+1, searchNode.y, searchNode))) {
 
                         checkAdjacentNode(instance, searchNode,
                             1, 1, DIAGONAL_COST * getTileCost(searchNode.x+1, searchNode.y+1));
@@ -421,8 +421,8 @@ EasyStar.js = function() {
                 if (searchNode.x < collisionGrid[0].length-1 && searchNode.y > 0) {
 
                     if (allowCornerCutting ||
-                        (isTileWalkable(collisionGrid, acceptableTiles, searchNode.x, searchNode.y-1) &&
-                        isTileWalkable(collisionGrid, acceptableTiles, searchNode.x+1, searchNode.y))) {
+                        (isTileWalkable(collisionGrid, acceptableTiles, searchNode.x, searchNode.y-1, searchNode) &&
+                        isTileWalkable(collisionGrid, acceptableTiles, searchNode.x+1, searchNode.y, searchNode))) {
 
                         checkAdjacentNode(instance, searchNode,
                             1, -1, DIAGONAL_COST * getTileCost(searchNode.x+1, searchNode.y-1));
@@ -431,8 +431,8 @@ EasyStar.js = function() {
                 if (searchNode.x > 0 && searchNode.y < collisionGrid.length-1) {
 
                     if (allowCornerCutting ||
-                        (isTileWalkable(collisionGrid, acceptableTiles, searchNode.x, searchNode.y+1) &&
-                        isTileWalkable(collisionGrid, acceptableTiles, searchNode.x-1, searchNode.y))) {
+                        (isTileWalkable(collisionGrid, acceptableTiles, searchNode.x, searchNode.y+1, searchNode) &&
+                        isTileWalkable(collisionGrid, acceptableTiles, searchNode.x-1, searchNode.y, searchNode))) {
 
                         checkAdjacentNode(instance, searchNode,
                             -1, 1, DIAGONAL_COST * getTileCost(searchNode.x-1, searchNode.y+1));

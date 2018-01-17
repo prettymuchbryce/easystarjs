@@ -320,4 +320,30 @@ describe("EasyStar.js", function() {
 
       easyStar.calculate();
   })
+
+  it("It should handle tiles with a directional condition and no corner cutting", function (done) {
+      var easyStar = new EasyStar.js();
+      easyStar.disableCornerCutting();
+      var grid = [
+          [0, 1, 0],
+          [0, 0, 0],
+          [0, 0, 0],
+      ];
+      easyStar.setGrid(grid);
+      easyStar.enableDiagonals();
+      easyStar.setAcceptableTiles([0]);
+      easyStar.setDirectionalCondition(2, 1, [EasyStar.TOP]);
+      easyStar.setDirectionalCondition(1, 1, [EasyStar.RIGHT]);
+      easyStar.setDirectionalCondition(0, 1, [EasyStar.RIGHT]);
+      easyStar.setDirectionalCondition(0, 0, [EasyStar.BOTTOM]);
+
+      easyStar.findPath(2, 0, 0, 0, function (path) {
+          expect(path).not.toBeNull();
+          expect(path.length).toEqual(5);
+          expect(path[2]).toEqual({ x: 1, y: 1})
+          done();
+      });
+
+      easyStar.calculate();
+  })
 });
