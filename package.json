@@ -30,16 +30,16 @@
     "devDependencies": {
         "babel-core": "^6.8.0",
         "babel-loader": "^6.2.4",
-        "jasmine-core": "^2.5.1",
-        "karma": "^0.12.16",
-        "karma-benchmark": "^0.7.1",
-        "karma-benchmarkjs-reporter": "^1.0.0",
-        "karma-coverage": "^0.2.4",
-        "karma-jasmine": "^0.3.5",
-        "karma-phantomjs-launcher": "^0.1.4",
         "webpack": "^1.13.0"
     },
     "dependencies": {
-        "heap": "0.2.6"
+        "heap": "0.2.6",
+        "jasmine-core": "^2.8.0",
+        "karma": "^2.0.0",
+        "karma-benchmark": "^0.7.1",
+        "karma-benchmarkjs-reporter": "^1.0.0",
+        "karma-coverage": "^1.1.1",
+        "karma-jasmine": "^1.1.1",
+        "karma-phantomjs-launcher": "^1.0.4"
     }
 }
