@@ -1,6 +1,6 @@
 {
     "name": "easystarjs",
-    "version": "0.4.2",
+    "version": "0.4.3",
     "main": "./src/easystar.js",
     "typings": "./index.d.ts",
     "description": "Asynchronous A* Pathfinding API",
@@ -30,10 +30,7 @@
     "devDependencies": {
         "babel-core": "^6.8.0",
         "babel-loader": "^6.2.4",
-        "webpack": "^1.13.0"
-    },
-    "dependencies": {
-        "heap": "0.2.6",
+        "webpack": "^1.13.0",
         "jasmine-core": "^2.8.0",
         "karma": "^2.0.0",
         "karma-benchmark": "^0.7.1",
@@ -41,5 +38,8 @@
         "karma-coverage": "^1.1.1",
         "karma-jasmine": "^1.1.1",
         "karma-phantomjs-launcher": "^1.0.4"
+    },
+    "dependencies": {
+        "heap": "0.2.6"
     }
 }
