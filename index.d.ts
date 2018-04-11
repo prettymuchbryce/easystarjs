@@ -122,6 +122,19 @@ export class js {
    */
   stopAvoidingAllAdditionalPoints(): void
 
+    /**
+     * Find a path synchronously.
+     *
+     * @param {Number} startX The X position of the starting point.
+     * @param {Number} startY The Y position of the starting point.
+     * @param {Number} endX The X position of the ending point.
+     * @param {Number} endY The Y position of the ending point.
+     * is found, or no path is found.
+     * @return {Array<{ x: Number, y: Number }>|null} The result of easystar.calculate(), a path array or null
+     *
+     */
+    findPathSync(startX: number, startY: number, endX: number, endY: number): Array<{ x: number, y: number }>|null
+
   /**
    * Find a path.
    *

@@ -226,6 +226,29 @@ EasyStar.js = function() {
     };
 
     /**
+     * Find a path and calculate synchronously
+     *
+     * @param {Number} startX
+     * @param {Number} startY
+     * @param {Number} endX
+     * @param {Number} endY
+     * @returns {Array<{ x: Number, y: Number}|null>}
+     */
+    this.findPathSync = function(startX, startY, endX, endY) {
+        var result = null;
+
+        syncEnabled = true;
+
+        this.findPath(startX, startY, endX, endY, function (path) {
+            result = path;
+        });
+
+        this.calculate();
+
+        return result;
+    };
+
+    /**
     * Find a path.
     *
     * @param {Number} startX The X position of the starting point.

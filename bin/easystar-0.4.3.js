@@ -150,8 +150,8 @@ var EasyStar =
 	    /**
 	    * Sets the tile cost for a particular tile type.
 	    *
-	    * @param {Number} The tile type to set the cost for.
-	    * @param {Number} The multiplicative cost associated with the given tile.
+	    * @param {Number} tileType The tile type to set the cost for.
+	    * @param {Number} cost The multiplicative cost associated with the given tile.
 	    **/
 	    this.setTileCost = function (tileType, cost) {
 	        costMap[tileType] = cost;
@@ -163,7 +163,7 @@ var EasyStar =
 	    *
 	    * @param {Number} x The x value of the point to cost.
 	    * @param {Number} y The y value of the point to cost.
-	    * @param {Number} The multiplicative cost associated with the given point.
+	    * @param {Number} cost The multiplicative cost associated with the given point.
 	    **/
 	    this.setAdditionalPointCost = function (x, y, cost) {
 	        if (pointsToCost[y] === undefined) {
@@ -273,6 +273,29 @@ var EasyStar =
 	    };
 
 	    /**
+	     * Find a path and calculate synchronously
+	     *
+	     * @param {Number} startX
+	     * @param {Number} startY
+	     * @param {Number} endX
+	     * @param {Number} endY
+	     * @returns {Array<{ x: Number, y: Number}|null>}
+	     */
+	    this.findPathSync = function (startX, startY, endX, endY) {
+	        var result = null;
+
+	        syncEnabled = true;
+
+	        this.findPath(startX, startY, endX, endY, function (path) {
+	            result = path;
+	        });
+
+	        this.calculate();
+
+	        return result;
+	    };
+
+	    /**
 	    * Find a path.
 	    *
 	    * @param {Number} startX The X position of the starting point.
@@ -285,17 +308,6 @@ var EasyStar =
 	    *
 	    **/
 	    this.findPath = function (startX, startY, endX, endY, callback) {
-	        // Wraps the callback for sync vs async logic
-	        var callbackWrapper = function (result) {
-	            if (syncEnabled) {
-	                callback(result);
-	            } else {
-	                setTimeout(function () {
-	                    callback(result);
-	                });
-	            }
-	        };
-
 	        // No acceptable tiles were set
 	        if (acceptableTiles === undefined) {
 	            throw new Error("You can't set a path without first calling setAcceptableTiles() on EasyStar.");
@@ -312,7 +324,7 @@ var EasyStar =
 
 	        // Start and end are the same tile.
 	        if (startX === endX && startY === endY) {
-	            callbackWrapper([]);
+	            callback([]);
 	            return;
 	        }
 
@@ -327,7 +339,7 @@ var EasyStar =
 	        }
 
 	        if (isAcceptable === false) {
-	            callbackWrapper(null);
+	            callback(null);
 	            return;
 	        }
 
@@ -342,7 +354,7 @@ var EasyStar =
 	        instance.startY = startY;
 	        instance.endX = endX;
 	        instance.endY = endY;
-	        instance.callback = callbackWrapper;
+	        instance.callback = callback;
 
 	        instance.openList.push(coordinateToNode(instance, instance.startX, instance.startY, null, STRAIGHT_COST));
 
