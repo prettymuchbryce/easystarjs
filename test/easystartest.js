@@ -387,8 +387,6 @@ describe('EasyStar.js', function () {
 
         result = easyStar.findPathSync(0, 0, 1, 1);
 
-        // Expect our result to be updated immediately
-        // after calculate is invoked
         expect(result.length).toEqual(3);
         expect(result[0]).toEqual({x: 0, y: 0});
         expect(result[1]).toEqual({x: 0, y: 1});
