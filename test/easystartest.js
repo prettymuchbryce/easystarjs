@@ -347,69 +347,67 @@ describe('EasyStar.js', function () {
         easyStar.calculate();
     });
 
-    describe('Synchronous', function () {
-        it('It should invoke the findPath callback immediately when sync mode is enabled', function () {
-            var easyStar = new EasyStar.js();
-            var result = [];
-            var grid = [
-                [0, 1, 0],
-                [0, 0, 0],
-                [0, 0, 0],
-            ];
+    it('It should invoke the findPath callback immediately when sync mode is enabled', function () {
+        var easyStar = new EasyStar.js();
+        var result = [];
+        var grid = [
+            [0, 1, 0],
+            [0, 0, 0],
+            [0, 0, 0],
+        ];
 
-            easyStar.enableSync();
-            easyStar.setGrid(grid);
-            easyStar.setAcceptableTiles([0]);
+        easyStar.enableSync();
+        easyStar.setGrid(grid);
+        easyStar.setAcceptableTiles([0]);
 
-            easyStar.findPath(0, 0, 1, 1, function (path) {
-                result.push.apply(result, path);
-            });
-
-            easyStar.calculate();
-
-            // Expect our result to be updated immediately
-            // after calculate is invoked
-            expect(result.length).toEqual(3);
-            expect(result[0]).toEqual({x: 0, y: 0});
-            expect(result[1]).toEqual({x: 0, y: 1});
-            expect(result[2]).toEqual({x: 1, y: 1});
+        easyStar.findPath(0, 0, 1, 1, function (path) {
+            result.push.apply(result, path);
         });
 
-        it('It should return the path directly from the findPathSync method', function () {
-            var easyStar = new EasyStar.js();
-            var result;
-            var grid = [
-                [0, 1, 0],
-                [0, 0, 0],
-                [0, 0, 0],
-            ];
-            easyStar.setGrid(grid);
-            easyStar.setAcceptableTiles([0]);
+        easyStar.calculate();
 
-            result = easyStar.findPathSync(0, 0, 1, 1);
+        // Expect our result to be updated immediately
+        // after calculate is invoked
+        expect(result.length).toEqual(3);
+        expect(result[0]).toEqual({x: 0, y: 0});
+        expect(result[1]).toEqual({x: 0, y: 1});
+        expect(result[2]).toEqual({x: 1, y: 1});
+    });
 
-            // Expect our result to be updated immediately
-            // after calculate is invoked
-            expect(result.length).toEqual(3);
-            expect(result[0]).toEqual({x: 0, y: 0});
-            expect(result[1]).toEqual({x: 0, y: 1});
-            expect(result[2]).toEqual({x: 1, y: 1});
-        });
+    it('It should return the path directly from the findPathSync method', function () {
+        var easyStar = new EasyStar.js();
+        var result;
+        var grid = [
+            [0, 1, 0],
+            [0, 0, 0],
+            [0, 0, 0],
+        ];
+        easyStar.setGrid(grid);
+        easyStar.setAcceptableTiles([0]);
 
-        it('It should return null directly from the findPathSync method if the path cannot be found', function () {
-            var easyStar = new EasyStar.js();
-            var result;
-            var grid = [
-                [0, 1, 0],
-                [1, 1, 0],
-                [0, 0, 0],
-            ];
-            easyStar.setGrid(grid);
-            easyStar.setAcceptableTiles([0]);
+        result = easyStar.findPathSync(0, 0, 1, 1);
 
-            result = easyStar.findPathSync(0, 0, 2, 2);
+        // Expect our result to be updated immediately
+        // after calculate is invoked
+        expect(result.length).toEqual(3);
+        expect(result[0]).toEqual({x: 0, y: 0});
+        expect(result[1]).toEqual({x: 0, y: 1});
+        expect(result[2]).toEqual({x: 1, y: 1});
+    });
 
-            expect(result).toBeNull();
-        });
+    it('It should return null directly from the findPathSync method if the path cannot be found', function () {
+        var easyStar = new EasyStar.js();
+        var result;
+        var grid = [
+            [0, 1, 0],
+            [1, 1, 0],
+            [0, 0, 0],
+        ];
+        easyStar.setGrid(grid);
+        easyStar.setAcceptableTiles([0]);
+
+        result = easyStar.findPathSync(0, 0, 2, 2);
+
+        expect(result).toBeNull();
     });
 });
