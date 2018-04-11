@@ -6,7 +6,7 @@
 *   Implementation By Bryce Neal (@prettymuchbryce)
 **/
 
-var EasyStar = {}
+var EasyStar = {};
 var Instance = require('./instance');
 var Node = require('./node');
 var Heap = require('heap');
@@ -72,14 +72,14 @@ EasyStar.js = function() {
      */
     this.enableDiagonals = function() {
         diagonalsEnabled = true;
-    }
+    };
 
     /**
      * Disable diagonal pathfinding.
      */
     this.disableDiagonals = function() {
         diagonalsEnabled = false;
-    }
+    };
 
     /**
     * Sets the collision grid that EasyStar uses.
@@ -103,8 +103,8 @@ EasyStar.js = function() {
     /**
     * Sets the tile cost for a particular tile type.
     *
-    * @param {Number} The tile type to set the cost for.
-    * @param {Number} The multiplicative cost associated with the given tile.
+    * @param {Number} tileType The tile type to set the cost for.
+    * @param {Number} cost The multiplicative cost associated with the given tile.
     **/
     this.setTileCost = function(tileType, cost) {
         costMap[tileType] = cost;
@@ -116,7 +116,7 @@ EasyStar.js = function() {
     *
     * @param {Number} x The x value of the point to cost.
     * @param {Number} y The y value of the point to cost.
-    * @param {Number} The multiplicative cost associated with the given point.
+    * @param {Number} cost The multiplicative cost associated with the given point.
     **/
     this.setAdditionalPointCost = function(x, y, cost) {
         if (pointsToCost[y] === undefined) {
@@ -135,14 +135,14 @@ EasyStar.js = function() {
         if (pointsToCost[y] !== undefined) {
             delete pointsToCost[y][x];
         }
-    }
+    };
 
     /**
     * Remove all additional point costs.
     **/
     this.removeAllAdditionalPointCosts = function() {
         pointsToCost = {};
-    }
+    };
 
     /**
     * Sets a directional condition on a tile
@@ -238,17 +238,6 @@ EasyStar.js = function() {
     *
     **/
     this.findPath = function(startX, startY, endX, endY, callback) {
-        // Wraps the callback for sync vs async logic
-        var callbackWrapper = function(result) {
-            if (syncEnabled) {
-                callback(result);
-            } else {
-                setTimeout(function() {
-                    callback(result);
-                });
-            }
-        }
-
         // No acceptable tiles were set
         if (acceptableTiles === undefined) {
             throw new Error("You can't set a path without first calling setAcceptableTiles() on EasyStar.");
@@ -267,7 +256,7 @@ EasyStar.js = function() {
 
         // Start and end are the same tile.
         if (startX===endX && startY===endY) {
-            callbackWrapper([]);
+            callback([]);
             return;
         }
 
@@ -282,7 +271,7 @@ EasyStar.js = function() {
         }
 
         if (isAcceptable === false) {
-            callbackWrapper(null);
+            callback(null);
             return;
         }
 
@@ -297,7 +286,7 @@ EasyStar.js = function() {
         instance.startY = startY;
         instance.endX = endX;
         instance.endY = endY;
-        instance.callback = callbackWrapper;
+        instance.callback = callback;
 
         instance.openList.push(coordinateToNode(instance, instance.startX,
             instance.startY, null, STRAIGHT_COST));
@@ -469,13 +458,13 @@ EasyStar.js = function() {
     var isTileWalkable = function(collisionGrid, acceptableTiles, x, y, sourceNode) {
         var directionalCondition = directionalConditions[y] && directionalConditions[y][x];
         if (directionalCondition) {
-            var direction = calculateDirection(sourceNode.x - x, sourceNode.y - y)
+            var direction = calculateDirection(sourceNode.x - x, sourceNode.y - y);
             var directionIncluded = function () {
                 for (var i = 0; i < directionalCondition.length; i++) {
                     if (directionalCondition[i] === direction) return true
                 }
                 return false
-            }
+            };
             if (!directionIncluded()) return false
         }
         for (var i = 0; i < acceptableTiles.length; i++) {
@@ -493,14 +482,14 @@ EasyStar.js = function() {
      * -1,  1 | 0,  1  | 1,  1
      */
     var calculateDirection = function (diffX, diffY) {
-        if (diffX === 0 && diffY === -1) return EasyStar.TOP
-        else if (diffX === 1 && diffY === -1) return EasyStar.TOP_RIGHT
-        else if (diffX === 1 && diffY === 0) return EasyStar.RIGHT
-        else if (diffX === 1 && diffY === 1) return EasyStar.BOTTOM_RIGHT
-        else if (diffX === 0 && diffY === 1) return EasyStar.BOTTOM
-        else if (diffX === -1 && diffY === 1) return EasyStar.BOTTOM_LEFT
-        else if (diffX === -1 && diffY === 0) return EasyStar.LEFT
-        else if (diffX === -1 && diffY === -1) return EasyStar.TOP_LEFT
+        if (diffX === 0 && diffY === -1) return EasyStar.TOP;
+        else if (diffX === 1 && diffY === -1) return EasyStar.TOP_RIGHT;
+        else if (diffX === 1 && diffY === 0) return EasyStar.RIGHT;
+        else if (diffX === 1 && diffY === 1) return EasyStar.BOTTOM_RIGHT;
+        else if (diffX === 0 && diffY === 1) return EasyStar.BOTTOM;
+        else if (diffX === -1 && diffY === 1) return EasyStar.BOTTOM_LEFT;
+        else if (diffX === -1 && diffY === 0) return EasyStar.LEFT;
+        else if (diffX === -1 && diffY === -1) return EasyStar.TOP_LEFT;
         throw new Error('These differences are not valid: ' + diffX + ', ' + diffY)
     };
 
@@ -544,13 +533,13 @@ EasyStar.js = function() {
             return (dx + dy);
         }
     };
-}
+};
 
-EasyStar.TOP = 'TOP'
-EasyStar.TOP_RIGHT = 'TOP_RIGHT'
-EasyStar.RIGHT = 'RIGHT'
-EasyStar.BOTTOM_RIGHT = 'BOTTOM_RIGHT'
-EasyStar.BOTTOM = 'BOTTOM'
-EasyStar.BOTTOM_LEFT = 'BOTTOM_LEFT'
-EasyStar.LEFT = 'LEFT'
-EasyStar.TOP_LEFT = 'TOP_LEFT'
+EasyStar.TOP = 'TOP';
+EasyStar.TOP_RIGHT = 'TOP_RIGHT';
+EasyStar.RIGHT = 'RIGHT';
+EasyStar.BOTTOM_RIGHT = 'BOTTOM_RIGHT';
+EasyStar.BOTTOM = 'BOTTOM';
+EasyStar.BOTTOM_LEFT = 'BOTTOM_LEFT';
+EasyStar.LEFT = 'LEFT';
+EasyStar.TOP_LEFT = 'TOP_LEFT';
