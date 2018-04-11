@@ -63,6 +63,9 @@ easystar.setAdditionalPointCost(x, y, cost);
 easystar.setTileCost(tileType, multiplicativeCost);
 ```
 ```javascript
+easystar.findPathSync(startX, startY, endX, endY);
+```
+```javascript
 easystar.enableSync();
 ```
 ```javascript
