@@ -45,6 +45,9 @@ easystar.calculate();
 #### Additional Features
 
 ```javascript
+easystar.findReachable(x, y, callback);
+```
+```javascript
 easystar.setIterationsPerCalculation(someValue);
 ```
 ```javascript
@@ -61,6 +64,9 @@ easystar.setAdditionalPointCost(x, y, cost);
 ```
 ```javascript
 easystar.setTileCost(tileType, multiplicativeCost);
+```
+```javascript
+easystar.setCostThreshold(maximumCost);
 ```
 ```javascript
 easystar.enableSync();
