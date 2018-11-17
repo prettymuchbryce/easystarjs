@@ -346,4 +346,56 @@ describe("EasyStar.js", function() {
 
       easyStar.calculate();
   })
+
+  it("It should prefer cheaper tiles", function (done) {
+    var easyStar = new EasyStar.js();
+    var map = [
+        [1,2,1],
+        [1,2,1],
+        [1,1,1]
+    ];
+
+    easyStar.setGrid(map);
+    easyStar.setAcceptableTiles([1, 2]);
+    easyStar.setTileCost(2, 6);
+    easyStar.findPath(0, 0, 2, 0, onPathFound);
+    easyStar.calculate();
+
+    function onPathFound(path) {
+        expect(path).toEqual([
+            { x: 0, y: 0 },
+            { x: 0, y: 1 },
+            { x: 0, y: 2 },
+            { x: 1, y: 2 },
+            { x: 2, y: 2 },
+            { x: 2, y: 1 },
+            { x: 2, y: 0 }
+        ]);
+        done();
+    }
+  });
+
+  it("It should use costly tiles when cheaper", function (done) {
+    var easyStar = new EasyStar.js();
+    var map = [
+        [1,2,1],
+        [1,2,1],
+        [1,1,1]
+    ];
+
+    easyStar.setGrid(map);
+    easyStar.setAcceptableTiles([1, 2]);
+    easyStar.setTileCost(2, 5);
+    easyStar.findPath(0, 0, 2, 0, onPathFound);
+    easyStar.calculate();
+
+    function onPathFound(path) {
+        expect(path).toEqual([
+            { x: 0, y: 0 },
+            { x: 1, y: 0 },
+            { x: 2, y: 0 }
+        ]);
+        done();
+    }
+  });
 });
