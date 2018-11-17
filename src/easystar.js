@@ -9,7 +9,6 @@
 var EasyStar = {}
 var Instance = require('./instance');
 var Node = require('./node');
-var Heap = require('heap');
 
 const CLOSED_LIST = 0;
 const OPEN_LIST = 1;
@@ -286,11 +285,6 @@ EasyStar.js = function() {
 
         // Create the instance
         var instance = new Instance();
-        instance.openList = new Heap(function(nodeA, nodeB) {
-            return nodeA.bestGuessDistance() - nodeB.bestGuessDistance();
-        });
-        instance.isDoneCalculating = false;
-        instance.nodeHash = {};
         instance.startX = startX;
         instance.startY = startY;
         instance.endX = endX;
@@ -335,11 +329,6 @@ EasyStar.js = function() {
 
         // Create the instance
         var instance = new Instance();
-        instance.openList = new Heap(function(nodeA, nodeB) {
-            return nodeA.bestGuessDistance() - nodeB.bestGuessDistance();
-        });
-        instance.isDoneCalculating = false;
-        instance.nodeHash = {};
         instance.startX = x;
         instance.startY = x;
         instance.callback = callbackWrapper;

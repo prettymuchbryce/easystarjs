@@ -1,3 +1,5 @@
+var Heap = require('heap');
+
 /**
  * Represents a single instance of EasyStar.
  * A path that is in the queue to eventually be found.
@@ -10,8 +12,10 @@ module.exports = function() {
     this.endX;
     this.endY;
     this.nodeHash = {};
-    this.openList;
     this.searchedNodes = [];
+    this.openList = new Heap(function(nodeA, nodeB) {
+        return nodeA.bestGuessDistance() - nodeB.bestGuessDistance();
+    });
 
     this.pushNode = function(node) {
         this.openList.push(node);
