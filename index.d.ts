@@ -58,6 +58,13 @@ export class js {
   setTileCost(tileType: number, cost: number): void
 
   /**
+   * Sets the threshold for cost when searching.
+   *
+   * @param {Number} The threshold of cost at which a path should be terminated.
+   **/
+  setCostThreshold(costThreshold: number): void
+
+  /**
    * Sets the an additional cost for a particular point.
    * Overrides the cost from setTileCost.
    *
@@ -144,6 +151,19 @@ export class js {
    *
    **/
   cancelPath(instanceId: number): boolean
+
+  /**
+  * Find reachable tiles.
+  *
+  * @param {Number} startX The X position of the starting point.
+  * @param {Number} startY The Y position of the starting point.
+  * @param {Function} callback A function that is called when all tiles have
+  * been searched.
+  * @return {Number} A numeric, non-zero value which identifies the created
+  * instance. This value can be passed to cancelPath to cancel the path
+  * calculation.
+  **/
+  findReachable(x: number, y: number, callback: (path: { x: number, y: number }[]) => void): number
 
   /**
    * This method steps through the A* Algorithm in an attempt to
