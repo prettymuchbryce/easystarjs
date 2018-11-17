@@ -11,4 +11,13 @@ module.exports = function() {
     this.endY;
     this.nodeHash = {};
     this.openList;
+    this.searchedNodes = [];
+
+    this.pushNode = function(node) {
+        this.openList.push(node);
+        this.searchedNodes.push({
+            x: node.x,
+            y: node.y
+        });
+    }
 };

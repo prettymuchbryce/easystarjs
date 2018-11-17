@@ -259,21 +259,9 @@ EasyStar.js = function() {
             }
         }
 
-        // No acceptable tiles were set
-        if (acceptableTiles === undefined) {
-            throw new Error("You can't set a path without first calling setAcceptableTiles() on EasyStar.");
-        }
-        // No grid was set
-        if (collisionGrid === undefined) {
-            throw new Error("You can't set a path without first calling setGrid() on EasyStar.");
-        }
-
-        // Start or endpoint outside of scope.
-        if (startX < 0 || startY < 0 || endX < 0 || endY < 0 ||
-        startX > collisionGrid[0].length-1 || startY > collisionGrid.length-1 ||
-        endX > collisionGrid[0].length-1 || endY > collisionGrid.length-1) {
-            throw new Error("Your start or end point is outside the scope of your grid.");
-        }
+        validateInstance();
+        validatePoint(startX, startY);
+        validatePoint(endX, endY);
 
         // Start and end are the same tile.
         if (startX===endX && startY===endY) {
@@ -309,10 +297,59 @@ EasyStar.js = function() {
         instance.endY = endY;
         instance.callback = callbackWrapper;
 
-        instance.openList.push(coordinateToNode(instance, instance.startX,
+        instance.pushNode(coordinateToNode(instance, instance.startX,
             instance.startY, null, STRAIGHT_COST));
 
         var instanceId = nextInstanceId ++;
+        instances[instanceId] = instance;
+        instanceQueue.push(instanceId);
+        return instanceId;
+    };
+
+    /**
+    * Find reachable tiles.
+    *
+    * @param {Number} startX The X position of the starting point.
+    * @param {Number} startY The Y position of the starting point.
+    * @param {Function} callback A function that is called when all tiles have
+    * been searched.
+    * @return {Number} A numeric, non-zero value which identifies the created
+    * instance. This value can be passed to cancelPath to cancel the path
+    * calculation.
+    **/
+    this.findReachable = function(x, y, callback) {
+        // Wraps the callback for sync vs async logic
+        var callbackWrapper = function() {
+            var searchedNodes = this.searchedNodes;
+            if (syncEnabled) {
+                callback(searchedNodes);
+            } else {
+                setTimeout(function() {
+                    callback(searchedNodes);
+                });
+            }
+        }
+
+        validateInstance();
+        validatePoint(x, y);
+
+        // Create the instance
+        var instance = new Instance();
+        instance.openList = new Heap(function(nodeA, nodeB) {
+            return nodeA.bestGuessDistance() - nodeB.bestGuessDistance();
+        });
+        instance.isDoneCalculating = false;
+        instance.nodeHash = {};
+        instance.startX = x;
+        instance.startY = x;
+        instance.callback = callbackWrapper;
+
+        var startNode = coordinateToNode(
+            instance, instance.startX, instance.startY, null, STRAIGHT_COST
+        );
+        instance.pushNode(startNode);
+
+        var instanceId = nextInstanceId++;
         instances[instanceId] = instance;
         instanceQueue.push(instanceId);
         return instanceId;
@@ -467,7 +504,7 @@ EasyStar.js = function() {
 
             if (node.list === undefined) {
                 node.list = OPEN_LIST;
-                instance.openList.push(node);
+                instance.pushNode(node);
             } else if (searchNode.costSoFar + cost < node.costSoFar) {
                 node.costSoFar = searchNode.costSoFar + cost;
                 node.parent = searchNode;
@@ -477,6 +514,29 @@ EasyStar.js = function() {
     };
 
     // Helpers
+    var validateInstance = function() {
+        // No acceptable tiles were set
+        if (acceptableTiles === undefined) {
+            throw new Error("You can't set a path without first calling setAcceptableTiles() on EasyStar.");
+        }
+        // No grid was set
+        if (collisionGrid === undefined) {
+            throw new Error("You can't set a path without first calling setGrid() on EasyStar.");
+        }
+    };
+
+    var validatePoint = function(x, y) {
+        // Point outside of scope.
+        if (
+            x < 0 || y < 0 ||
+            x > collisionGrid[0].length-1 || y > collisionGrid.length-1
+        ) {
+            throw new Error(
+                "Your point " + [x, y] + " is outside the scope of your grid."
+            );
+        }
+    };
+
     var isTileWalkable = function(collisionGrid, acceptableTiles, x, y, sourceNode) {
         var directionalCondition = directionalConditions[y] && directionalConditions[y][x];
         if (directionalCondition) {
