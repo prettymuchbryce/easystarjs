@@ -330,7 +330,7 @@ EasyStar.js = function() {
         // Create the instance
         var instance = new Instance();
         instance.startX = x;
-        instance.startY = x;
+        instance.startY = y;
         instance.callback = callbackWrapper;
 
         var startNode = coordinateToNode(
