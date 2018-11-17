@@ -398,4 +398,72 @@ describe("EasyStar.js", function() {
         done();
     }
   });
+
+  describe("costThreshold", function() {
+    var map = [[0,0,1,0,0],
+               [0,0,1,0,0],
+               [0,0,1,0,0],
+               [0,0,1,0,0],
+               [0,0,0,0,0]];
+
+    it("It should cancel out a path early", function (done) {
+        var easyStar = new EasyStar.js();
+        easyStar.setGrid(map);
+        easyStar.setAcceptableTiles([0]);
+
+        easyStar.setCostThreshold(6);
+        easyStar.findPath(0, 0, 4, 0, onPathFound);
+        easyStar.calculate();
+
+        function onPathFound(path) {
+            expect(path).toBeNull();
+            done();
+        }
+    });
+
+    it("It should return a path within threshold", function (done) {
+        var easyStar = new EasyStar.js();
+        easyStar.setGrid(map);
+        easyStar.setAcceptableTiles([0]);
+
+        easyStar.setCostThreshold(6);
+        easyStar.findPath(0, 0, 2, 4, onPathFound);
+        easyStar.calculate();
+
+        function onPathFound(path) {
+            expect(path).toEqual([
+                { x: 0, y: 0 },
+                { x: 1, y: 0 },
+                { x: 1, y: 1 },
+                { x: 1, y: 2 },
+                { x: 1, y: 3 },
+                { x: 1, y: 4 },
+                { x: 2, y: 4 }
+            ]);
+            done();
+        }
+    });
+
+    it("It should handle diagonals", function (done) {
+        var easyStar = new EasyStar.js();
+        easyStar.setGrid(map);
+        easyStar.setAcceptableTiles([0]);
+
+        easyStar.setCostThreshold(6);
+        easyStar.enableDiagonals();
+        easyStar.findPath(0, 0, 2, 4, onPathFound);
+        easyStar.calculate();
+
+        function onPathFound(path) {
+            expect(path).toEqual([
+                { x: 0, y: 0 },
+                { x: 1, y: 1 },
+                { x: 1, y: 2 },
+                { x: 1, y: 3 },
+                { x: 2, y: 4 }
+            ]);
+            done();
+        }
+    });
+  });
 });

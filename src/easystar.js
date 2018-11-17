@@ -25,6 +25,7 @@ EasyStar.js = function() {
     var pointsToAvoid = {};
     var collisionGrid;
     var costMap = {};
+    var costThreshold = null;
     var pointsToCost = {};
     var directionalConditions = {};
     var allowCornerCutting = true;
@@ -108,6 +109,15 @@ EasyStar.js = function() {
     **/
     this.setTileCost = function(tileType, cost) {
         costMap[tileType] = cost;
+    };
+
+    /**
+    * Sets the threshold for cost when searching
+    *
+    * @param {Number} The threshold of cost at which a path should be cancelled
+    **/
+    this.setCostThreshold = function(threshold) {
+        costThreshold = threshold;
     };
 
     /**
@@ -450,7 +460,8 @@ EasyStar.js = function() {
 
         if ((pointsToAvoid[adjacentCoordinateY] === undefined ||
              pointsToAvoid[adjacentCoordinateY][adjacentCoordinateX] === undefined) &&
-            isTileWalkable(collisionGrid, acceptableTiles, adjacentCoordinateX, adjacentCoordinateY, searchNode)) {
+            isTileWalkable(collisionGrid, acceptableTiles, adjacentCoordinateX, adjacentCoordinateY, searchNode) &&
+            canAfford(searchNode, cost)) {
             var node = coordinateToNode(instance, adjacentCoordinateX,
                 adjacentCoordinateY, searchNode, cost);
 
@@ -486,6 +497,13 @@ EasyStar.js = function() {
 
         return false;
     };
+
+    var canAfford = function(sourceNode, cost) {
+        if (costThreshold != null) {
+            return sourceNode.costSoFar + cost <= costThreshold;
+        }
+        return true;
+    }
 
     /**
      * -1, -1 | 0, -1  | 1, -1
