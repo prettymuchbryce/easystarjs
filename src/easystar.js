@@ -583,7 +583,9 @@ EasyStar.js = function() {
         } else {
             instance.nodeHash[y] = {};
         }
-        var simpleDistanceToTarget = getDistance(x, y, instance.endX, instance.endY);
+        var simpleDistanceToTarget = !instance.endX || !instance.endY ?
+            1 :
+            getDistance(x, y, instance.endX, instance.endY);
         if (parent!==null) {
             var costSoFar = parent.costSoFar + cost;
         } else {
