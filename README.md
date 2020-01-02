@@ -11,8 +11,8 @@
 * **Phaser:** see [Phaser Plugin](https://github.com/appsbu-de/phaser_plugin_pathfinding)
 * **Bower:** `bower install easystarjs`
 
-## Description 
-easystar.js is an asynchronous A* pathfinding API written in Javascript for use in your HTML5 games and interactive projects. The goal of this project is to make it easy and fast to implement performance conscious pathfinding. 
+## Description
+easystar.js is an asynchronous A\* pathfinding API written in Javascript for use in your HTML5 games and interactive projects. The goal of this project is to make it easy and fast to implement performance conscious pathfinding.
 
 ## Features
 
@@ -73,6 +73,9 @@ var instanceId = easystar.findPath(startX, startY, endX, endY, callback);
 // ...
 easystar.cancelPath(instanceId);
 ```
+```javascript
+easystar.setParallelLimit(limit);
+```
 
 ## Usage
 
@@ -96,7 +99,7 @@ var grid = [[0,0,1,0,0],
 ```
 
 Set our grid.
-```javascript	
+```javascript
 easystar.setGrid(grid);
 ```
 Set tiles which are "walkable".
@@ -115,14 +118,14 @@ easystar.findPath(0, 0, 4, 0, function( path ) {
 });
 ```
 
-EasyStar will not yet start calculating my path. 
+EasyStar will not yet start calculating my path.
 
 In order for EasyStar to actually start calculating, I must call the calculate() method.
 
 You should call `easystar.calculate()` on a ticker, or setInterval.
 
-If you have a large grid, then it is possible that these calculations could slow down the browser. 
-For this reason, it might be a good idea to give EasyStar a smaller `iterationsPerCalculation` value via 
+If you have a large grid, then it is possible that these calculations could slow down the browser.
+For this reason, it might be a good idea to give EasyStar a smaller `iterationsPerCalculation` value via
 
 ```javascript
 easystar.setIterationsPerCalculation(1000);
