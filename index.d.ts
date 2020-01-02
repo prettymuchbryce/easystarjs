@@ -91,6 +91,17 @@ export class js {
   setIterationsPerCalculation(iterations: number): void
 
   /**
+   * Sets the limit of the path queue instance index, which is decremented per
+   * calculation if enabled. If multiple calls to .findPath() are made, this
+   * will distribute the load by running iterationsPerCalculation before
+   * moving onto the next path in the queue.
+   *
+   * @param {Number} limit The maximum number of iterations before resetting
+   * on calculate() call. Use -1 to run all the paths at once.
+   */
+  setParallelLimit(limit: number): void
+
+  /**
    * Avoid a particular point on the grid,
    * regardless of whether or not it is an acceptable tile.
    *
