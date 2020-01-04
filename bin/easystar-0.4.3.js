@@ -81,6 +81,9 @@ var EasyStar =
 	    var iterationsPerCalculation = Number.MAX_VALUE;
 	    var acceptableTiles;
 	    var diagonalsEnabled = false;
+	    var isNdarrayGrid = false;
+	    var gridWidth;
+	    var gridHeight;
 
 	    /**
 	    * Sets the collision grid that EasyStar uses.
@@ -137,11 +140,20 @@ var EasyStar =
 	    this.setGrid = function (grid) {
 	        collisionGrid = grid;
 
+	        if (!Array.isArray(collisionGrid)) {
+	            isNdarrayGrid = true;
+	            gridWidth = collisionGrid.shape[0];
+	            gridHeight = collisionGrid.shape[1];
+	        } else {
+	            gridWidth = collisionGrid[0].length;
+	            gridHeight = collisionGrid.length;
+	        }
+
 	        //Setup cost map
-	        for (var y = 0; y < collisionGrid.length; y++) {
-	            for (var x = 0; x < collisionGrid[0].length; x++) {
-	                if (!costMap[collisionGrid[y][x]]) {
-	                    costMap[collisionGrid[y][x]] = 1;
+	        for (var y = 0; y < gridHeight; y++) {
+	            for (var x = 0; x < gridWidth; x++) {
+	                if (!costMap[getTileAt(x, y)]) {
+	                    costMap[getTileAt(x, y)] = 1;
 	                }
 	            }
 	        }
@@ -306,7 +318,7 @@ var EasyStar =
 	        }
 
 	        // Start or endpoint outside of scope.
-	        if (startX < 0 || startY < 0 || endX < 0 || endY < 0 || startX > collisionGrid[0].length - 1 || startY > collisionGrid.length - 1 || endX > collisionGrid[0].length - 1 || endY > collisionGrid.length - 1) {
+	        if (startX < 0 || startY < 0 || endX < 0 || endY < 0 || startX > gridWidth - 1 || startY > gridHeight - 1 || endX > gridWidth - 1 || endY > gridHeight - 1) {
 	            throw new Error("Your start or end point is outside the scope of your grid.");
 	        }
 
@@ -317,7 +329,7 @@ var EasyStar =
 	        }
 
 	        // End point is not an acceptable tile.
-	        var endTile = collisionGrid[endY][endX];
+	        var endTile = getTileAt(endX, endY);
 	        var isAcceptable = false;
 	        for (var i = 0; i < acceptableTiles.length; i++) {
 	            if (endTile === acceptableTiles[i]) {
@@ -326,7 +338,7 @@ var EasyStar =
 	            }
 	        }
 
-	        if (isAcceptable === false) {
+	        if (!isAcceptable) {
 	            callbackWrapper(null);
 	            return;
 	        }
@@ -428,10 +440,10 @@ var EasyStar =
 	            if (searchNode.y > 0) {
 	                checkAdjacentNode(instance, searchNode, 0, -1, STRAIGHT_COST * getTileCost(searchNode.x, searchNode.y - 1));
 	            }
-	            if (searchNode.x < collisionGrid[0].length - 1) {
+	            if (searchNode.x < gridWidth - 1) {
 	                checkAdjacentNode(instance, searchNode, 1, 0, STRAIGHT_COST * getTileCost(searchNode.x + 1, searchNode.y));
 	            }
-	            if (searchNode.y < collisionGrid.length - 1) {
+	            if (searchNode.y < gridHeight - 1) {
 	                checkAdjacentNode(instance, searchNode, 0, 1, STRAIGHT_COST * getTileCost(searchNode.x, searchNode.y + 1));
 	            }
 	            if (searchNode.x > 0) {
@@ -440,28 +452,28 @@ var EasyStar =
 	            if (diagonalsEnabled) {
 	                if (searchNode.x > 0 && searchNode.y > 0) {
 
-	                    if (allowCornerCutting || isTileWalkable(collisionGrid, acceptableTiles, searchNode.x, searchNode.y - 1, searchNode) && isTileWalkable(collisionGrid, acceptableTiles, searchNode.x - 1, searchNode.y, searchNode)) {
+	                    if (allowCornerCutting || isTileWalkable(searchNode.x, searchNode.y - 1, searchNode) && isTileWalkable(searchNode.x - 1, searchNode.y, searchNode)) {
 
 	                        checkAdjacentNode(instance, searchNode, -1, -1, DIAGONAL_COST * getTileCost(searchNode.x - 1, searchNode.y - 1));
 	                    }
 	                }
-	                if (searchNode.x < collisionGrid[0].length - 1 && searchNode.y < collisionGrid.length - 1) {
+	                if (searchNode.x < gridWidth - 1 && searchNode.y < gridHeight - 1) {
 
-	                    if (allowCornerCutting || isTileWalkable(collisionGrid, acceptableTiles, searchNode.x, searchNode.y + 1, searchNode) && isTileWalkable(collisionGrid, acceptableTiles, searchNode.x + 1, searchNode.y, searchNode)) {
+	                    if (allowCornerCutting || isTileWalkable(searchNode.x, searchNode.y + 1, searchNode) && isTileWalkable(searchNode.x + 1, searchNode.y, searchNode)) {
 
 	                        checkAdjacentNode(instance, searchNode, 1, 1, DIAGONAL_COST * getTileCost(searchNode.x + 1, searchNode.y + 1));
 	                    }
 	                }
-	                if (searchNode.x < collisionGrid[0].length - 1 && searchNode.y > 0) {
+	                if (searchNode.x < gridWidth - 1 && searchNode.y > 0) {
 
-	                    if (allowCornerCutting || isTileWalkable(collisionGrid, acceptableTiles, searchNode.x, searchNode.y - 1, searchNode) && isTileWalkable(collisionGrid, acceptableTiles, searchNode.x + 1, searchNode.y, searchNode)) {
+	                    if (allowCornerCutting || isTileWalkable(searchNode.x, searchNode.y - 1, searchNode) && isTileWalkable(searchNode.x + 1, searchNode.y, searchNode)) {
 
 	                        checkAdjacentNode(instance, searchNode, 1, -1, DIAGONAL_COST * getTileCost(searchNode.x + 1, searchNode.y - 1));
 	                    }
 	                }
-	                if (searchNode.x > 0 && searchNode.y < collisionGrid.length - 1) {
+	                if (searchNode.x > 0 && searchNode.y < gridHeight - 1) {
 
-	                    if (allowCornerCutting || isTileWalkable(collisionGrid, acceptableTiles, searchNode.x, searchNode.y + 1, searchNode) && isTileWalkable(collisionGrid, acceptableTiles, searchNode.x - 1, searchNode.y, searchNode)) {
+	                    if (allowCornerCutting || isTileWalkable(searchNode.x, searchNode.y + 1, searchNode) && isTileWalkable(searchNode.x - 1, searchNode.y, searchNode)) {
 
 	                        checkAdjacentNode(instance, searchNode, -1, 1, DIAGONAL_COST * getTileCost(searchNode.x - 1, searchNode.y + 1));
 	                    }
@@ -475,7 +487,7 @@ var EasyStar =
 	        var adjacentCoordinateX = searchNode.x + x;
 	        var adjacentCoordinateY = searchNode.y + y;
 
-	        if ((pointsToAvoid[adjacentCoordinateY] === undefined || pointsToAvoid[adjacentCoordinateY][adjacentCoordinateX] === undefined) && isTileWalkable(collisionGrid, acceptableTiles, adjacentCoordinateX, adjacentCoordinateY, searchNode)) {
+	        if ((pointsToAvoid[adjacentCoordinateY] === undefined || pointsToAvoid[adjacentCoordinateY][adjacentCoordinateX] === undefined) && isTileWalkable(adjacentCoordinateX, adjacentCoordinateY, searchNode)) {
 	            var node = coordinateToNode(instance, adjacentCoordinateX, adjacentCoordinateY, searchNode, cost);
 
 	            if (node.list === undefined) {
@@ -490,7 +502,7 @@ var EasyStar =
 	    };
 
 	    // Helpers
-	    var isTileWalkable = function (collisionGrid, acceptableTiles, x, y, sourceNode) {
+	    var isTileWalkable = function (x, y, sourceNode) {
 	        var directionalCondition = directionalConditions[y] && directionalConditions[y][x];
 	        if (directionalCondition) {
 	            var direction = calculateDirection(sourceNode.x - x, sourceNode.y - y);
@@ -503,7 +515,7 @@ var EasyStar =
 	            if (!directionIncluded()) return false;
 	        }
 	        for (var i = 0; i < acceptableTiles.length; i++) {
-	            if (collisionGrid[y][x] === acceptableTiles[i]) {
+	            if (getTileAt(x, y) === acceptableTiles[i]) {
 	                return true;
 	            }
 	        }
@@ -522,7 +534,7 @@ var EasyStar =
 	    };
 
 	    var getTileCost = function (x, y) {
-	        return pointsToCost[y] && pointsToCost[y][x] || costMap[collisionGrid[y][x]];
+	        return pointsToCost[y] && pointsToCost[y][x] || costMap[getTileAt(x, y)];
 	    };
 
 	    var coordinateToNode = function (instance, x, y, parent, cost) {
@@ -560,6 +572,10 @@ var EasyStar =
 	            var dy = Math.abs(y1 - y2);
 	            return dx + dy;
 	        }
+	    };
+
+	    var getTileAt = function (x, y) {
+	        return isNdarrayGrid ? +collisionGrid.get(x, y) : +collisionGrid[y][x];
 	    };
 	};
 
