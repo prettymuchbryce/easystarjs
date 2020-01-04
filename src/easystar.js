@@ -34,6 +34,9 @@ EasyStar.js = function() {
     var iterationsPerCalculation = Number.MAX_VALUE;
     var acceptableTiles;
     var diagonalsEnabled = false;
+    var isNdarrayGrid = false;
+    var gridWidth;
+    var gridHeight;
 
     /**
     * Sets the collision grid that EasyStar uses.
@@ -90,11 +93,20 @@ EasyStar.js = function() {
     this.setGrid = function(grid) {
         collisionGrid = grid;
 
+        if (!Array.isArray(collisionGrid)) {
+            isNdarrayGrid = true;
+            gridWidth = collisionGrid.shape[0];
+            gridHeight = collisionGrid.shape[1];
+        } else {
+            gridWidth = collisionGrid[0].length;
+            gridHeight = collisionGrid.length;
+        }
+
         //Setup cost map
-        for (var y = 0; y < collisionGrid.length; y++) {
-            for (var x = 0; x < collisionGrid[0].length; x++) {
-                if (!costMap[collisionGrid[y][x]]) {
-                    costMap[collisionGrid[y][x]] = 1
+        for (var y = 0; y < gridHeight; y++) {
+            for (var x = 0; x < gridWidth; x++) {
+                if (!costMap[getTileAt(x, y)]) {
+                    costMap[getTileAt(x, y)] = 1;
                 }
             }
         }
@@ -260,8 +272,8 @@ EasyStar.js = function() {
 
         // Start or endpoint outside of scope.
         if (startX < 0 || startY < 0 || endX < 0 || endY < 0 ||
-        startX > collisionGrid[0].length-1 || startY > collisionGrid.length-1 ||
-        endX > collisionGrid[0].length-1 || endY > collisionGrid.length-1) {
+        startX > gridWidth-1 || startY > gridHeight-1 ||
+        endX > gridWidth-1 || endY > gridHeight-1) {
             throw new Error("Your start or end point is outside the scope of your grid.");
         }
 
@@ -272,7 +284,7 @@ EasyStar.js = function() {
         }
 
         // End point is not an acceptable tile.
-        var endTile = collisionGrid[endY][endX];
+        var endTile = getTileAt(endX, endY);
         var isAcceptable = false;
         for (var i = 0; i < acceptableTiles.length; i++) {
             if (endTile === acceptableTiles[i]) {
@@ -281,7 +293,7 @@ EasyStar.js = function() {
             }
         }
 
-        if (isAcceptable === false) {
+        if (!isAcceptable) {
             callbackWrapper(null);
             return;
         }
@@ -368,7 +380,7 @@ EasyStar.js = function() {
                 path.push({x: searchNode.x, y: searchNode.y});
                 var parent = searchNode.parent;
                 while (parent!=null) {
-                    path.push({x: parent.x, y:parent.y});
+                    path.push({x: parent.x, y: parent.y});
                     parent = parent.parent;
                 }
                 path.reverse();
@@ -385,11 +397,11 @@ EasyStar.js = function() {
                 checkAdjacentNode(instance, searchNode,
                     0, -1, STRAIGHT_COST * getTileCost(searchNode.x, searchNode.y-1));
             }
-            if (searchNode.x < collisionGrid[0].length-1) {
+            if (searchNode.x < gridWidth-1) {
                 checkAdjacentNode(instance, searchNode,
                     1, 0, STRAIGHT_COST * getTileCost(searchNode.x+1, searchNode.y));
             }
-            if (searchNode.y < collisionGrid.length-1) {
+            if (searchNode.y < gridHeight-1) {
                 checkAdjacentNode(instance, searchNode,
                     0, 1, STRAIGHT_COST * getTileCost(searchNode.x, searchNode.y+1));
             }
@@ -401,38 +413,38 @@ EasyStar.js = function() {
                 if (searchNode.x > 0 && searchNode.y > 0) {
 
                     if (allowCornerCutting ||
-                        (isTileWalkable(collisionGrid, acceptableTiles, searchNode.x, searchNode.y-1, searchNode) &&
-                        isTileWalkable(collisionGrid, acceptableTiles, searchNode.x-1, searchNode.y, searchNode))) {
+                        (isTileWalkable(searchNode.x, searchNode.y-1, searchNode) &&
+                        isTileWalkable(searchNode.x-1, searchNode.y, searchNode))) {
 
                         checkAdjacentNode(instance, searchNode,
                             -1, -1, DIAGONAL_COST * getTileCost(searchNode.x-1, searchNode.y-1));
                     }
                 }
-                if (searchNode.x < collisionGrid[0].length-1 && searchNode.y < collisionGrid.length-1) {
+                if (searchNode.x < gridWidth-1 && searchNode.y < gridHeight-1) {
 
                     if (allowCornerCutting ||
-                        (isTileWalkable(collisionGrid, acceptableTiles, searchNode.x, searchNode.y+1, searchNode) &&
-                        isTileWalkable(collisionGrid, acceptableTiles, searchNode.x+1, searchNode.y, searchNode))) {
+                        (isTileWalkable(searchNode.x, searchNode.y+1, searchNode) &&
+                        isTileWalkable(searchNode.x+1, searchNode.y, searchNode))) {
 
                         checkAdjacentNode(instance, searchNode,
                             1, 1, DIAGONAL_COST * getTileCost(searchNode.x+1, searchNode.y+1));
                     }
                 }
-                if (searchNode.x < collisionGrid[0].length-1 && searchNode.y > 0) {
+                if (searchNode.x < gridWidth-1 && searchNode.y > 0) {
 
                     if (allowCornerCutting ||
-                        (isTileWalkable(collisionGrid, acceptableTiles, searchNode.x, searchNode.y-1, searchNode) &&
-                        isTileWalkable(collisionGrid, acceptableTiles, searchNode.x+1, searchNode.y, searchNode))) {
+                        (isTileWalkable(searchNode.x, searchNode.y-1, searchNode) &&
+                        isTileWalkable(searchNode.x+1, searchNode.y, searchNode))) {
 
                         checkAdjacentNode(instance, searchNode,
                             1, -1, DIAGONAL_COST * getTileCost(searchNode.x+1, searchNode.y-1));
                     }
                 }
-                if (searchNode.x > 0 && searchNode.y < collisionGrid.length-1) {
+                if (searchNode.x > 0 && searchNode.y < gridHeight-1) {
 
                     if (allowCornerCutting ||
-                        (isTileWalkable(collisionGrid, acceptableTiles, searchNode.x, searchNode.y+1, searchNode) &&
-                        isTileWalkable(collisionGrid, acceptableTiles, searchNode.x-1, searchNode.y, searchNode))) {
+                        (isTileWalkable(searchNode.x, searchNode.y+1, searchNode) &&
+                        isTileWalkable(searchNode.x-1, searchNode.y, searchNode))) {
 
                         checkAdjacentNode(instance, searchNode,
                             -1, 1, DIAGONAL_COST * getTileCost(searchNode.x-1, searchNode.y+1));
@@ -450,7 +462,7 @@ EasyStar.js = function() {
 
         if ((pointsToAvoid[adjacentCoordinateY] === undefined ||
              pointsToAvoid[adjacentCoordinateY][adjacentCoordinateX] === undefined) &&
-            isTileWalkable(collisionGrid, acceptableTiles, adjacentCoordinateX, adjacentCoordinateY, searchNode)) {
+            isTileWalkable(adjacentCoordinateX, adjacentCoordinateY, searchNode)) {
             var node = coordinateToNode(instance, adjacentCoordinateX,
                 adjacentCoordinateY, searchNode, cost);
 
@@ -466,20 +478,20 @@ EasyStar.js = function() {
     };
 
     // Helpers
-    var isTileWalkable = function(collisionGrid, acceptableTiles, x, y, sourceNode) {
+    var isTileWalkable = function(x, y, sourceNode) {
         var directionalCondition = directionalConditions[y] && directionalConditions[y][x];
         if (directionalCondition) {
             var direction = calculateDirection(sourceNode.x - x, sourceNode.y - y)
             var directionIncluded = function () {
                 for (var i = 0; i < directionalCondition.length; i++) {
-                    if (directionalCondition[i] === direction) return true
+                    if (directionalCondition[i] === direction) return true;
                 }
-                return false
+                return false;
             }
-            if (!directionIncluded()) return false
+            if (!directionIncluded()) return false;
         }
         for (var i = 0; i < acceptableTiles.length; i++) {
-            if (collisionGrid[y][x] === acceptableTiles[i]) {
+            if (getTileAt(x, y) === acceptableTiles[i]) {
                 return true;
             }
         }
@@ -493,19 +505,19 @@ EasyStar.js = function() {
      * -1,  1 | 0,  1  | 1,  1
      */
     var calculateDirection = function (diffX, diffY) {
-        if (diffX === 0 && diffY === -1) return EasyStar.TOP
-        else if (diffX === 1 && diffY === -1) return EasyStar.TOP_RIGHT
-        else if (diffX === 1 && diffY === 0) return EasyStar.RIGHT
-        else if (diffX === 1 && diffY === 1) return EasyStar.BOTTOM_RIGHT
-        else if (diffX === 0 && diffY === 1) return EasyStar.BOTTOM
-        else if (diffX === -1 && diffY === 1) return EasyStar.BOTTOM_LEFT
-        else if (diffX === -1 && diffY === 0) return EasyStar.LEFT
-        else if (diffX === -1 && diffY === -1) return EasyStar.TOP_LEFT
-        throw new Error('These differences are not valid: ' + diffX + ', ' + diffY)
+        if (diffX === 0 && diffY === -1) return EasyStar.TOP;
+        else if (diffX === 1 && diffY === -1) return EasyStar.TOP_RIGHT;
+        else if (diffX === 1 && diffY === 0) return EasyStar.RIGHT;
+        else if (diffX === 1 && diffY === 1) return EasyStar.BOTTOM_RIGHT;
+        else if (diffX === 0 && diffY === 1) return EasyStar.BOTTOM;
+        else if (diffX === -1 && diffY === 1) return EasyStar.BOTTOM_LEFT;
+        else if (diffX === -1 && diffY === 0) return EasyStar.LEFT;
+        else if (diffX === -1 && diffY === -1) return EasyStar.TOP_LEFT;
+        throw new Error('These differences are not valid: ' + diffX + ', ' + diffY);
     };
 
     var getTileCost = function(x, y) {
-        return (pointsToCost[y] && pointsToCost[y][x]) || costMap[collisionGrid[y][x]]
+        return (pointsToCost[y] && pointsToCost[y][x]) || costMap[getTileAt(x, y)];
     };
 
     var coordinateToNode = function(instance, x, y, parent, cost) {
@@ -522,12 +534,12 @@ EasyStar.js = function() {
         } else {
             costSoFar = 0;
         }
-        var node = new Node(parent,x,y,costSoFar,simpleDistanceToTarget);
+        var node = new Node(parent, x, y, costSoFar, simpleDistanceToTarget);
         instance.nodeHash[y][x] = node;
         return node;
     };
 
-    var getDistance = function(x1,y1,x2,y2) {
+    var getDistance = function(x1, y1, x2, y2) {
         if (diagonalsEnabled) {
             // Octile distance
             var dx = Math.abs(x1 - x2);
@@ -543,6 +555,10 @@ EasyStar.js = function() {
             var dy = Math.abs(y1 - y2);
             return (dx + dy);
         }
+    };
+
+    var getTileAt = function(x, y) {
+        return isNdarrayGrid ? +collisionGrid.get(x, y) : +collisionGrid[y][x];
     };
 }
 
