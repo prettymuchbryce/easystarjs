@@ -74,7 +74,7 @@ var instanceId = easystar.findPath(startX, startY, endX, endY, callback);
 easystar.cancelPath(instanceId);
 ```
 ```javascript
-easystar.setParallelLimit(limit);
+easystar.enableParallelCompute();
 ```
 
 ## Usage
