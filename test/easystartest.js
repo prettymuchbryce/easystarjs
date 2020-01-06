@@ -346,4 +346,84 @@ describe("EasyStar.js", function() {
 
       easyStar.calculate();
   })
+
+  it("It should handle computing paths in serial", function (done) {
+    var easyStar = new EasyStar.js();
+    var map = [[1,1,0,1,1],
+           [1,1,0,1,1],
+           [1,1,0,1,1],
+           [1,1,1,1,1],
+           [1,1,1,1,1]];
+
+    easyStar.setGrid(map);
+    easyStar.setAcceptableTiles([1]);
+    easyStar.setIterationsPerCalculation(2);
+    easyStar.disableParallelCompute();
+
+    var iteration = 0;
+    // iteration each path was found on
+    var firstIteration = -1;
+    var secondIteration = -1;
+    var maxIterations = 8;
+
+    easyStar.findPath(1, 2, 3, 2, () => {
+      firstIteration = iteration;
+    });
+
+    easyStar.findPath(1, 2, 3, 2, () => {
+      secondIteration = iteration;
+      expect(firstIteration).toBeLessThan(secondIteration);
+      done();
+    });
+
+    function iterate() {
+      if (iteration < maxIterations) {
+        easyStar.calculate();
+        iteration += 1;
+        setTimeout(iterate, 1);
+      }
+    }
+
+    iterate();
+  })
+
+  it("It should handle computing paths in parallel", function (done) {
+    var easyStar = new EasyStar.js();
+    var map = [[1,1,0,1,1],
+           [1,1,0,1,1],
+           [1,1,0,1,1],
+           [1,1,1,1,1],
+           [1,1,1,1,1]];
+
+    easyStar.setGrid(map);
+    easyStar.setAcceptableTiles([1]);
+    easyStar.setIterationsPerCalculation(2);
+    easyStar.enableParallelCompute();
+
+    var iteration = 0;
+    // iteration each path was found on
+    var firstIteration = -1;
+    var secondIteration = -1;
+    var maxIterations = 8;
+
+    easyStar.findPath(1, 2, 3, 2, () => {
+      firstIteration = iteration;
+    });
+
+    easyStar.findPath(1, 2, 3, 2, () => {
+      secondIteration = iteration;
+      expect(firstIteration).toEqual(secondIteration);
+      done();
+    });
+
+    function iterate() {
+      if (iteration < maxIterations) {
+        easyStar.calculate();
+        iteration += 1;
+        setTimeout(iterate, 1);
+      }
+    }
+
+    iterate();
+  })
 });

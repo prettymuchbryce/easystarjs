@@ -35,7 +35,7 @@ EasyStar.js = function() {
     var iterationsPerCalculation = Number.MAX_VALUE;
     var acceptableTiles;
     var diagonalsEnabled = false;
-    var parallelLimit;
+    var parallelEnabled = false;
 
     /**
     * Sets the collision grid that EasyStar uses.
@@ -67,6 +67,24 @@ EasyStar.js = function() {
     **/
     this.disableSync = function() {
         syncEnabled = false;
+    };
+
+    /**
+    * Enables parallel path computing.
+    *
+    * If multiple calls to .findPath() are made, this
+    * will distribute the load by running iterationsPerCalculation before
+    * moving onto the next path in the queue.
+    **/
+    this.enableParallelCompute = function() {
+        parallelEnabled = true;
+    };
+
+    /**
+    * Disables parallel path computing.
+    **/
+    this.disableParallelCompute = function() {
+        parallelEnabled = false;
     };
 
     /**
@@ -178,19 +196,6 @@ EasyStar.js = function() {
     **/
     this.setIterationsPerCalculation = function(iterations) {
         iterationsPerCalculation = iterations;
-    };
-
-    /**
-    * Sets the limit of the path queue instance index, which is decremented per
-    * calculation if enabled. If multiple calls to .findPath() are made, this
-    * will distribute the load by running iterationsPerCalculation before
-    * moving onto the next path in the queue.
-    *
-    * @param {Number} limit The maximum number of iterations before resetting
-    * on calculate() call. Use -1 to run all the paths at once.
-    **/
-    this.setParallelLimit = function(limit) {
-        parallelLimit = limit;
     };
 
     /**
@@ -568,15 +573,14 @@ EasyStar.js = function() {
     };
 
     var updateQueueIndex = function () {
-        if (!parallelLimit || !instanceQueue.length) {
+        if (!parallelEnabled || !instanceQueue.length) {
             return;
         }
 
         instanceQueueIndex--;
 
-        if (instanceQueueIndex < 0 || instanceQueueIndex > instanceQueue.length) {
-            instanceQueueIndex = (instanceQueue.length - 1) %
-                (parallelLimit === -1 ? instanceQueue.length : parallelLimit);
+        if (instanceQueueIndex < 0) {
+            instanceQueueIndex = instanceQueue.length - 1;
         }
     };
 }
