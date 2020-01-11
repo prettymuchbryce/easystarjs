@@ -172,7 +172,7 @@ EasyStar.js = function() {
     * have a large tile-map and don't want to block your thread while
     * finding a path.
     *
-    * @param {Number} iterations The number of searches to prefrom per calculate() call.
+    * @param {Number} iterations The number of searches to perform per calculate() call.
     **/
     this.setIterationsPerCalculation = function(iterations) {
         iterationsPerCalculation = iterations;
