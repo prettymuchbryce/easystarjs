@@ -1,4 +1,6 @@
-var easyStar;
+const EasyStar = require("../src/easystar");
+let easyStar;
+
 function onPathFound() { }
 function setup10x10maze() {
     easyStar = new EasyStar.js();

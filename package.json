@@ -1,14 +1,14 @@
 {
     "name": "easystarjs",
-    "version": "0.4.3",
+    "version": "0.4.4",
     "main": "./src/easystar.js",
     "typings": "./index.d.ts",
     "description": "Asynchronous A* Pathfinding API",
     "scripts": {
-        "build": "webpack && webpack --minify",
-        "test": "./node_modules/karma/bin/karma start ./karma.conf.js",
-        "benchmark": "./node_modules/karma/bin/karma start ./karma.benchmark.conf.js",
-        "watch": "webpack -w"
+        "build:production": "webpack --production",
+        "test:production": "karma start ./karma.conf.js",
+        "benchmark": "karma start ./karma.benchmark.conf.js",
+        "dev": "webpack --development && karma start ./karma.conf.js --development"
     },
     "keywords": [
         "A*",
@@ -28,16 +28,22 @@
         "url": "http://bryce.is"
     },
     "devDependencies": {
-        "babel-core": "^6.8.0",
-        "babel-loader": "^6.2.4",
-        "webpack": "^1.13.0",
-        "jasmine-core": "^2.8.0",
-        "karma": "^2.0.0",
-        "karma-benchmark": "^0.7.1",
+        "@babel/core": "^7.11.6",
+        "@babel/preset-env": "^7.11.5",
+        "babel-loader": "^8.1.0",
+        "jasmine-core": "^3.6.0",
+        "karma": "^5.2.3",
+        "karma-benchmark": "^1.0.4",
         "karma-benchmarkjs-reporter": "^1.0.0",
-        "karma-coverage": "^1.1.1",
-        "karma-jasmine": "^1.1.1",
-        "karma-phantomjs-launcher": "^1.0.4"
+        "karma-chrome-launcher": "^3.1.0",
+        "karma-coverage-istanbul-reporter": "^3.0.3",
+        "karma-jasmine": "^4.0.1",
+        "karma-verbose-reporter": "0.0.6",
+        "karma-webpack": "^4.0.2",
+        "webpack": "^4.44.2",
+        "webpack-cli": "^3.3.12",
+        "uglifyjs-webpack-plugin": "^2.2.0",
+        "@jsdevtools/coverage-istanbul-loader": "^3.0.5"
     },
     "dependencies": {
         "heap": "0.2.6"

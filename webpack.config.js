@@ -1,35 +1,59 @@
-var webpack = require('webpack');
-var config = require('./package.json');
+const path = require("path");
+const fs = require("fs");
+const UglifyJSPlugin = require("uglifyjs-webpack-plugin");
+const webpack = require('webpack');
+const config = require('./package.json');
 
-var minify = process.argv.indexOf('--minify') !== -1;
+const isProductionBuild = process.argv.indexOf('--production') !== -1;
+const filename = `easystar-${config.version}.min.js`
 
-var filename = 'easystar-' + config.version
-if (minify) {
-    filename += '.min.js';
-} else {
-    filename += '.js';
+const getLicense = () => {
+    return fs.readFileSync(path.resolve(__dirname, "LICENSE"), 'utf8');
 }
 
 module.exports = {
+    target: "web",
+    mode: isProductionBuild ? "production" : "development",
     entry: './src/easystar.js',
+    devtool: isProductionBuild ? false : 'inline-source-map',
     output: {
-        path: './bin',
+        path: path.resolve(__dirname, "bin"),
         filename: filename,
         libraryTarget: "var",
-        library: "EasyStar"
-    },
-    module: {
-        loaders: [
-            { test: /\.js?$/, loader: 'babel-loader'}
-        ]
+        library: "EasyStar",
+        publicPath: "/bin/"
     },
     resolve: {
-        extensions: ['', '.js']
+        extensions: ['.js'],
+        modules: ["node_modules"]
+    },
+    module: {
+        rules: [
+            {
+                test: /\.js$/,
+                exclude: /(node_modules)/,
+                use: {
+                    loader: 'babel-loader',
+                    options: {
+                        presets: ['@babel/preset-env']
+                    }
+                }
+            }
+        ]
     },
     plugins: [
-        new webpack.optimize.UglifyJsPlugin({
-            include: /\.min\.js$/,
-            minimize: minify
+        new webpack.BannerPlugin({
+            banner: getLicense()
+        }),
+        new UglifyJSPlugin({
+            sourceMap: !isProductionBuild,
+            uglifyOptions: {
+                ecma: 6,
+                warnings: false,
+                output: {
+                    comments: true,
+                },
+            }
         })
     ]
 };

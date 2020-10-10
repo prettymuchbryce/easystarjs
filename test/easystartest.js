@@ -1,3 +1,5 @@
+var EasyStar = require("../src/easystar");
+
 describe("EasyStar.js", function() {
 
   beforeEach(function() { });
