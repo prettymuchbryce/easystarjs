@@ -1,6 +1,6 @@
 const path = require("path");
 const fs = require("fs");
-const UglifyJSPlugin = require("uglifyjs-webpack-plugin");
+const TerserPlugin = require('terser-webpack-plugin');
 const webpack = require('webpack');
 const config = require('./package.json');
 
@@ -8,7 +8,8 @@ const isProductionBuild = process.argv.indexOf('--production') !== -1;
 const filename = `easystar-${config.version}.min.js`
 
 const getLicense = () => {
-    return fs.readFileSync(path.resolve(__dirname, "LICENSE"), 'utf8');
+    const licenseText = fs.readFileSync(path.resolve(__dirname, "LICENSE"), 'utf8');
+    return `@license\n${licenseText}`;
 }
 
 module.exports = {
@@ -26,6 +27,30 @@ module.exports = {
     resolve: {
         extensions: ['.js'],
         modules: ["node_modules"]
+    },
+    optimization: {
+        minimize: true,
+        minimizer: [new TerserPlugin(
+            {
+                minify: (file, sourceMap) => {
+                    // https://github.com/mishoo/UglifyJS2#minify-options
+                    const uglifyJsOptions = {
+                        warnings: false,
+                        output: {
+                            comments: "some"
+                        }
+                    };
+
+                    if (sourceMap) {
+                        uglifyJsOptions.sourceMap = {
+                            content: sourceMap,
+                        };
+                    }
+
+                    return require('uglify-js').minify(file, uglifyJsOptions);
+                },
+            }
+        )],
     },
     module: {
         rules: [
@@ -45,15 +70,5 @@ module.exports = {
         new webpack.BannerPlugin({
             banner: getLicense()
         }),
-        new UglifyJSPlugin({
-            sourceMap: !isProductionBuild,
-            uglifyOptions: {
-                ecma: 6,
-                warnings: false,
-                output: {
-                    comments: true,
-                },
-            }
-        })
     ]
 };
