@@ -16,7 +16,7 @@ const getLicense = () => {
 const terserSettings = {
     terserOptions: {
         output: {
-            comments: /@license/i,
+            comments: "all"
         },
         mangle: false,
     },
