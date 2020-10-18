@@ -1,7 +1,27 @@
-// Karma configuration
-// Generated on Sun Nov 17 2013 05:27:43 GMT-0500 (EST)
+const path = require("path");
+
+const isDevelopmentEnv = process.argv.indexOf('--development') !== -1;
 
 module.exports = function(config) {
+
+  let chromeFlags = [
+    '--headless', // only in Production testing.
+    '--disable-gpu', // only in Production testing.
+    '--no-sandbox',
+    '--disable-setuid-sandbox',
+    '--disable-dev-shm-usage',
+    '--remote-debugging-port=9222'
+  ];
+  if (isDevelopmentEnv) {
+    chromeFlags = chromeFlags.slice(2)
+  }
+
+  let karmaReporters = [
+    'verbose',
+    'progress',
+    'coverage-istanbul'
+  ];
+
   config.set({
 
     // base path, that will be used to resolve files and exclude
@@ -9,32 +29,63 @@ module.exports = function(config) {
 
     plugins: [
       'karma-jasmine',
-      'karma-coverage',
-      'karma-phantomjs-launcher'
+      'karma-chrome-launcher',
+      'karma-verbose-reporter',
+      'karma-coverage-istanbul-reporter',
+      'karma-webpack'
     ],
-
 
     // frameworks to use
     frameworks: ['jasmine'],
 
+    preprocessors: {
+      'src/**/*.js': ['webpack'],
+      'test/**/*.js': ['webpack']
+    },
 
     // list of files / patterns to load in the browser
     files: [
-        './bin/easystar-0.4.3.js',
-        './test/easystartest.js'
+      'src/**/*.js',
+      'test/easystartest.js'
     ],
-
 
     // list of files to exclude
-    exclude: [
-
-    ],
-
+    exclude: [],
 
     // test results reporter to use
     // possible values: 'dots', 'progress', 'junit', 'growl', 'coverage'
-    reporters: ['progress'],
+    reporters: karmaReporters,
 
+    coverageIstanbulReporter: {
+      // reports can be any that are listed here: https://github.com/istanbuljs/istanbuljs/tree/73c25ce79f91010d1ff073aa6ff3fd01114f90db/packages/istanbul-reports/lib
+      reports: ['html', 'lcovonly', 'text-summary'],
+      dir: path.join(__dirname, 'coverage'),
+      fixWebpackSourcePaths: true,
+    },
+
+    webpack: {
+      // karma watches the test entry points
+      // (you don't need to specify the entry option)
+      // webpack watches dependencies
+      // webpack configuration
+      devtool: 'inline-source-map',
+      module: {
+        rules: [
+          {
+            test: /\.js/,
+            include: /src/,
+            exclude: /node_modules/,
+            use: "@jsdevtools/coverage-istanbul-loader"
+          }
+        ]
+      },
+    },
+
+    webpackMiddleware: {
+      // webpack-dev-middleware configuration
+      // i. e.
+      stats: 'errors-only',
+    },
 
     // web server port
     port: 9876,
@@ -46,30 +97,34 @@ module.exports = function(config) {
 
     // level of logging
     // possible values: config.LOG_DISABLE || config.LOG_ERROR || config.LOG_WARN || config.LOG_INFO || config.LOG_DEBUG
-    logLevel: config.LOG_INFO,
+    logLevel: config.LOG_ERROR,
 
 
     // enable / disable watching file and executing tests whenever any file changes
     autoWatch: true,
 
+    browsers: [
+        'ChromeHeadless'
+    ],
 
-    // Start these browsers, currently available:
-    // - Chrome
-    // - ChromeCanary
-    // - Firefox
-    // - Opera (has to be installed with `npm install karma-opera-launcher`)
-    // - Safari (only Mac; has to be installed with `npm install karma-safari-launcher`)
-    // - PhantomJS
-    // - IE (only Windows; has to be installed with `npm install karma-ie-launcher`)
-    //browsers: ['PhantomJS'],
+    customLaunchers: {
+      ChromeHeadless: {
+        base: 'Chrome',
+        flags: chromeFlags
+      }
+    },
 
+    coverageReporter: {
+      type: 'html',
+      dir: 'coverage'
+    },
 
     // If browser does not capture in given timeout [ms], kill it
-    captureTimeout: 60000,
+    captureTimeout: 1000 * 10,
 
 
     // Continuous Integration mode
     // if true, it capture browsers, run tests and exit
-    singleRun: false
+    singleRun: !isDevelopmentEnv
   });
 };
