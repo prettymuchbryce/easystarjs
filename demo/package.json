@@ -9,7 +9,7 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "express": "~3.4.4",
+    "express": "~4.17.1",
     "consolidate": "~0.9.1",
     "mustache": "~0.7.3"
   }
