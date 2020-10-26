@@ -160,6 +160,18 @@ EasyStar.js = function() {
     };
 
     /**
+    * Get the directional conditions previously set on a tile
+    *
+    * @param {Number} x The x value of the point.
+    * @param {Number} y The y value of the point.
+    * @return {Number} A list of all the allowed directions that can access
+    * the tile.
+    **/
+    this.getDirectionalCondition = function(x, y) {
+        return directionalConditions[y][x];
+    };
+
+    /**
     * Remove all directional conditions
     **/
     this.removeAllDirectionalConditions = function() {
