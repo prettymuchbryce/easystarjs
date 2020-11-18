@@ -8,7 +8,8 @@
         "build:production": "webpack --production && webpack --production --minify",
         "test:production": "karma start ./karma.conf.js",
         "benchmark": "karma start ./karma.benchmark.conf.js",
-        "dev": "webpack --development && karma start ./karma.conf.js --development"
+        "dev": "webpack --development && karma start ./karma.conf.js --development",
+        "test": "npm run test:production"
     },
     "keywords": [
         "A*",
