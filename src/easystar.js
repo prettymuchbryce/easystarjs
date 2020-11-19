@@ -21,7 +21,6 @@ var nextInstanceId = 1;
 EasyStar.js = function() {
     var STRAIGHT_COST = 1.0;
     var DIAGONAL_COST = 1.4;
-    var syncEnabled = false;
     var pointsToAvoid = {};
     var collisionGrid;
     var costMap = {};
@@ -50,21 +49,6 @@ EasyStar.js = function() {
             // Number
             acceptableTiles = [tiles];
         }
-    };
-
-    /**
-    * Enables sync mode for this EasyStar instance..
-    * if you're into that sort of thing.
-    **/
-    this.enableSync = function() {
-        syncEnabled = true;
-    };
-
-    /**
-    * Disables sync mode for this EasyStar instance.
-    **/
-    this.disableSync = function() {
-        syncEnabled = false;
     };
 
     /**
@@ -225,6 +209,27 @@ EasyStar.js = function() {
         pointsToAvoid = {};
     };
 
+
+    /**
+    * Find a path.
+    *
+    * @param {Number} startX The X position of the starting point.
+    * @param {Number} startY The Y position of the starting point.
+    * @param {Number} endX The X position of the ending point.
+    * @param {Number} endY The Y position of the ending point.
+    * @return {Array} The path
+    *
+    **/
+    this.findPathSync = function(startX, startY, endX, endY) {
+
+        let val;
+        this.findPath(startX, startY, endX, endY, function(result){
+            val = result;
+        })
+        this.calculate(true);
+        return val;
+    }
+
     /**
     * Find a path.
     *
@@ -238,16 +243,6 @@ EasyStar.js = function() {
     *
     **/
     this.findPath = function(startX, startY, endX, endY, callback) {
-        // Wraps the callback for sync vs async logic
-        var callbackWrapper = function(result) {
-            if (syncEnabled) {
-                callback(result);
-            } else {
-                setTimeout(function() {
-                    callback(result);
-                });
-            }
-        }
 
         // No acceptable tiles were set
         if (acceptableTiles === undefined) {
@@ -267,7 +262,7 @@ EasyStar.js = function() {
 
         // Start and end are the same tile.
         if (startX===endX && startY===endY) {
-            callbackWrapper([]);
+            callback([]);
             return;
         }
 
@@ -282,7 +277,7 @@ EasyStar.js = function() {
         }
 
         if (isAcceptable === false) {
-            callbackWrapper(null);
+            callback(null);
             return;
         }
 
@@ -297,7 +292,7 @@ EasyStar.js = function() {
         instance.startY = startY;
         instance.endX = endX;
         instance.endY = endY;
-        instance.callback = callbackWrapper;
+        instance.callback = callback;
 
         instance.openList.push(coordinateToNode(instance, instance.startX,
             instance.startY, null, STRAIGHT_COST));
@@ -305,7 +300,9 @@ EasyStar.js = function() {
         var instanceId = nextInstanceId ++;
         instances[instanceId] = instance;
         instanceQueue.push(instanceId);
-        return instanceId;
+
+        return instanceId
+
     };
 
     /**
@@ -330,7 +327,7 @@ EasyStar.js = function() {
     * You can change the number of calculations done in a call by using
     * easystar.setIteratonsPerCalculation().
     **/
-    this.calculate = function() {
+    this.calculate = function(syncEnabled) {
         if (instanceQueue.length === 0 || collisionGrid === undefined || acceptableTiles === undefined) {
             return;
         }
