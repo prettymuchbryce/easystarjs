@@ -31,9 +31,11 @@ EasyStar.js = function() {
     var iterationsSoFar;
     var instances = {};
     var instanceQueue = [];
+    var instanceQueueIndex = 0;
     var iterationsPerCalculation = Number.MAX_VALUE;
     var acceptableTiles;
     var diagonalsEnabled = false;
+    var parallelEnabled = false;
 
     /**
     * Sets the collision grid that EasyStar uses.
@@ -65,6 +67,24 @@ EasyStar.js = function() {
     **/
     this.disableSync = function() {
         syncEnabled = false;
+    };
+
+    /**
+    * Enables parallel path computing.
+    *
+    * If multiple calls to .findPath() are made, this
+    * will distribute the load by running iterationsPerCalculation before
+    * moving onto the next path in the queue.
+    **/
+    this.enableParallelCompute = function() {
+        parallelEnabled = true;
+    };
+
+    /**
+    * Disables parallel path computing.
+    **/
+    this.disableParallelCompute = function() {
+        parallelEnabled = false;
     };
 
     /**
@@ -305,6 +325,7 @@ EasyStar.js = function() {
         var instanceId = nextInstanceId ++;
         instances[instanceId] = instance;
         instanceQueue.push(instanceId);
+
         return instanceId;
     };
 
@@ -334,6 +355,7 @@ EasyStar.js = function() {
         if (instanceQueue.length === 0 || collisionGrid === undefined || acceptableTiles === undefined) {
             return;
         }
+
         for (iterationsSoFar = 0; iterationsSoFar < iterationsPerCalculation; iterationsSoFar++) {
             if (instanceQueue.length === 0) {
                 return;
@@ -344,11 +366,12 @@ EasyStar.js = function() {
                 iterationsSoFar = 0;
             }
 
-            var instanceId = instanceQueue[0];
+            var instanceId = instanceQueue[instanceQueueIndex];
             var instance = instances[instanceId];
             if (typeof instance == 'undefined') {
                 // This instance was cancelled
-                instanceQueue.shift();
+                instanceQueue.splice(instanceQueueIndex, 1);
+                updateQueueIndex();
                 continue;
             }
 
@@ -356,7 +379,8 @@ EasyStar.js = function() {
             if (instance.openList.size() === 0) {
                 instance.callback(null);
                 delete instances[instanceId];
-                instanceQueue.shift();
+                instanceQueue.splice(instanceQueueIndex, 1);
+                updateQueueIndex();
                 continue;
             }
 
@@ -375,7 +399,8 @@ EasyStar.js = function() {
                 var ip = path;
                 instance.callback(ip);
                 delete instances[instanceId];
-                instanceQueue.shift();
+                instanceQueue.splice(instanceQueueIndex, 1);
+                updateQueueIndex();
                 continue;
             }
 
@@ -441,6 +466,8 @@ EasyStar.js = function() {
             }
 
         }
+
+        updateQueueIndex();
     };
 
     // Private methods follow
@@ -542,6 +569,18 @@ EasyStar.js = function() {
             var dx = Math.abs(x1 - x2);
             var dy = Math.abs(y1 - y2);
             return (dx + dy);
+        }
+    };
+
+    var updateQueueIndex = function () {
+        if (!parallelEnabled || !instanceQueue.length) {
+            return;
+        }
+
+        instanceQueueIndex--;
+
+        if (instanceQueueIndex < 0) {
+            instanceQueueIndex = instanceQueue.length - 1;
         }
     };
 }

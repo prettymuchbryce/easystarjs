@@ -42,6 +42,20 @@ export class js {
   disableDiagonals(): void
 
   /**
+   * Enables parallel path computing.
+   *
+   * If multiple calls to .findPath() are made, this
+   * will distribute the load by running iterationsPerCalculation before
+   * moving onto the next path in the queue.
+   **/
+  enableParallelCompute(): void
+
+  /**
+   * Disables parallel path computing.
+   */
+  disableParallelCompute(): void
+
+  /**
    * Sets the collision grid that EasyStar uses.
    *
    * @param {Array} grid The collision grid that this EasyStar instance will read from.
