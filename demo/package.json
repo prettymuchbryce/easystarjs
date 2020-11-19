@@ -11,6 +11,6 @@
   "dependencies": {
     "express": "~3.4.4",
     "consolidate": "~0.9.1",
-    "mustache": "~0.7.3"
+    "mustache": "~4.0.1"
   }
 }
