@@ -34,6 +34,7 @@ EasyStar.js = function() {
     var iterationsPerCalculation = Number.MAX_VALUE;
     var acceptableTiles;
     var diagonalsEnabled = false;
+    var findNearestEnabled = false;
 
     /**
     * Sets the collision grid that EasyStar uses.
@@ -79,6 +80,20 @@ EasyStar.js = function() {
      */
     this.disableDiagonals = function() {
         diagonalsEnabled = false;
+    }
+
+    /**
+     * Enable pathfinder to find 'nearest' tile when non acceptable tile is selected.
+     */
+    this.enableFindNearest = function(){
+        findNearestEnabled = true;
+    }
+
+    /**
+     * Enable find nearest.
+     */
+    this.disableFindNearest = function(){
+        findNearestEnabled = false;
     }
 
     /**
@@ -281,7 +296,7 @@ EasyStar.js = function() {
             }
         }
 
-        if (isAcceptable === false) {
+        if (isAcceptable === false && !findNearestEnabled) {
             callbackWrapper(null);
             return;
         }
@@ -354,7 +369,45 @@ EasyStar.js = function() {
 
             // Couldn't find a path.
             if (instance.openList.size() === 0) {
-                instance.callback(null);
+
+				// if nearest target is rdesired
+                if(findNearestEnabled){
+                    // find the closest points
+                    instance.storeList.sort(function(a, b){
+                        if( a.simpleDistanceToTarget === b.simpleDistanceToTarget) return 0;
+                        return  a.simpleDistanceToTarget < b.simpleDistanceToTarget ? -1 :1
+                    })
+                    // loop through and find best result
+                    var closestDist = instance.storeList[0].simpleDistanceToTarget;
+                    var targetNode, targetCost;
+                    for(var i = 0; i < instance.storeList.length; i++){
+
+                        if(instance.storeList[i].simpleDistanceToTarget > closestDist ) break;
+
+                        if(!targetNode || targetCost > instance.storeList[i].costSoFar){
+                            targetNode = instance.storeList[i];
+                            targetCost = instance.storeList[i].costSoFar;
+                        }
+                    }
+
+                    if(targetNode){
+                        var path = [];
+                        while(targetNode){
+                            path.push({x:targetNode.x, y:targetNode.y})
+                            targetNode = targetNode.parent
+                        }
+                        instance.callback(path.reverse());
+                    }
+                    else
+                    {
+                        instance.callback(null);
+                    }
+                }
+                else
+                {
+                    instance.callback(null);
+                }
+
                 delete instances[instanceId];
                 instanceQueue.shift();
                 continue;
@@ -462,6 +515,12 @@ EasyStar.js = function() {
                 node.parent = searchNode;
                 instance.openList.updateItem(node);
             }
+            else{
+                if(!instance.storeList){
+                    instance.storeList = [];
+                }
+                instance.storeList.push( node )
+            }
         }
     };
 
@@ -546,11 +605,11 @@ EasyStar.js = function() {
     };
 }
 
-EasyStar.TOP = 'TOP'
-EasyStar.TOP_RIGHT = 'TOP_RIGHT'
-EasyStar.RIGHT = 'RIGHT'
-EasyStar.BOTTOM_RIGHT = 'BOTTOM_RIGHT'
-EasyStar.BOTTOM = 'BOTTOM'
-EasyStar.BOTTOM_LEFT = 'BOTTOM_LEFT'
-EasyStar.LEFT = 'LEFT'
-EasyStar.TOP_LEFT = 'TOP_LEFT'
+EasyStar.TOP = 'TOP';
+EasyStar.TOP_RIGHT = 'TOP_RIGHT';
+EasyStar.RIGHT = 'RIGHT';
+EasyStar.BOTTOM_RIGHT = 'BOTTOM_RIGHT';
+EasyStar.BOTTOM = 'BOTTOM';
+EasyStar.BOTTOM_LEFT = 'BOTTOM_LEFT';
+EasyStar.LEFT = 'LEFT';
+EasyStar.TOP_LEFT = 'TOP_LEFT';
