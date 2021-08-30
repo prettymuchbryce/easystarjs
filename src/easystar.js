@@ -372,26 +372,11 @@ EasyStar.js = function() {
 
 				// if nearest target is rdesired
                 if(findNearestEnabled){
-                    // find the closest points
-                    instance.storeList.sort(function(a, b){
-                        if( a.simpleDistanceToTarget === b.simpleDistanceToTarget) return 0;
-                        return  a.simpleDistanceToTarget < b.simpleDistanceToTarget ? -1 :1
-                    })
-                    // loop through and find best result
-                    var closestDist = instance.storeList[0].simpleDistanceToTarget;
-                    var targetNode, targetCost;
-                    for(var i = 0; i < instance.storeList.length; i++){
 
-                        if(instance.storeList[i].simpleDistanceToTarget > closestDist ) break;
-
-                        if(!targetNode || targetCost > instance.storeList[i].costSoFar){
-                            targetNode = instance.storeList[i];
-                            targetCost = instance.storeList[i].costSoFar;
-                        }
-                    }
-
-                    if(targetNode){
+                    // does instance have a 'nearest target'
+                    if( instance.nearestTarget){
                         var path = [];
+                        let targetNode = instance.nearestTarget;
                         while(targetNode){
                             path.push({x:targetNode.x, y:targetNode.y})
                             targetNode = targetNode.parent
@@ -515,11 +500,13 @@ EasyStar.js = function() {
                 node.parent = searchNode;
                 instance.openList.updateItem(node);
             }
-            else{
-                if(!instance.storeList){
-                    instance.storeList = [];
-                }
-                instance.storeList.push( node )
+            else if(findNearestEnabled) {     
+              if(!instance.nearestTarget) {
+                instance.nearestTarget = searchNode;
+              }
+              else if( node.simpleDistanceToTarget < instance.nearestTarget.simpleDistanceToTarget || node.simpleDistanceToTarget === instance.nearestTarget.simpleDistanceToTarget && node.costSoFar < instance.nearestTarget.costSoFar ){
+                instance.nearestTarget = node;
+              }
             }
         }
     };
