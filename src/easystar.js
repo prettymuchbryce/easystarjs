@@ -467,6 +467,9 @@ EasyStar.js = function() {
 
     // Helpers
     var isTileWalkable = function(collisionGrid, acceptableTiles, x, y, sourceNode) {
+        if (pointsToAvoid[y] && pointsToAvoid[y][x]) {
+            return false;
+        }
         var directionalCondition = directionalConditions[y] && directionalConditions[y][x];
         if (directionalCondition) {
             var direction = calculateDirection(sourceNode.x - x, sourceNode.y - y)
