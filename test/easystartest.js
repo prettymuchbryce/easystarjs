@@ -348,4 +348,28 @@ describe("EasyStar.js", function() {
 
       easyStar.calculate();
   })
+
+  it("It should not cut corners of `pointsToAvoid`.", function(done) {
+    var easyStar = new EasyStar.js();
+    easyStar.enableDiagonals();
+    var map = [[1,1],
+               [1,1]];
+
+    easyStar.setGrid(map);
+
+    easyStar.disableCornerCutting();
+
+    easyStar.setAcceptableTiles([1]);
+    easyStar.avoidAdditionalPoint(1, 0);
+    easyStar.avoidAdditionalPoint(0, 1);
+
+    easyStar.findPath(0,0,1,1,onPathFound);
+
+    easyStar.calculate();
+
+    function onPathFound(path) {
+        expect(path).toBeNull();
+        done();
+    }
+  });
 });
