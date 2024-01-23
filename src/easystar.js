@@ -535,7 +535,7 @@ EasyStar.js = function() {
             if (dx < dy) {
                 return DIAGONAL_COST * dx + (dy-dx);
             } else {
-                return DIAGONAL_COST * dy + (dx=dy);
+                return DIAGONAL_COST * dy + (dx-dy);
             }
         } else {
             // Manhattan distance
